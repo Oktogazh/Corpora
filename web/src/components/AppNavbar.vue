@@ -20,7 +20,7 @@
         </router-link>
         <div id="navigation" class="grow flex justify-end items-center">
           <router-link :to="{ name: 'Sign In' }">
-            <button>
+            <button class="text-text hover:text-primary transition-colors duration-300">
               {{ $t("AppNavbar.signIn")}}
             </button>
           </router-link>
@@ -51,7 +51,7 @@
         </div>
       </div>
     </div>
-    <Separator class="bg-secondary-100 absolute bottom-0 h-px w-full"/>
+    <Separator class="bg-secondary-200 absolute bottom-0 h-px w-full"/>
   </header>
 </template>
 
