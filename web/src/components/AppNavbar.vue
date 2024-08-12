@@ -13,12 +13,17 @@
     >
       <div
         id="navbar-inner-container"
-        class="h-full w-full flex justify-between m-auto max-w-[1300px]"
+        class="h-full w-full py-4 flex justify-between m-auto max-w-[1300px]"
       >
         <div id="title" class="flex items-center text-text">{{ appName }}</div>
         <div id="navigation" class="grow flex justify-end items-center">
-          <label for="dark-mode-switch">
-          </label>
+          <button>
+          </button>
+          <Separator
+            class="bg-secondary-100 data-[orientation=vertical]:h-full data-[orientation=vertical]:w-px mx-[15px]"
+            decorative
+            orientation="vertical"
+          />
           <SwitchRoot
             id="dark-mode-switch"
             @update:checked="switchDarkMode"
@@ -41,7 +46,7 @@
         </div>
       </div>
     </div>
-    <Separator as="hr" class="absolute bottom-0 h-px w-full border-secondary-100"/>
+    <Separator class="bg-secondary-100 absolute bottom-0 h-px w-full"/>
   </header>
 </template>
 
@@ -64,9 +69,9 @@ export default defineComponent({
     AnOutlinedSun,
   },
   computed: {
-    ...mapState(useAppStore, {
+    ...mapState(useAppStore,{
       appName: (state) => state.name,
-    })
+    }),
   },
   data: () => ({
     isDarkMode: useDark({
