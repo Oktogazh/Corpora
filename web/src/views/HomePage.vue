@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="h-[100em]">
 
   </div>
 </template>
@@ -9,6 +9,9 @@ import { defineComponent } from 'vue'
 
 export default defineComponent({
   name: 'HomePage',
+  data: () => ({
+    title: 'Home Page',
+  }),
 })
 </script>
 

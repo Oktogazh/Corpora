@@ -1,5 +1,6 @@
 <template>
     <AppNavbar />
+    <RouterView />
 </template>
 
 <script lang="ts">

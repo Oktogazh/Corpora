@@ -15,10 +15,15 @@
         id="navbar-inner-container"
         class="h-full w-full py-4 flex justify-between m-auto max-w-[1300px]"
       >
-        <div id="title" class="flex items-center text-text">{{ appName }}</div>
+        <router-link :to="{ name: 'home' }">
+          <div id="title" class="flex items-center text-text capitalize">{{ appName }}</div>
+        </router-link>
         <div id="navigation" class="grow flex justify-end items-center">
-          <button>
-          </button>
+          <router-link :to="{ name: 'Sign In' }">
+            <button>
+              {{ $t("AppNavbar.signIn")}}
+            </button>
+          </router-link>
           <Separator
             class="bg-secondary-100 data-[orientation=vertical]:h-full data-[orientation=vertical]:w-px mx-[15px]"
             decorative
