@@ -8,9 +8,9 @@
 import { defineComponent } from 'vue'
 
 export default defineComponent({
-  name: 'HomePage',
+  name: 'HomeView',
   data: () => ({
-    title: 'Home Page',
+    cardsSkeletons: 4,
   }),
 })
 </script>

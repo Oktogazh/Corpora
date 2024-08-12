@@ -16,7 +16,7 @@ app.use(router)
 
 // Set pinia and app name from package.json
 app.use(pinia)
-document.title = name
+document.title = name.charAt(0).toLocaleUpperCase() + name.slice(1)
 const appStore = useAppStore()
 appStore.setName(name)
 
