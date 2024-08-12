@@ -16,9 +16,10 @@ app.use(router)
 
 // Set pinia and app name from package.json
 app.use(pinia)
-document.title = name.charAt(0).toLocaleUpperCase() + name.slice(1)
+const title = name.charAt(0).toLocaleUpperCase() + name.slice(1)
+document.title = title
 const appStore = useAppStore()
-appStore.setName(name)
+appStore.setName(title)
 
 // Set vue-i18n
 app.use(i18n)
