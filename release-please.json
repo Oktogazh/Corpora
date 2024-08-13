@@ -1,0 +1,11 @@
+{
+  "packages": {
+    "firebase/functions": {
+      "release-type": "node",
+      "changelog-path": "web/public/CHANGELOG.md"
+    },
+    "web": {
+      "release-type": "node"
+    }
+  }
+}
