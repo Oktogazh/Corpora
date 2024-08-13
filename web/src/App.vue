@@ -1,6 +1,6 @@
 <template>
     <AppNavbar />
-    <div class="flex">
+    <div class="flex mt-[64px]">
       <RouterView />
     </div>
 </template>

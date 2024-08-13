@@ -20,9 +20,9 @@
         </router-link>
         <div id="navigation" class="grow flex justify-end items-center">
           <router-link :to="{ name: 'Sign In' }">
-            <button class="text-text hover:text-primary transition-colors duration-300">
+            <div class="text-text hover:text-primary transition-colors duration-300">
               {{ $t("AppNavbar.signIn")}}
-            </button>
+            </div>
           </router-link>
           <Separator
             class="bg-secondary-100 data-[orientation=vertical]:h-full data-[orientation=vertical]:w-px mx-[15px]"
@@ -33,7 +33,7 @@
             id="dark-mode-switch"
             @update:checked="switchDarkMode"
             :defaultChecked="isDarkMode"
-            class="w-[44px] h-[24px] flex bg-background-100 shadow-sm rounded-full relative cursor-pointer border-[1px] border-secondary-200 hover:border-primary-400 transition-colors duration-300"
+            class="w-[44px] h-[24px] flex bg-background-100 shadow-sm rounded-full relative cursor-pointer border-[1px] border-secondary-200 hover:border-primary transition-colors duration-300"
           >
             <transition name="slide" mode="out-in">
               <SwitchThumb
