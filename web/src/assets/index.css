@@ -2,8 +2,10 @@
 @tailwind components;
 @tailwind utilities;
 
-.container {
+.section-container {
   width: 100%;
   margin: auto;
   max-width: 1152px;
+  padding: 24px 0;
+  ;
 }
