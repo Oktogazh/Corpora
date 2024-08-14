@@ -1,8 +1,8 @@
 <template>
     <AppNavbar />
-    <div class="flex mt-[64px]">
-      <RouterView />
-    </div>
+    <div class="flex mt-[64px]"></div>
+    <RouterView />
+    <RouterView name="footer" />
 </template>
 
 <script lang="ts">

@@ -5,13 +5,24 @@ const router = createRouter({
   routes: [
     {
       path: '/',
-      name: 'home',
-      component: () => import('../views/HomeView.vue')
+      name: 'Home',
+      components: {
+        default: () => import('../views/HomeView.vue'),
+        footer: () => import('../components/AppFooter.vue')
+      }
     },
     {
-      path: '/🗝️',
+      path: '/🗝🚪',
       name: 'Sign In',
       component: () => import('../views/SignInView.vue')
+    },
+    {
+      path: '/🚀📝',
+      name: 'Change Log',
+      components: {
+        default: () => import('../views/ChangeLogView.vue'),
+        footer: () => import('../components/AppFooter.vue')
+      }
     }
   ]
 })

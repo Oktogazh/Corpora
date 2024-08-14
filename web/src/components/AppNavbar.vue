@@ -15,7 +15,7 @@
         id="navbar-inner-container"
         class="h-full w-full py-4 flex justify-between m-auto max-w-[1300px]"
       >
-        <router-link :to="{ name: 'home' }">
+        <router-link :to="{ name: 'Home' }">
           <div id="title" class="flex items-center text-text">{{ appName }}</div>
         </router-link>
         <div id="navigation" class="grow flex justify-end items-center">
