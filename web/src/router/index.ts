@@ -12,12 +12,12 @@ const router = createRouter({
       }
     },
     {
-      path: '/🗝🚪',
+      path: '/signin',
       name: 'Sign In',
       component: () => import('../views/SignInView.vue')
     },
     {
-      path: '/🚀📝',
+      path: '/changelog',
       name: 'Change Log',
       components: {
         default: () => import('../views/ChangeLogView.vue'),
@@ -25,10 +25,6 @@ const router = createRouter({
       }
     }
   ]
-})
-
-router.beforeEach((to, from, next) => {
-  next()
 })
 
 export default router

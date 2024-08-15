@@ -29,6 +29,7 @@ export default defineComponent({
     async loadMarkdown() {
       try {
         const response = await fetch('/CHANGELOG.md')
+        console.log('response:', response)
         const markdown = await response.text()
         this.htmlChangeLog = await marked(markdown)
       } catch (error) {
@@ -39,27 +40,31 @@ export default defineComponent({
 })
 </script>
 
-<style>
-h1 {
+<style scoped>
+:deep(h1) {
   font-size: 1.5rem;
   margin-top: 1rem;
   margin-bottom: 1rem;
 }
 
-h2 {
+:deep(h2) {
   font-size: 1.25rem;
   margin-top: 1rem;
   margin-bottom: 1rem;
 }
 
-h3 {
+:deep(h3) {
   font-size: 1rem;
   margin-top: 1rem;
   margin-bottom: 1rem;
 }
 
-li {
+:deep(li) {
   margin-top: 0.5rem;
   margin-bottom: 0.5rem;
+}
+
+:deep(a) {
+  color: #3182ce;
 }
 </style>

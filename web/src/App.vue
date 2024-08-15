@@ -1,8 +1,9 @@
 <template>
-    <AppNavbar />
-    <div class="flex mt-[64px]"></div>
-    <RouterView />
+  <AppNavbar />
+  <div class="min-h-[100vh] pt-[64px] flex flex-col justify-between text-text">
+    <RouterView name="default"/>
     <RouterView name="footer" />
+  </div>
 </template>
 
 <script lang="ts">
@@ -17,6 +18,6 @@ export default defineComponent({
 })
 </script>
 
-
 <style scoped>
+
 </style>
