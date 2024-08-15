@@ -1,5 +1,17 @@
 # Changelog
 
+## [0.0.2](https://github.com/Oktogazh/Corpora/compare/corpora-v0.0.1...corpora-v0.0.2) (2024-08-15)
+
+
+### ✨ Polish
+
+* layout, route paths, style scope of the changelog ([f0babb1](https://github.com/Oktogazh/Corpora/commit/f0babb1af15d0dec0fa93200cbb7521798d6e10b))
+
+
+### ✨  New
+
+* change log page created ([5161d75](https://github.com/Oktogazh/Corpora/commit/5161d75f04fd217f2f3610496c4587e0b1bd98f4))
+
 ## 0.0.1 (2024-08-13)
 
 
