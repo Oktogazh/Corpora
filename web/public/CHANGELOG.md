@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.0.3](https://github.com/Oktogazh/Corpora/compare/corpora-v0.0.2...corpora-v0.0.3) (2024-08-17)
+
+
+### ✨  New
+
+* buttons on the log in view ([276e229](https://github.com/Oktogazh/Corpora/commit/276e2294c973dfaa4dbf33630a56d8726155a9aa))
+
 ## [0.0.2](https://github.com/Oktogazh/Corpora/compare/corpora-v0.0.1...corpora-v0.0.2) (2024-08-15)
 
 
