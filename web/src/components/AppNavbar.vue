@@ -15,13 +15,13 @@
         id="navbar-inner-container"
         class="h-full w-full py-4 flex justify-between m-auto max-w-[1300px]"
       >
-        <router-link :to="{ name: 'Home' }">
-          <div id="title" class="flex items-center text-text">{{ appName }}</div>
+        <router-link :to="{ name: 'Home' }" id="title" class="flex items-center font-bold text-text-800">
+          {{ appName }}
         </router-link>
         <div id="navigation" class="grow flex justify-end items-center">
           <router-link :to="{ name: 'Sign In' }">
             <div class="text-text hover:text-primary transition-colors duration-300">
-              {{ $t("AppNavbar.signIn")}}
+              {{ $t("Log in")}}
             </div>
           </router-link>
           <Separator

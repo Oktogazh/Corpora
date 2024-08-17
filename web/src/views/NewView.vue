@@ -1,5 +1,5 @@
 <template>
-  <div class="h-[100em] flex flex-col w-full ">
+  <div class="w-full ">
     <div class="w-full px-6 sm:px-12 lg:px-16">
       <div class="section-container flex flex-row justify-between">
         <Skeleton
