@@ -19,7 +19,7 @@
           {{ appName }}
         </router-link>
         <div id="navigation" class="grow flex justify-end items-center">
-          <router-link :to="{ name: 'Sign In' }">
+          <router-link :to="{ name: 'Log In' }">
             <div class="text-text hover:text-primary transition-colors duration-300">
               {{ $t("Log in (navbar link)")}}
             </div>

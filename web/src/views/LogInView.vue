@@ -1,9 +1,11 @@
 <template>
   <div class="w-full ">
     <div class="w-full px-6 sm:px-12 lg:px-16">
-      <div class="section-container">
+      <div class="section-container flex items-center justify-center">
         <div class="flex flex-col justify-center items-center gap-8 text-center">
-          <h1 class="text-4xl mx-2 font-bold text-secondary-500">{{ $t('Log in to Corpora') }}</h1>
+          <h1 class="text-4xl mx-2 font-bold text-text-900">
+            {{ $t('Log in to Corpora') }}
+          </h1>
 
           <div class="flex flex-col gap-4 w-72 mx-10">
             <button
@@ -20,6 +22,7 @@
               </span>
             </button>
           </div>
+
           <div class="h-8 w-full flex flex-row justify-center items-center">
             <Separator class="bg-secondary-200 w-full h-px">
             </Separator>
@@ -69,11 +72,30 @@
               </div>
             </div>
             <button
-              class="w-72 bg-primary text-background font-semibold p-2 rounded-full hover:bg-primary-600 mt-4"
+              class="w-72 bg-primary text-background font-semibold p-2 rounded-full hover:bg-primary-500 mt-4"
               @click="loginWithPassword">
               {{ $t('Log In (action button)') }}
             </button>
+            <router-link
+              :to="{ name: 'Forgot Password' }"
+              class="text-text hover:text-text-500 underline">
+              {{ $t('Forgot password?') }}
+            </router-link>
           </div>
+          
+          <div class="h-8 w-full flex flex-row justify-center items-center">
+            <Separator class="bg-secondary-200 w-full h-px">
+            </Separator>
+          </div>
+          <span class="text-text-500">
+            {{ $t("Don't have an account yet?") }}
+
+            <router-link
+              :to="{ name: 'Sign Up' }"
+              class="text-text hover:text-text-500 underline">
+              {{ $t("Sign up for Corpora") }}
+            </router-link>
+          </span>
         </div>
       </div>
     </div>
