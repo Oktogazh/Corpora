@@ -2,28 +2,21 @@
   <div class="w-full ">
     <div class="w-full px-6 sm:px-12 lg:px-16">
       <div class="section-container">
-        <div class="flex flex-col justify-center content-center gap-8 text-center">
+        <div class="flex flex-col justify-center items-center gap-8 text-center">
           <h1 class="text-4xl mx-2 font-bold text-secondary-500">{{ $t('Log in to Corpora') }}</h1>
 
-          <div class="flex flex-col gap-4">
-            <button class="rounded-full border-[1px] border-secondary-300 p-2 w-full hover:bg-background-50 hover:border-secondary-200">
+          <div class="flex flex-col gap-4 w-72 mx-10">
+            <button
+              class="rounded-full border-[1px] border-secondary-300 p-2 w-full hover:bg-background-50 hover:border-secondary-200"
+              v-for="(button, i) in loginButtons"
+              :key="i">
               <img
                 class="absolute w-6 h-6 ms-10"
-                src="https://upload.wikimedia.org/wikipedia/commons/c/c1/Google_%22G%22_logo.svg"
-                alt="Google icon">
+                :src="button.icon"
+                :alt="button.alt">
               <span class="flex flex-row justify-center items-center gap-2 text-text-800 font-bold">
                 <img class="w-6 h-6 opacity-0 ms-8">
-                <span>{{ $t('Log in with Google') }}</span>
-              </span>
-            </button>
-            <button class="rounded-full border-[1px] border-secondary-300 p-2 w-full hover:bg-background-50 hover:border-secondary-200">
-              <img
-                class="absolute w-6 h-6 ms-10"
-                src="https://upload.wikimedia.org/wikipedia/commons/c/c1/Google_%22G%22_logo.svg"
-                alt="Google icon">
-              <span class="flex flex-row justify-center items-center gap-2 text-text-800 font-bold">
-                <img class="w-6 h-6 opacity-0 ms-8">
-                <span>{{ $t('Log in with Google') }}</span>
+                <span>{{ $t(button.text) }}</span>
               </span>
             </button>
           </div>
@@ -34,6 +27,53 @@
               {{ $t('or') }}
             </span>
           </div>
+          <div class="flex flex-col justify-center gap-4 w-fit">
+            <div>
+              <label
+                class="flex flex-col text-start font-semibold text-sm mb-2"
+                for="email-or-username">
+                {{ $t('Email or username') }}
+              </label>
+              <input
+                id="email-or-user-name"
+                class="w-full border-[1px] border-secondary-300 p-2 rounded bg-background-100 hover:bg-background-50 hover:border-secondary-200"
+                type="text"
+                :placeholder="$t('Email or username')"
+                :v-model="emailOrUsername">
+            </div>
+            <div>
+              <label
+                class="flex flex-col text-start font-semibold text-sm mb-2"
+                for="email-or-username">
+                {{ $t('Password') }}
+              </label>
+              <div class="flex flex-row items-center">
+                <input
+                  id="password"
+                  class="w-full border-[1px] border-secondary-300 p-2 rounded bg-background-100 hover:bg-background-50 hover:border-secondary-200 pe-8"
+                  :type="showPassword? 'text': 'password'"
+                  :placeholder="$t('Password')"
+                  :v-model="password">
+                  <div>
+                    <BsEye
+                      v-if="!showPassword"
+                      class="transform absolute -translate-x-full -translate-y-1/2 -ms-2 font-bold cursor-pointer"
+                      @click="showPassword = true"
+                    />
+                    <BsEyeSlash
+                      v-else
+                      class="transform absolute -translate-x-full -translate-y-1/2 -ms-2 font-bold cursor-pointer"
+                      @click="showPassword = false"
+                    />
+                  </div>
+              </div>
+            </div>
+            <button
+              class="w-72 bg-primary text-background font-semibold p-2 rounded-full hover:bg-primary-600 mt-4"
+              @click="loginWithPassword">
+              {{ $t('Log In (action button)') }}
+            </button>
+          </div>
         </div>
       </div>
     </div>
@@ -43,15 +83,38 @@
 <script lang="ts">
 import { defineComponent } from 'vue'
 import { Separator } from 'radix-vue';
+import { BsEye, BsEyeSlash } from '@kalimahapps/vue-icons';
 
 
 export default defineComponent({
   name: 'HomePage',
   components: {
-    Separator
+    Separator,
+    BsEye,
+    BsEyeSlash
   },
   data: () => ({
+    emailOrUsername: '',
+    password: '',
+    showPassword: false,
+    loginButtons: [
+      {
+        alt: 'Google icon',
+        icon: 'https://upload.wikimedia.org/wikipedia/commons/c/c1/Google_%22G%22_logo.svg',
+        text: 'Log in with Google'
+      },
+      {
+        alt: 'Facebook icon',
+        icon: 'https://upload.wikimedia.org/wikipedia/commons/b/b8/2021_Facebook_icon.svg',
+        text: 'Log in with Facebook'
+      },
+    ]
   }),
+  methods: {
+    loginWithPassword() {
+      console.log('Logging in with password')
+    }
+  }
 })
 </script>
 

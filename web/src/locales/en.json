@@ -1,5 +1,10 @@
 {
-  "Log in": "Log in",
+  "Email or username": "Email or username",
+  "Log in (navbar link)": "Log in",
+  "Log In (action button)": "Log In",
   "Log in to Corpora": "Log in to Corpora",
-  "or": "or"
+  "Log in with Google": "Log in with Google",
+  "Log in with Facebook": "Log in with Facebook",
+  "or": "or",
+  "Password": "Password"
 }

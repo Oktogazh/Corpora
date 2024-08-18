@@ -21,7 +21,7 @@
         <div id="navigation" class="grow flex justify-end items-center">
           <router-link :to="{ name: 'Sign In' }">
             <div class="text-text hover:text-primary transition-colors duration-300">
-              {{ $t("Log in")}}
+              {{ $t("Log in (navbar link)")}}
             </div>
           </router-link>
           <Separator
