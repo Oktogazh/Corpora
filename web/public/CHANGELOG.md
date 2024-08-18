@@ -1,5 +1,22 @@
 # Changelog
 
+## [0.1.0](https://github.com/Oktogazh/Corpora/compare/corpora-v0.0.3...corpora-v0.1.0) (2024-08-18)
+
+
+### 🚀 Features
+
+* **auth:** can connect with google ([7feeda2](https://github.com/Oktogazh/Corpora/commit/7feeda2716483c5517356a35713dbef74d515d30))
+
+
+### ✨ Polish
+
+* **log in view:** complete the interface ([5afd128](https://github.com/Oktogazh/Corpora/commit/5afd128dd13f2d29ce590eb24d9a49e36463d7ab))
+
+
+### ✨  New
+
+* **log in view:** Google button and password based loging interface ([e2c1dd6](https://github.com/Oktogazh/Corpora/commit/e2c1dd68a5a7bb6b8ebad47fa85f1695e41b9dd1))
+
 ## [0.0.3](https://github.com/Oktogazh/Corpora/compare/corpora-v0.0.2...corpora-v0.0.3) (2024-08-17)
 
 
