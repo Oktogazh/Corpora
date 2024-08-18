@@ -2,7 +2,7 @@ import { initializeApp } from "firebase/app";
 import { getAnalytics } from "firebase/analytics";
 import { getFirestore } from "firebase/firestore";
 import { getDatabase } from "firebase/database";
-import { getAuth } from "firebase/auth";
+import { getAuth, GoogleAuthProvider, FacebookAuthProvider } from "firebase/auth";
 import { getFunctions } from "firebase/functions";
 import { getStorage } from "firebase/storage";
 // TODO: Add SDKs for Firebase products that you want to use
@@ -28,9 +28,20 @@ const analytics = getAnalytics(app);
 const db = getFirestore(app)
 const rtdb = getDatabase(app)
 const auth = getAuth(app)
+auth.useDeviceLanguage()
 const functions = getFunctions(app, 'europe-west1')
 const storage = getStorage(app)
+const googleProvider = new GoogleAuthProvider()
+const facebookProvider = new FacebookAuthProvider()
 
 export {
-  auth, functions, db, rtdb, storage, analytics, app
+  auth,
+  googleProvider,
+  facebookProvider,
+  functions,
+  db,
+  rtdb,
+  storage,
+  analytics,
+  app
 }

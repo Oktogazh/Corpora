@@ -9,6 +9,7 @@
 
           <div class="flex flex-col gap-4 w-72 mx-10">
             <button
+              @click="loginWith(button.name)"
               class="rounded-full border-[1px] border-secondary-300 p-2 w-full hover:bg-background-50 hover:border-secondary-200"
               v-for="(button, i) in loginButtons"
               :key="i">
@@ -106,6 +107,8 @@
 import { defineComponent } from 'vue'
 import { Separator } from 'radix-vue';
 import { BsEye, BsEyeSlash } from '@kalimahapps/vue-icons';
+import { auth, googleProvider, facebookProvider } from '@/firebase';
+import { signInWithPopup } from "firebase/auth";
 
 
 export default defineComponent({
@@ -121,11 +124,13 @@ export default defineComponent({
     showPassword: false,
     loginButtons: [
       {
+        name: 'google',
         alt: 'Google icon',
         icon: 'https://upload.wikimedia.org/wikipedia/commons/c/c1/Google_%22G%22_logo.svg',
         text: 'Log in with Google'
       },
       {
+        name: 'facebook',
         alt: 'Facebook icon',
         icon: 'https://upload.wikimedia.org/wikipedia/commons/b/b8/2021_Facebook_icon.svg',
         text: 'Log in with Facebook'
@@ -133,8 +138,37 @@ export default defineComponent({
     ]
   }),
   methods: {
+    loginWith(provider: string) {
+      switch (provider) {
+        case 'google':
+          this.loginWithGoogle();
+          break;
+        case 'facebook':
+          this.loginWithFacebook();
+          break;
+        default:
+          console.error('Unknown provider:', provider);
+      }
+    },
+    async loginWithGoogle() {
+      try {
+        const result = await signInWithPopup(auth, googleProvider);
+        const user = result.user;
+        console.log("User signed in:", user);
+      } catch (error) {
+        console.error("Error signing in with Google:", error);
+      }
+    },
+    async loginWithFacebook() {
+      try {
+        const result = await signInWithPopup(auth, facebookProvider);
+        const user = result.user;
+        console.log("User signed in:", user);
+      } catch (error) {
+        console.error("Error signing in with Facebook:", error);
+      }
+    },
     loginWithPassword() {
-      console.log('Logging in with password')
     }
   }
 })

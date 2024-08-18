@@ -2,6 +2,7 @@ import '@/assets/main.css'
 import { createApp } from 'vue'
 import { createPinia } from 'pinia'
 import { useAppStore } from '@/stores/app'
+import { useUserStore } from '@/stores/user'
 import { name } from '@/../package.json'
 
 import App from './App.vue'
@@ -20,6 +21,7 @@ const title = name.charAt(0).toLocaleUpperCase() + name.slice(1)
 document.title = title
 const appStore = useAppStore()
 appStore.setName(title)
+useUserStore().initAuth()
 
 // Set vue-i18n
 app.use(i18n)
