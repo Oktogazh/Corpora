@@ -8,6 +8,9 @@ export const useUserStore = defineStore('User', {
     isConnected: false,
   }),
   actions: {
+    logout() {
+      auth.signOut();
+    },
     initAuth() {
       const state = this;
       onAuthStateChanged(auth, (user) => {

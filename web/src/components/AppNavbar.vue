@@ -19,11 +19,18 @@
           {{ appName }}
         </router-link>
         <div id="navigation" class="grow flex justify-end items-center">
-          <router-link :to="{ name: 'Log In' }">
+          <router-link :to="{ name: 'Log In' }" v-if="!isConnected">
             <div class="text-text hover:text-primary transition-colors duration-300">
               {{ $t("Log in (navbar link)")}}
             </div>
           </router-link>
+          <button
+            @click="logOut"
+            class="text-text hover:text-primary transition-colors duration-300"
+            v-else
+          >
+              {{ $t("Log out (navbar link)")}}
+            </button>
           <Separator
             class="bg-secondary-100 data-[orientation=vertical]:h-full data-[orientation=vertical]:w-px mx-[15px]"
             decorative
@@ -58,10 +65,11 @@
 <script lang="ts">
 import { defineComponent } from 'vue';
 import { Separator, SwitchRoot, SwitchThumb } from 'radix-vue';
-import { AnOutlinedMoon, AnOutlinedSun } from '@kalimahapps/vue-icons';
+import { AnOutlinedMoon, AnOutlinedSun, BxLogOut } from '@kalimahapps/vue-icons';
 import { useDark } from '@vueuse/core';
 import { useAppStore } from '@/stores/app';
 import { mapState } from 'pinia';
+import { useUserStore } from '@/stores/user'
 
 
 export default defineComponent({
@@ -77,6 +85,9 @@ export default defineComponent({
     ...mapState(useAppStore,{
       appName: (state) => state.name,
     }),
+    ...mapState(useUserStore,{
+      isConnected: (state) => state.isConnected,
+    }),
   },
   data: () => ({
     isDarkMode: useDark({
@@ -87,6 +98,9 @@ export default defineComponent({
     }),
   }),
   methods: {
+    logOut () {
+      useUserStore().logout()
+    },
     async switchDarkMode(val: boolean) {
       this.isDarkMode = val
     },
