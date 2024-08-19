@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.2.0](https://github.com/Oktogazh/Corpora/compare/corpora-v0.1.0...corpora-v0.2.0) (2024-08-19)
+
+
+### 🚀 Features
+
+* **auth:** can log out ([31f8b2c](https://github.com/Oktogazh/Corpora/commit/31f8b2c70f2328d5de6a03041a3eb4477363e606))
+
 ## [0.1.0](https://github.com/Oktogazh/Corpora/compare/corpora-v0.0.3...corpora-v0.1.0) (2024-08-18)
 
 
