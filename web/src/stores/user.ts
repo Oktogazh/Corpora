@@ -14,8 +14,7 @@ export const useUserStore = defineStore('User', {
     initAuth() {
       const state = this;
       onAuthStateChanged(auth, (user) => {
-        console.log('onAuthStateChanged', user);
-        state.user = user;
+        state.user = JSON.parse(JSON.stringify(user));
         state.isConnected = user !== null;
       });
     },

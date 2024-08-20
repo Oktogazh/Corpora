@@ -109,6 +109,9 @@ import { Separator } from 'radix-vue';
 import { BsEye, BsEyeSlash } from '@kalimahapps/vue-icons';
 import { auth, googleProvider, facebookProvider } from '@/firebase';
 import { signInWithPopup } from "firebase/auth";
+import { useUserStore } from '@/stores/user';
+import { mapState } from 'pinia';
+import { type RouteLocationRaw } from 'vue-router';
 
 
 export default defineComponent({
@@ -118,7 +121,13 @@ export default defineComponent({
     BsEye,
     BsEyeSlash
   },
+  computed: {
+    ...mapState(useUserStore,{
+      isConnected: (state) => state.isConnected,
+    }),
+  },
   data: () => ({
+    nextRoute: null as any,
     emailOrUsername: '',
     password: '',
     showPassword: false,
@@ -152,25 +161,37 @@ export default defineComponent({
     },
     async loginWithGoogle() {
       try {
-        const result = await signInWithPopup(auth, googleProvider);
-        const user = result.user;
-        console.log("User signed in:", user);
+        await signInWithPopup(auth, googleProvider);
       } catch (error) {
         console.error("Error signing in with Google:", error);
       }
     },
     async loginWithFacebook() {
       try {
-        const result = await signInWithPopup(auth, facebookProvider);
-        const user = result.user;
-        console.log("User signed in:", user);
+        await signInWithPopup(auth, facebookProvider);
       } catch (error) {
         console.error("Error signing in with Facebook:", error);
       }
     },
     loginWithPassword() {
     }
-  }
+  },
+  created() {
+    if (this.isConnected) {
+      this.$router.push({name: 'Home'});
+    }
+  },
+  watch: {
+    isConnected(isConnected) {
+      if (isConnected) {
+        try {
+          this.$router.go(-1)
+        } catch (error) {
+          this.$router.push({name: 'Home'});
+        }
+      }
+    }
+  },
 })
 </script>
 

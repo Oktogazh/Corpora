@@ -65,7 +65,7 @@
 <script lang="ts">
 import { defineComponent } from 'vue';
 import { Separator, SwitchRoot, SwitchThumb } from 'radix-vue';
-import { AnOutlinedMoon, AnOutlinedSun, BxLogOut } from '@kalimahapps/vue-icons';
+import { AnOutlinedMoon, AnOutlinedSun } from '@kalimahapps/vue-icons';
 import { useDark } from '@vueuse/core';
 import { useAppStore } from '@/stores/app';
 import { mapState } from 'pinia';
