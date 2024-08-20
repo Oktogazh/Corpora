@@ -20,9 +20,12 @@
         </router-link>
         <div id="navigation" class="grow flex justify-end items-center">
           <router-link :to="{ name: 'Log In' }" v-if="!isConnected">
-            <div class="text-text hover:text-primary transition-colors duration-300">
+            <button
+              :disabled="$route.name === 'Log In'"
+              :class="$route.name !== 'Log In' && 'hover:text-primary'"
+              class="transition-colors duration-300">
               {{ $t("Log in (navbar link)")}}
-            </div>
+            </button>
           </router-link>
           <button
             @click="logOut"

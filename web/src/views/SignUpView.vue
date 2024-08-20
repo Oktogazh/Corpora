@@ -7,30 +7,6 @@
             {{ $t('Log in to Corpora') }}
           </h1>
 
-          <div class="flex flex-col gap-4 w-72 mx-10">
-            <button
-              @click="loginWith(button.name)"
-              class="rounded-full border-[1px] border-secondary-300 p-2 w-full hover:bg-background-50 hover:border-secondary-200"
-              v-for="(button, i) in loginButtons"
-              :key="i">
-              <img
-                class="absolute w-6 h-6 ms-10"
-                :src="button.icon"
-                :alt="button.alt">
-              <span class="flex flex-row justify-center items-center gap-2 text-text-800 font-bold">
-                <img class="w-6 h-6 opacity-0 ms-8">
-                <span>{{ $t(button.text) }}</span>
-              </span>
-            </button>
-          </div>
-
-          <div class="h-8 w-full flex flex-row justify-center items-center">
-            <Separator class="bg-secondary-200 w-full h-px">
-            </Separator>
-            <span class="bg-background px-2 text-secondary-500 absolute">
-              {{ $t('or') }}
-            </span>
-          </div>
           <div class="flex flex-col justify-center gap-4 w-fit">
             <div>
               <label
@@ -75,14 +51,46 @@
             <button
               class="w-72 bg-primary text-background font-semibold p-2 rounded-full hover:bg-primary-500 mt-4"
               @click="loginWithPassword">
-              {{ $t('Log In (action button)') }}
+              {{ $t('Next') }}
             </button>
-            <router-link
-              :to="{ name: 'Forgot Password' }"
-              class="text-text hover:text-text-500 underline">
-              {{ $t('Forgot password?') }}
-            </router-link>
           </div>
+          <div class="h-8 w-full flex flex-row justify-center items-center">
+            <Separator class="bg-secondary-200 w-full h-px">
+            </Separator>
+            <span class="bg-background px-2 text-secondary-500 absolute">
+              {{ $t('or') }}
+            </span>
+          </div>
+
+          <div class="flex flex-col gap-4 w-72 mx-10">
+            <button
+              @click="loginWith(button.name)"
+              class="rounded-full border-[1px] border-secondary-300 p-2 w-full hover:bg-background-50 hover:border-secondary-200"
+              v-for="(button, i) in loginButtons"
+              :key="i">
+              <img
+                class="absolute w-6 h-6 ms-10"
+                :src="button.icon"
+                :alt="button.alt">
+              <span class="flex flex-row justify-center items-center gap-2 text-text-800 font-bold">
+                <img class="w-6 h-6 opacity-0 ms-8">
+                <span>{{ $t(button.text) }}</span>
+              </span>
+            </button>
+          </div>
+          <div class="h-8 w-full flex flex-row justify-center items-center">
+            <Separator class="bg-secondary-200 w-full h-px">
+            </Separator>
+          </div>
+          <span class="text-text-500">
+            {{ $t("Already have an account?") }}
+
+            <router-link
+              :to="{ name: 'Sign Up' }"
+              class="text-text hover:text-text-500 underline">
+              {{ $t("Log in here") }}
+            </router-link>
+          </span>
         </div>
       </div>
     </div>
@@ -100,7 +108,7 @@ import { mapState } from 'pinia';
 
 
 export default defineComponent({
-  name: 'LogInView',
+  name: 'SignUpView',
   components: {
     Separator,
     BsEye,
