@@ -83,6 +83,20 @@
               {{ $t('Forgot password?') }}
             </router-link>
           </div>
+
+          <div class="h-8 w-full flex flex-row justify-center items-center">
+            <Separator class="bg-secondary-200 w-full h-px">
+            </Separator>
+          </div>
+          <span class="text-text-500">
+            {{ $t("Don't have an account yet?") }}
+
+            <router-link
+              :to="{ name: 'Sign Up' }"
+              class="text-text hover:text-text-500 underline">
+              {{ $t("Sign up for Corpora") }}
+            </router-link>
+          </span>
         </div>
       </div>
     </div>

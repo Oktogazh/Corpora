@@ -1,10 +1,13 @@
 <template>
   <div class="w-full ">
     <div class="w-full px-6 sm:px-12 lg:px-16">
-      <div class="section-container flex items-center justify-center">
-        <div class="flex flex-col justify-center items-center gap-8 text-center">
+      <div
+        class="section-container flex flex-col items-center justify-center">
+        <div
+          v-if="step === 0"
+          class="flex flex-col justify-center items-center gap-8 text-center">
           <h1 class="text-4xl mx-2 font-bold text-text-900">
-            {{ $t('Log in to Corpora') }}
+            {{ $t('Sign up') }}
           </h1>
 
           <div class="flex flex-col justify-center gap-4 w-fit">
@@ -19,38 +22,11 @@
                 class="w-full border-[1px] border-secondary-300 p-2 rounded bg-background-100 hover:bg-background-50 hover:border-secondary-200"
                 type="text"
                 :placeholder="$t('Email or username')"
-                :v-model="emailOrUsername">
-            </div>
-            <div>
-              <label
-                class="flex flex-col text-start font-semibold text-sm mb-2"
-                for="email-or-username">
-                {{ $t('Password') }}
-              </label>
-              <div class="flex flex-row items-center">
-                <input
-                  id="password"
-                  class="w-full border-[1px] border-secondary-300 p-2 rounded bg-background-100 hover:bg-background-50 hover:border-secondary-200 pe-8"
-                  :type="showPassword? 'text': 'password'"
-                  :placeholder="$t('Password')"
-                  :v-model="password">
-                  <div>
-                    <BsEye
-                      v-if="!showPassword"
-                      class="transform absolute -translate-x-full -translate-y-1/2 -ms-2 font-bold cursor-pointer"
-                      @click="showPassword = true"
-                    />
-                    <BsEyeSlash
-                      v-else
-                      class="transform absolute -translate-x-full -translate-y-1/2 -ms-2 font-bold cursor-pointer"
-                      @click="showPassword = false"
-                    />
-                  </div>
-              </div>
+                :v-model="email">
             </div>
             <button
               class="w-72 bg-primary text-background font-semibold p-2 rounded-full hover:bg-primary-500 mt-4"
-              @click="loginWithPassword">
+              @click="step = 1">
               {{ $t('Next') }}
             </button>
           </div>
@@ -86,12 +62,60 @@
             {{ $t("Already have an account?") }}
 
             <router-link
-              :to="{ name: 'Sign Up' }"
+              :to="{ name: 'Log In' }"
               class="text-text hover:text-text-500 underline">
               {{ $t("Log in here") }}
             </router-link>
           </span>
         </div>
+      <div
+        v-else
+        class="section-container flex flex-col items-center justify-center">
+        <div
+          class="flex flex-col items-center justify-center">
+          <div>
+
+          </div>
+          <SliderRoot
+            :modelValue="[step]"
+            class="relative flex items-center select-none touch-none h-5 w-full"
+            :max="3"
+            :step="1"
+            disabled
+          >
+            <SliderTrack class="bg-secondary relative grow rounded-full h-[3px]">
+              <SliderRange class="absolute bg-primary rounded-full h-full" />
+            </SliderTrack>
+          </SliderRoot>
+          <div>
+            <label
+              class="flex flex-col text-start font-semibold text-sm mb-2"
+              for="email-or-username">
+              {{ $t('Password') }}
+            </label>
+            <div class="flex flex-row items-center">
+              <input
+                id="password"
+                class="border-[1px] border-secondary-300 p-2 rounded bg-background-100 hover:bg-background-50 hover:border-secondary-200 pe-8"
+                :type="showPassword? 'text': 'password'"
+                :placeholder="$t('Password')"
+                :v-model="password">
+              <div>
+                <BsEye
+                  v-if="!showPassword"
+                  class="transform absolute -translate-x-full -translate-y-1/2 -ms-2 font-bold cursor-pointer"
+                  @click="showPassword = true"
+                />
+                <BsEyeSlash
+                  v-else
+                  class="transform absolute -translate-x-full -translate-y-1/2 -ms-2 font-bold cursor-pointer"
+                  @click="showPassword = false"
+                />
+            </div>
+          </div>
+          </div>
+        </div>
+      </div>
       </div>
     </div>
   </div>
@@ -99,7 +123,7 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue'
-import { Separator } from 'radix-vue';
+import { Separator, SliderRange, SliderRoot, SliderTrack } from 'radix-vue';
 import { BsEye, BsEyeSlash } from '@kalimahapps/vue-icons';
 import { auth, googleProvider, facebookProvider } from '@/firebase';
 import { signInWithPopup } from "firebase/auth";
@@ -112,16 +136,20 @@ export default defineComponent({
   components: {
     Separator,
     BsEye,
-    BsEyeSlash
+    BsEyeSlash,
+    SliderRange,
+    SliderRoot,
+    SliderTrack
   },
   computed: {
     ...mapState(useUserStore,{
       isConnected: (state) => state.isConnected,
-    }),
+    })
   },
   data: () => ({
-    nextRoute: null as any,
-    emailOrUsername: '',
+    step: 0,
+    email: '',
+    username: '',
     password: '',
     showPassword: false,
     loginButtons: [
