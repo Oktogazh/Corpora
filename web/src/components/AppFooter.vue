@@ -1,5 +1,5 @@
 <template>
-  <footer class="bottom-0 flex flex-col w-full ">
+  <footer class="bottom-0 flex flex-col items-center w-full ">
     <router-link :to="{ name: 'Change Log' }">
       changelog
     </router-link>

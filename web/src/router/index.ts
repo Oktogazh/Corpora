@@ -8,7 +8,8 @@ const router = createRouter({
       name: 'Home',
       components: {
         default: () => import('../views/HomeView.vue'),
-        footer: () => import('../components/AppFooter.vue')
+        footer: () => import('../components/AppFooter.vue'),
+        sidebar: () => import('../components/HomeSidebar.vue')
       }
     },
     {
