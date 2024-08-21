@@ -1,7 +1,7 @@
 <template>
   <header
     id="navbar-outer-container"
-    class="fixed top-0 left-0 z-30 bg-transparent w-full h-16"
+    class="fixed top-0 left-0 z-30 bg-transparent w-full h-16 text-text-800"
   >
     <div
       id="navbar-bg"
@@ -15,7 +15,7 @@
         id="navbar-inner-container"
         class="h-full w-full py-4 flex justify-between m-auto max-w-[1300px]"
       >
-        <router-link :to="{ name: 'Home' }" id="title" class="flex items-center font-bold text-text-800">
+        <router-link :to="{ name: 'Home' }" id="title" class="flex items-center font-bold">
           {{ appName }}
         </router-link>
         <div id="navigation" class="grow flex justify-end items-center">

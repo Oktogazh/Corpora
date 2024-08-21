@@ -1,5 +1,9 @@
 {
+  "1 letter": "1 letter",
+  "1 number or special character (example: # ? ! &)": "1 number or special character (example: # ? ! &)",
+  "10 characters": "10 characters",
   "Already have an account?": "Already have an account?",
+  "Create a password": "Create a password",
   "Don't have an account yet?": "Don't have an account yet?",
   "Email or username": "Email or username",
   "Forgot password?": "Forgot password?",
@@ -13,5 +17,8 @@
   "Next": "Next",
   "or": "or",
   "Password": "Password",
-  "Sign up for Corpora": "Sign up for Corpora"
+  "Sign up for Corpora": "Sign up for Corpora",
+  "Sign Up (action button)": "Sign Up",
+  "Step {n} of 3": "Step {n} of 3",
+  "Your password must contain at least": "Your password must contain at least"
 }

@@ -1,16 +1,20 @@
 <template>
-  <div class="w-full ">
-    <div class="w-full px-6 sm:px-12 lg:px-16">
+  <div
+    class="w-full ">
+    <div
+      class="w-full px-6 sm:px-12 lg:px-16">
       <div
         class="section-container flex flex-col items-center justify-center">
         <div
           v-if="step === 0"
           class="flex flex-col justify-center items-center gap-8 text-center">
-          <h1 class="text-4xl mx-2 font-bold text-text-900">
+          <h1
+            class="text-4xl mx-2 font-bold text-text-900">
             {{ $t('Sign up') }}
           </h1>
 
-          <div class="flex flex-col justify-center gap-4 w-fit">
+          <div
+            class="flex flex-col justify-center gap-4 w-fit">
             <div>
               <label
                 class="flex flex-col text-start font-semibold text-sm mb-2"
@@ -30,7 +34,8 @@
               {{ $t('Next') }}
             </button>
           </div>
-          <div class="h-8 w-full flex flex-row justify-center items-center">
+          <div
+            class="h-8 w-full flex flex-row justify-center items-center">
             <Separator class="bg-secondary-200 w-full h-px">
             </Separator>
             <span class="bg-background px-2 text-secondary-500 absolute">
@@ -38,7 +43,8 @@
             </span>
           </div>
 
-          <div class="flex flex-col gap-4 w-72 mx-10">
+          <div
+            class="flex flex-col gap-4 w-72 mx-10">
             <button
               @click="loginWith(button.name)"
               class="rounded-full border-[1px] border-secondary-300 p-2 w-full hover:bg-background-50 hover:border-secondary-200"
@@ -54,11 +60,13 @@
               </span>
             </button>
           </div>
-          <div class="h-8 w-full flex flex-row justify-center items-center">
+          <div
+            class="h-8 w-full flex flex-row justify-center items-center">
             <Separator class="bg-secondary-200 w-full h-px">
             </Separator>
           </div>
-          <span class="text-text-500">
+          <span
+            class="text-text-500">
             {{ $t("Already have an account?") }}
 
             <router-link
@@ -68,54 +76,109 @@
             </router-link>
           </span>
         </div>
-      <div
-        v-else
-        class="section-container flex flex-col items-center justify-center">
         <div
-          class="flex flex-col items-center justify-center">
-          <div>
-
-          </div>
-          <SliderRoot
-            :modelValue="[step]"
-            class="relative flex items-center select-none touch-none h-5 w-full"
-            :max="3"
-            :step="1"
-            disabled
-          >
-            <SliderTrack class="bg-secondary relative grow rounded-full h-[3px]">
-              <SliderRange class="absolute bg-primary rounded-full h-full" />
-            </SliderTrack>
-          </SliderRoot>
-          <div>
-            <label
-              class="flex flex-col text-start font-semibold text-sm mb-2"
-              for="email-or-username">
-              {{ $t('Password') }}
-            </label>
-            <div class="flex flex-row items-center">
-              <input
-                id="password"
-                class="border-[1px] border-secondary-300 p-2 rounded bg-background-100 hover:bg-background-50 hover:border-secondary-200 pe-8"
-                :type="showPassword? 'text': 'password'"
-                :placeholder="$t('Password')"
-                :v-model="password">
-              <div>
-                <BsEye
-                  v-if="!showPassword"
-                  class="transform absolute -translate-x-full -translate-y-1/2 -ms-2 font-bold cursor-pointer"
-                  @click="showPassword = true"
-                />
-                <BsEyeSlash
-                  v-else
-                  class="transform absolute -translate-x-full -translate-y-1/2 -ms-2 font-bold cursor-pointer"
-                  @click="showPassword = false"
-                />
+          v-else
+          class="section-container flex flex-col items-center justify-center">
+          <div
+            class="flex flex-col items-center justify-between gap-4">
+            <div>
+              <SliderRoot
+                :modelValue="[step]"
+                class="relative flex items-center select-none touch-none h-5 w-full"
+                :max="3"
+                :step="1"
+                disabled
+              >
+                <SliderTrack class="bg-secondary relative grow rounded-full h-[3px]">
+                  <SliderRange class="absolute bg-primary rounded-full h-full" />
+                </SliderTrack>
+              </SliderRoot>
+              <div
+                class="flex w-full p-2">
+                <button>
+                  <AkChevronLeft
+                    @click="--step"
+                    class="font-bold text-3xl"/>
+                </button>
+                <div
+                  class="flex flex-col mx-4">
+                  <span class="text-text-500 font-medium">{{ $tc("Step {n} of 3", step) }}</span>
+                  <span class="text-text font-bold">{{ $tc("Create a password") }}</span>
+                  <div
+                    class="flex">
+                    <input class="h-0 pe-8">
+                    <AkChevronLeft
+                      class="font-bold text-3xl h-0  mx-5"/>
+                  </div>
+                </div>
+              </div>
             </div>
-          </div>
+            <div
+              class="flex flex-col gap-2"
+              v-if="step === 1">
+              <label
+                class="flex flex-col text-start font-semibold text-sm mb-2"
+                for="email-or-username">
+                {{ $t('Password') }}
+              </label>
+              <div
+                class="flex flex-row items-center">
+                <input
+                  id="password"
+                  class="border-[1px] w-full border-secondary-300 p-2 rounded bg-background-100 hover:bg-background-50 hover:border-secondary-200 pe-8"
+                  :type="showPassword? 'text': 'password'"
+                  :placeholder="$t('Password')"
+                  :v-model="password">
+                <div>
+                  <BsEye
+                    v-if="!showPassword"
+                    class="transform absolute -translate-x-full -translate-y-1/2 -ms-2 font-bold cursor-pointer"
+                    @click="showPassword = true"
+                  />
+                  <BsEyeSlash
+                    v-else
+                    class="transform absolute -translate-x-full -translate-y-1/2 -ms-2 font-bold cursor-pointer"
+                    @click="showPassword = false"
+                  />
+                </div>
+              </div>
+              <div class="flex flex-col gap-2 text-xs">
+                <span
+                  class="font-semibold text-sm">{{ $t("Your password must contain at least") }}</span>
+                <span
+                  class="flex gap-2">
+                  <AkCircle v-if="true"/>
+                  <AkCircleCheckFill v-else/>
+                  {{ $t("1 letter") }}
+                </span>
+                <span
+                  class="flex gap-2 align-baseline">
+                  <AkCircle v-if="true"/>
+                  <AkCircleCheckFill v-else/>
+                  {{ $t("1 number or special character (example: # ? ! &)") }}
+                </span>
+                <span
+                  class="flex gap-2 align-baseline">
+                  <AkCircle v-if="true"/>
+                  <AkCircleCheckFill v-else/>
+                  {{ $t("10 characters") }}
+                </span>
+              </div>
+            </div>
+            <button
+              v-if="step < 3"
+              class="w-72 bg-primary text-background font-semibold p-2 rounded-full hover:bg-primary-500 mt-4"
+              @click="++step">
+              {{ $t('Next') }}
+            </button>
+            <button
+              v-else
+              class="w-72 bg-primary text-background font-semibold p-2 rounded-full hover:bg-primary-500 mt-4"
+              @click="createAccountAndRedirect">
+              {{ $t("Sign Up (action button)") }}
+            </button>
           </div>
         </div>
-      </div>
       </div>
     </div>
   </div>
@@ -124,7 +187,7 @@
 <script lang="ts">
 import { defineComponent } from 'vue'
 import { Separator, SliderRange, SliderRoot, SliderTrack } from 'radix-vue';
-import { BsEye, BsEyeSlash } from '@kalimahapps/vue-icons';
+import { BsEye, BsEyeSlash, AkChevronLeft, AkCircleCheckFill, AkCircle } from '@kalimahapps/vue-icons';
 import { auth, googleProvider, facebookProvider } from '@/firebase';
 import { signInWithPopup } from "firebase/auth";
 import { useUserStore } from '@/stores/user';
@@ -134,6 +197,9 @@ import { mapState } from 'pinia';
 export default defineComponent({
   name: 'SignUpView',
   components: {
+    AkChevronLeft,
+    AkCircle,
+    AkCircleCheckFill,
     Separator,
     BsEye,
     BsEyeSlash,
@@ -182,6 +248,9 @@ export default defineComponent({
         default:
           console.error('Unknown provider:', provider);
       }
+    },
+    async createAccountAndRedirect() {
+      console.log('Creating account and redirecting');
     },
     async loginWithGoogle() {
       try {
