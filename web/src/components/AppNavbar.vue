@@ -18,22 +18,21 @@
         <router-link :to="{ name: 'Home' }" id="title" class="flex items-center font-bold">
           {{ appName }}
         </router-link>
+
         <div id="navigation" class="grow flex justify-end items-center">
-          <router-link :to="{ name: 'Log In' }" v-if="!isConnected">
+
+          <router-link
+            :to="{ name: 'Settings' }"
+            class="flex align-middle"
+            v-if="isConnected">
             <button
-              :disabled="$route.name === 'Log In'"
-              :class="$route.name !== 'Log In' && 'hover:text-primary'"
+              :disabled="$route.name === 'Settings'"
+              :class="$route.name !== 'Settings'? 'hover:text-primary': 'text-primary'"
               class="transition-colors duration-300">
-              {{ $t("Log in (navbar link)")}}
+              <BxSolidCog class="h-6 w-6" />
             </button>
           </router-link>
-          <button
-            @click="logOut"
-            class="text-text hover:text-primary transition-colors duration-300"
-            v-else
-          >
-              {{ $t("Log out (navbar link)")}}
-            </button>
+
           <Separator
             class="bg-secondary-100 data-[orientation=vertical]:h-full data-[orientation=vertical]:w-px mx-[15px]"
             decorative
@@ -43,7 +42,7 @@
             id="dark-mode-switch"
             @update:checked="switchDarkMode"
             :defaultChecked="isDarkMode"
-            class="w-[44px] h-[24px] flex bg-background-100 shadow-sm rounded-full relative cursor-pointer border-[1px] border-secondary-200 hover:border-primary transition-colors duration-300"
+            class="w-11 h-6 flex bg-background-100 shadow-sm rounded-full relative cursor-pointer border-[1px] border-secondary-200 hover:border-primary transition-colors duration-300"
           >
             <transition name="slide" mode="out-in">
               <SwitchThumb
@@ -58,6 +57,30 @@
               </SwitchThumb>
             </transition>
           </SwitchRoot>
+
+          <Separator
+            class="bg-secondary-100 data-[orientation=vertical]:h-full data-[orientation=vertical]:w-px mx-[15px]"
+            decorative
+            orientation="vertical"
+            v-if="isConnected"
+          />
+          <router-link
+            :to="{ name: 'Log In' }"
+            v-if="!isConnected">
+            <button
+              :disabled="$route.name === 'Log In'"
+              :class="$route.name !== 'Log In'? 'hover:text-primary': 'text-primary'"
+              class="transition-colors duration-300">
+              {{ $t("Log in (navbar link)")}}
+            </button>
+          </router-link>
+          <button
+            @click="logOut"
+            class="text-text hover:text-primary transition-colors duration-300"
+            v-else
+          >
+              {{ $t("Log out (navbar link)")}}
+          </button>
         </div>
       </div>
     </div>
@@ -68,7 +91,7 @@
 <script lang="ts">
 import { defineComponent } from 'vue';
 import { Separator, SwitchRoot, SwitchThumb } from 'radix-vue';
-import { AnOutlinedMoon, AnOutlinedSun } from '@kalimahapps/vue-icons';
+import { AnOutlinedMoon, AnOutlinedSun, BxSolidCog } from '@kalimahapps/vue-icons';
 import { useDark } from '@vueuse/core';
 import { useAppStore } from '@/stores/app';
 import { mapState } from 'pinia';
@@ -83,6 +106,7 @@ export default defineComponent({
     SwitchThumb,
     AnOutlinedMoon,
     AnOutlinedSun,
+    BxSolidCog,
   },
   computed: {
     ...mapState(useAppStore,{

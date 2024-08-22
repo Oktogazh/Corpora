@@ -1,9 +1,9 @@
 <template>
-  <div class="flex flex-col w-full ">
+  <div class="w-full ">
     <div class="w-full px-6 sm:px-12 lg:px-16">
-      <div class="section-container flex flex-col items-center gap-4">
+      <div class="section-container flex flex-row justify-between">
         <Skeleton
-          class="w-96 h-52 bg-secondary"
+          class="w-64 h-52 bg-secondary"
           v-for="card of cardsSkeletons"
           :key="card"
         ></Skeleton>
@@ -17,7 +17,7 @@ import { Skeleton } from '@/components/shadcn/ui/skeleton'
 import { defineComponent } from 'vue'
 
 export default defineComponent({
-  name: 'HomeView',
+  name: 'SettingsView',
   components: {
     Skeleton
   },
