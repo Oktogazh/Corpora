@@ -8,3 +8,13 @@
   max-width: 1152px;
   padding: 24px 0;
 }
+
+/* 1024px == lg breakpoint */
+@media (min-width: 1024px) {
+  .section-container {
+    width: 100%;
+    margin: auto;
+    max-width: 40vw;
+    padding: 24px 0;
+  }
+}

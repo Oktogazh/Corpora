@@ -37,6 +37,7 @@
             class="bg-secondary-100 data-[orientation=vertical]:h-full data-[orientation=vertical]:w-px mx-[15px]"
             decorative
             orientation="vertical"
+            v-if="isConnected"
           />
           <SwitchRoot
             id="dark-mode-switch"
@@ -62,7 +63,6 @@
             class="bg-secondary-100 data-[orientation=vertical]:h-full data-[orientation=vertical]:w-px mx-[15px]"
             decorative
             orientation="vertical"
-            v-if="isConnected"
           />
           <router-link
             :to="{ name: 'Log In' }"

@@ -2,13 +2,6 @@ import { createRouter, createWebHistory, onBeforeRouteUpdate, type RouteLocation
 import { onAuthStateChanged } from "firebase/auth";
 import { auth } from '@/firebase';
 
-let isConnected = false;
-
-onAuthStateChanged(auth, (user) => {
-  isConnected = user !== null;
-});
-
-
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
@@ -54,6 +47,15 @@ const router = createRouter({
     }
   ]
 })
+
+let isConnected = false;
+
+onAuthStateChanged(auth, (user) => {
+  isConnected = user !== null;
+  if (!isConnected) {
+    router.push({ name: 'Home' })
+  }
+});
 
 router.beforeEach((to, from, next) => {
   if (to.meta.requiresAuth as boolean | undefined) {
