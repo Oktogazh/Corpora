@@ -1,5 +1,24 @@
 # Changelog
 
+## [0.2.1](https://github.com/Oktogazh/Corpora/compare/corpora-v0.2.0...corpora-v0.2.1) (2024-08-23)
+
+
+### 🐞 Bug Fixes
+
+* redirect from log in when connected ([66397fb](https://github.com/Oktogazh/Corpora/commit/66397fbba524901ff3f16e31755b551e1354369b))
+* **router:** redirect to home page on log out ([875408b](https://github.com/Oktogazh/Corpora/commit/875408bf44866c7f83439464cd75e3eb76db3cf3))
+
+
+### ✨ Polish
+
+* **sign up form:** completed the stepper ([a6c3c19](https://github.com/Oktogazh/Corpora/commit/a6c3c1938a6e00ce765d02a7a7c23d50e7324557))
+
+
+### ✨  New
+
+* **sign up form:** installed vuelidate and add it to the email field ([00335c0](https://github.com/Oktogazh/Corpora/commit/00335c0a0db53d4f9fd11fd6f27416d9a3483122))
+* **sign up view:** stepper ([740289a](https://github.com/Oktogazh/Corpora/commit/740289a8063a867d1e380d8c6000f633a854e80d))
+
 ## [0.2.0](https://github.com/Oktogazh/Corpora/compare/corpora-v0.1.0...corpora-v0.2.0) (2024-08-19)
 
 
