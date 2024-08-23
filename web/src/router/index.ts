@@ -59,8 +59,9 @@ const router = createRouter({
 let isConnected = false;
 
 onAuthStateChanged(auth, (user) => {
+  const previouslyConnected = isConnected;
   isConnected = user !== null;
-  if (!isConnected) {
+  if (!isConnected && previouslyConnected) {
     router.push({ name: 'Home' })
   }
 });

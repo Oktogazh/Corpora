@@ -18,18 +18,19 @@
             <div>
               <label
                 class="flex flex-col text-start font-semibold text-sm mb-2"
-                for="email-or-username">
-                {{ $t('Email or username') }}
+                for="email">
+                {{ $t('Email') }}
               </label>
               <input
-                id="email-or-user-name"
+                id="email"
                 class="w-full border-[1px] border-secondary-300 p-2 rounded bg-background-100 hover:bg-background-50 hover:border-secondary-200"
                 type="text"
-                :placeholder="$t('Email or username')"
-                :v-model="email">
+                :placeholder="$t('Email')"
+                v-model="v$.email.$model">
             </div>
             <button
-              class="w-72 bg-primary text-background font-semibold p-2 rounded-full hover:bg-primary-500 mt-4"
+              :disabled="v$.email.$invalid"
+              class="w-72 bg-primary text-background font-semibold p-2 rounded-full hover:bg-primary-500 mt-4 disabled:bg-secondary-300"
               @click="step = 1">
               {{ $t('Next') }}
             </button>
@@ -192,6 +193,8 @@ import { auth, googleProvider, facebookProvider } from '@/firebase';
 import { signInWithPopup } from "firebase/auth";
 import { useUserStore } from '@/stores/user';
 import { mapState } from 'pinia';
+import { useVuelidate } from '@vuelidate/core'
+import { required, email } from '@vuelidate/validators'
 
 
 export default defineComponent({
@@ -272,6 +275,16 @@ export default defineComponent({
   created() {
     if (this.isConnected) {
       this.$router.push({name: 'Home'});
+    }
+  },
+  setup () {
+    return { v$: useVuelidate() }
+  },
+  validations () {
+    return {
+      email: { required, email },
+      username: { required },
+      password: { required }
     }
   },
   watch: {

@@ -26,9 +26,8 @@
             class="flex align-middle"
             v-if="isConnected">
             <button
-              :disabled="$route.name === 'Settings'"
-              :class="$route.name !== 'Settings'? 'hover:text-primary': 'text-primary'"
-              class="transition-colors duration-300">
+              :disabled="$route?.name === 'Settings'"
+              class="transition-colors duration-300 disabled:text-primary hover:text-primary">
               <BxSolidCog class="h-6 w-6" />
             </button>
           </router-link>
@@ -68,9 +67,8 @@
             :to="{ name: 'Log In' }"
             v-if="!isConnected">
             <button
-              :disabled="$route.name === 'Log In'"
-              :class="$route.name !== 'Log In'? 'hover:text-primary': 'text-primary'"
-              class="transition-colors duration-300">
+              :disabled="$route?.name === 'Log In'"
+              class="transition-colors duration-300 disabled:text-primary hover:text-primary">
               {{ $t("Log in (navbar link)")}}
             </button>
           </router-link>
