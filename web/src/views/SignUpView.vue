@@ -102,9 +102,9 @@
                     class="font-bold text-3xl"/>
                 </button>
                 <div
-                  class="flex flex-col mx-4">
+                  class="flex flex-col mx-4 text-text font-bold">
                   <span class="text-text-500 font-medium">{{ $tc("Step {n} of 3", step) }}</span>
-                  <v-switch class="text-text font-bold" :case="step">
+                  <v-switch class="" :case="step">
                     <template #1>{{ $t("Create a password") }}</template>
                     <template #2>{{ $t("Create a username") }}</template>
                     <template #default>{{ $t("Create an account") }}</template>
@@ -119,127 +119,125 @@
               </div>
             </div>
             <div
-              class="flex flex-col gap-2"
-              v-if="step === 1">
-              <label
-                class="flex flex-col text-start font-semibold text-sm mb-2"
-                for="email-or-username">
-                {{ $t('Password') }}
-              </label>
-              <div
-                class="flex flex-row items-center">
-                <input
-                  id="password"
-                  class="border-[1px] w-full border-secondary-300 p-2 rounded bg-background-100 hover:bg-background-50 hover:border-secondary-200 pe-8"
-                  :type="showPassword? 'text': 'password'"
-                  :placeholder="$t('Password')"
-                  v-model="v$.password.$model">
-                <div>
-                  <BsEye
-                    v-if="!showPassword"
-                    class="transform absolute -translate-x-full -translate-y-1/2 -ms-2 font-bold cursor-pointer"
-                    @click="showPassword = true"
-                  />
-                  <BsEyeSlash
-                    v-else
-                    class="transform absolute -translate-x-full -translate-y-1/2 -ms-2 font-bold cursor-pointer"
-                    @click="showPassword = false"
-                  />
-                </div>
-              </div>
-              <div class="flex flex-col gap-2 text-xs">
-                <span
-                  class="font-semibold text-sm">{{ $t("Your password must contain at least") }}</span>
-                <span
-                  class="flex gap-2">
-                  <AkCircle v-if="v$.password.hasLetter.$invalid"/>
-                  <AnFilledCheckCircle class="text-accent" v-else/>
-                  {{ $t("1 letter") }}
-                </span>
-                <span
-                  class="flex gap-2 align-baseline">
-                  <AkCircle v-if="v$.password.special.$invalid"/>
-                  <AnFilledCheckCircle class="text-accent" v-else/>
-                  {{ $t("1 number or special character (example: # ? ! &)") }}
-                </span>
-                <span
-                  class="flex gap-2 align-baseline">
-                  <AkCircle v-if="v$.password.minLength.$invalid"/>
-                  <AnFilledCheckCircle class="text-accent" v-else/>
-                  {{ $t("10 characters") }}
-                </span>
-              </div>
-              <button
-                :disabled="v$.password.$invalid"
-                class="w-72 bg-primary text-background font-semibold p-2 rounded-full hover:bg-primary-500 mt-4 disabled:bg-secondary-300"
-                @click="++step">
-                {{ $t('Next') }}
-              </button>
+              id="form-container"
+              class="flex flex-col gap-2">
+              <v-switch :case="step">
+                <template #1>
+                  <label
+                    class="flex flex-col text-start font-semibold text-sm"
+                    for="email-or-username">
+                    {{ $t('Password') }}
+                  </label>
+                  <div
+                    class="flex flex-row items-center mb-2">
+                    <input
+                      id="password"
+                      class="border-[1px] w-full border-secondary-300 p-2 rounded bg-background-100 hover:bg-background-50 hover:border-secondary-200 pe-8"
+                      :type="showPassword? 'text': 'password'"
+                      :placeholder="$t('Password')"
+                      v-model="v$.password.$model">
+                    <div>
+                      <BsEye
+                        v-if="!showPassword"
+                        class="transform absolute -translate-x-full -translate-y-1/2 -ms-2 font-bold cursor-pointer"
+                        @click="showPassword = true"
+                      />
+                      <BsEyeSlash
+                        v-else
+                        class="transform absolute -translate-x-full -translate-y-1/2 -ms-2 font-bold cursor-pointer"
+                        @click="showPassword = false"
+                      />
+                    </div>
+                  </div>
+                  <div class="flex flex-col gap-2 text-xs">
+                    <span
+                      class="font-semibold text-sm">{{ $t("Your password must contain at least") }}</span>
+                    <span
+                      class="flex gap-2">
+                      <AkCircle v-if="v$.password.hasLetter.$invalid"/>
+                      <AnFilledCheckCircle class="text-accent" v-else/>
+                      {{ $t("1 letter") }}
+                    </span>
+                    <span
+                      class="flex gap-2 align-baseline">
+                      <AkCircle v-if="v$.password.numberOrSpecial.$invalid"/>
+                      <AnFilledCheckCircle class="text-accent" v-else/>
+                      {{ $t("1 number or special character (example: # ? ! &)") }}
+                    </span>
+                    <span
+                      class="flex gap-2 align-baseline">
+                      <AkCircle v-if="v$.password.minLength.$invalid"/>
+                      <AnFilledCheckCircle class="text-accent" v-else/>
+                      {{ $t("10 characters") }}
+                    </span>
+                  </div>
+                  <button
+                    :disabled="v$.password.$invalid"
+                    class="w-72 bg-primary text-background font-semibold p-2 rounded-full hover:bg-primary-500 mt-4 disabled:bg-secondary-300"
+                    @click="++step">
+                    {{ $t('Next') }}
+                  </button>
+                </template>
+                <template #2>
+                  
+                  <label
+                    class="flex flex-col text-start font-semibold text-sm mb-2"
+                    for="email-or-username">
+                    {{ $t('Password') }}
+                  </label>
+                  <div
+                    class="flex flex-row items-center">
+                    <input
+                      id="password"
+                      class="border-[1px] w-full border-secondary-300 p-2 rounded bg-background-100 hover:bg-background-50 hover:border-secondary-200 pe-8"
+                      :type="showPassword? 'text': 'password'"
+                      :placeholder="$t('Password')"
+                      v-model="v$.password.$model">
+                    <div>
+                      <BsEye
+                        v-if="!showPassword"
+                        class="transform absolute -translate-x-full -translate-y-1/2 -ms-2 font-bold cursor-pointer"
+                        @click="showPassword = true"
+                      />
+                      <BsEyeSlash
+                        v-else
+                        class="transform absolute -translate-x-full -translate-y-1/2 -ms-2 font-bold cursor-pointer"
+                        @click="showPassword = false"
+                      />
+                    </div>
+                  </div>
+                  <div class="flex flex-col gap-2 text-xs">
+                    <span
+                      class="font-semibold text-sm">{{ $t("Your password must contain at least") }}</span>
+                    <span
+                      class="flex gap-2">
+                      <AkCircle v-if="v$.password.hasLetter.$invalid"/>
+                      <AnFilledCheckCircle class="text-accent" v-else/>
+                      {{ $t("1 letter") }}
+                    </span>
+                    <span
+                      class="flex gap-2 align-baseline">
+                      <AkCircle v-if="v$.password.minLength.$invalid"/>
+                      <AnFilledCheckCircle class="text-accent" v-else/>
+                      {{ $t("10 characters") }}
+                    </span>
+                  </div>
+                  <button
+                    :disabled="v$.password.$invalid"
+                    class="w-72 bg-primary text-background font-semibold p-2 rounded-full hover:bg-primary-500 mt-4 disabled:bg-secondary-300"
+                    @click="++step">
+                    {{ $t('Next') }}
+                  </button>
+                </template>
+                <template #3>
+                  <button
+                    class="w-72 bg-primary text-background font-semibold p-2 rounded-full hover:bg-primary-500 mt-4"
+                    @click="createAccountAndRedirect">
+                    {{ $t("Sign Up (action button)") }}
+                  </button>
+                </template>
+              </v-switch>
             </div>
-            <div
-              class="flex flex-col gap-2"
-              v-if="step === 2">
-              <label
-                class="flex flex-col text-start font-semibold text-sm mb-2"
-                for="email-or-username">
-                {{ $t('Password') }}
-              </label>
-              <div
-                class="flex flex-row items-center">
-                <input
-                  id="password"
-                  class="border-[1px] w-full border-secondary-300 p-2 rounded bg-background-100 hover:bg-background-50 hover:border-secondary-200 pe-8"
-                  :type="showPassword? 'text': 'password'"
-                  :placeholder="$t('Password')"
-                  v-model="v$.password.$model">
-                <div>
-                  <BsEye
-                    v-if="!showPassword"
-                    class="transform absolute -translate-x-full -translate-y-1/2 -ms-2 font-bold cursor-pointer"
-                    @click="showPassword = true"
-                  />
-                  <BsEyeSlash
-                    v-else
-                    class="transform absolute -translate-x-full -translate-y-1/2 -ms-2 font-bold cursor-pointer"
-                    @click="showPassword = false"
-                  />
-                </div>
-              </div>
-              <div class="flex flex-col gap-2 text-xs">
-                <span
-                  class="font-semibold text-sm">{{ $t("Your password must contain at least") }}</span>
-                <span
-                  class="flex gap-2">
-                  <AkCircle v-if="v$.password.hasLetter.$invalid"/>
-                  <AnFilledCheckCircle class="text-accent" v-else/>
-                  {{ $t("1 letter") }}
-                </span>
-                <span
-                  class="flex gap-2 align-baseline">
-                  <AkCircle v-if="v$.password.special.$invalid"/>
-                  <AnFilledCheckCircle class="text-accent" v-else/>
-                  {{ $t("1 number or special character (example: # ? ! &)") }}
-                </span>
-                <span
-                  class="flex gap-2 align-baseline">
-                  <AkCircle v-if="v$.password.minLength.$invalid"/>
-                  <AnFilledCheckCircle class="text-accent" v-else/>
-                  {{ $t("10 characters") }}
-                </span>
-              </div>
-              <button
-                :disabled="v$.password.$invalid"
-                class="w-72 bg-primary text-background font-semibold p-2 rounded-full hover:bg-primary-500 mt-4 disabled:bg-secondary-300"
-                @click="++step">
-                {{ $t('Next') }}
-              </button>
-            </div>
-            <button
-              v-else
-              class="w-72 bg-primary text-background font-semibold p-2 rounded-full hover:bg-primary-500 mt-4"
-              @click="createAccountAndRedirect">
-              {{ $t("Sign Up (action button)") }}
-            </button>
           </div>
         </div>
       </div>
@@ -353,8 +351,8 @@ export default defineComponent({
         hasLetter: (value: string) => {
           return /[a-zA-Z]/.test(value)
         },
-        special: (value: string) => {
-          return /[!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?]+/.test(value)
+        numberOrSpecial: (value: string) => {
+          return /[0-9!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?]+/.test(value)
         }
       }
     }
