@@ -4,6 +4,7 @@
   "1 number or special character (example: # ? ! &)": "1 number or special character (example: # ? ! &)",
   "10 characters": "10 characters",
   "Account Settings": "Account Settings",
+  "Available username": "Available username",
   "Already have an account?": "Already have an account?",
   "Create a password": "Create a password",
   "Don't have an account yet?": "Don't have an account yet?",
@@ -25,5 +26,6 @@
   "Sign up for Corpora": "Sign up for Corpora",
   "Sign Up (action button)": "Sign Up",
   "Step {n} of 3": "Step {n} of 3",
+  "Username": "Username",
   "Your password must contain at least": "Your password must contain at least"
 }

@@ -125,13 +125,13 @@
                 <template #1>
                   <label
                     class="flex flex-col text-start font-semibold text-sm"
-                    for="email-or-username">
+                    for="password">
                     {{ $t('Password') }}
                   </label>
                   <div
                     class="flex flex-row items-center mb-2">
                     <input
-                      id="password"
+                      name="password"
                       class="border-[1px] w-full border-secondary-300 p-2 rounded bg-background-100 hover:bg-background-50 hover:border-secondary-200 pe-8"
                       :type="showPassword? 'text': 'password'"
                       :placeholder="$t('Password')"
@@ -178,52 +178,39 @@
                     {{ $t('Next') }}
                   </button>
                 </template>
+
                 <template #2>
-                  
                   <label
                     class="flex flex-col text-start font-semibold text-sm mb-2"
-                    for="email-or-username">
-                    {{ $t('Password') }}
+                    for="username">
+                    {{ $t('Username') }}
                   </label>
                   <div
                     class="flex flex-row items-center">
                     <input
-                      id="password"
-                      class="border-[1px] w-full border-secondary-300 p-2 rounded bg-background-100 hover:bg-background-50 hover:border-secondary-200 pe-8"
-                      :type="showPassword? 'text': 'password'"
-                      :placeholder="$t('Password')"
-                      v-model="v$.password.$model">
-                    <div>
-                      <BsEye
-                        v-if="!showPassword"
-                        class="transform absolute -translate-x-full -translate-y-1/2 -ms-2 font-bold cursor-pointer"
-                        @click="showPassword = true"
-                      />
-                      <BsEyeSlash
-                        v-else
-                        class="transform absolute -translate-x-full -translate-y-1/2 -ms-2 font-bold cursor-pointer"
-                        @click="showPassword = false"
-                      />
-                    </div>
+                      name="username"
+                      class="border-[1px] w-full border-secondary-300 p-2 rounded bg-background-100 hover:bg-background-50 hover:border-secondary-200"
+                      :placeholder="$t('Username')"
+                      v-model="v$.username.$model">
                   </div>
                   <div class="flex flex-col gap-2 text-xs">
                     <span
                       class="font-semibold text-sm">{{ $t("Your password must contain at least") }}</span>
                     <span
-                      class="flex gap-2">
-                      <AkCircle v-if="v$.password.hasLetter.$invalid"/>
+                      class="flex gap-2 align-baseline">
+                      <AkCircle v-if="v$.username.minLength.$invalid"/>
                       <AnFilledCheckCircle class="text-accent" v-else/>
-                      {{ $t("1 letter") }}
+                      {{ $t("3 characters") }}
                     </span>
                     <span
-                      class="flex gap-2 align-baseline">
-                      <AkCircle v-if="v$.password.minLength.$invalid"/>
+                      class="flex gap-2">
+                      <AkCircle v-if="true"/>
                       <AnFilledCheckCircle class="text-accent" v-else/>
-                      {{ $t("10 characters") }}
+                      {{ $t("Available username") }}
                     </span>
                   </div>
                   <button
-                    :disabled="v$.password.$invalid"
+                    :disabled="v$.username.$invalid"
                     class="w-72 bg-primary text-background font-semibold p-2 rounded-full hover:bg-primary-500 mt-4 disabled:bg-secondary-300"
                     @click="++step">
                     {{ $t('Next') }}
@@ -254,7 +241,7 @@ import { signInWithPopup } from "firebase/auth";
 import { useUserStore } from '@/stores/user';
 import { mapState } from 'pinia';
 import { useVuelidate } from '@vuelidate/core'
-import { required, email, minLength } from '@vuelidate/validators'
+import { required, email } from '@vuelidate/validators'
 
 
 export default defineComponent({
@@ -343,7 +330,11 @@ export default defineComponent({
   validations () {
     return {
       email: { required, email },
-      username: { required },
+      username: { 
+        minLength: (value: string) => {
+          return value.length > 2
+        },
+       },
       password: {
         minLength: (value: string) => {
           return value.length > 9
