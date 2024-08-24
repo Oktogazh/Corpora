@@ -104,7 +104,11 @@
                 <div
                   class="flex flex-col mx-4">
                   <span class="text-text-500 font-medium">{{ $tc("Step {n} of 3", step) }}</span>
-                  <span class="text-text font-bold">{{ $tc("Create a password") }}</span>
+                  <v-switch class="text-text font-bold" :case="step">
+                    <template #1>{{ $t("Create a password") }}</template>
+                    <template #2>{{ $t("Create a username") }}</template>
+                    <template #default>{{ $t("Create an account") }}</template>
+                  </v-switch>
                   <div
                     class="flex">
                     <input class="h-0 pe-8">
@@ -129,7 +133,7 @@
                   class="border-[1px] w-full border-secondary-300 p-2 rounded bg-background-100 hover:bg-background-50 hover:border-secondary-200 pe-8"
                   :type="showPassword? 'text': 'password'"
                   :placeholder="$t('Password')"
-                  :v-model="password">
+                  v-model="v$.password.$model">
                 <div>
                   <BsEye
                     v-if="!showPassword"
@@ -148,30 +152,88 @@
                   class="font-semibold text-sm">{{ $t("Your password must contain at least") }}</span>
                 <span
                   class="flex gap-2">
-                  <AkCircle v-if="true"/>
-                  <AkCircleCheckFill v-else/>
+                  <AkCircle v-if="v$.password.hasLetter.$invalid"/>
+                  <AnFilledCheckCircle class="text-accent" v-else/>
                   {{ $t("1 letter") }}
                 </span>
                 <span
                   class="flex gap-2 align-baseline">
-                  <AkCircle v-if="true"/>
-                  <AkCircleCheckFill v-else/>
+                  <AkCircle v-if="v$.password.special.$invalid"/>
+                  <AnFilledCheckCircle class="text-accent" v-else/>
                   {{ $t("1 number or special character (example: # ? ! &)") }}
                 </span>
                 <span
                   class="flex gap-2 align-baseline">
-                  <AkCircle v-if="true"/>
-                  <AkCircleCheckFill v-else/>
+                  <AkCircle v-if="v$.password.minLength.$invalid"/>
+                  <AnFilledCheckCircle class="text-accent" v-else/>
                   {{ $t("10 characters") }}
                 </span>
               </div>
+              <button
+                :disabled="v$.password.$invalid"
+                class="w-72 bg-primary text-background font-semibold p-2 rounded-full hover:bg-primary-500 mt-4 disabled:bg-secondary-300"
+                @click="++step">
+                {{ $t('Next') }}
+              </button>
             </div>
-            <button
-              v-if="step < 3"
-              class="w-72 bg-primary text-background font-semibold p-2 rounded-full hover:bg-primary-500 mt-4"
-              @click="++step">
-              {{ $t('Next') }}
-            </button>
+            <div
+              class="flex flex-col gap-2"
+              v-if="step === 2">
+              <label
+                class="flex flex-col text-start font-semibold text-sm mb-2"
+                for="email-or-username">
+                {{ $t('Password') }}
+              </label>
+              <div
+                class="flex flex-row items-center">
+                <input
+                  id="password"
+                  class="border-[1px] w-full border-secondary-300 p-2 rounded bg-background-100 hover:bg-background-50 hover:border-secondary-200 pe-8"
+                  :type="showPassword? 'text': 'password'"
+                  :placeholder="$t('Password')"
+                  v-model="v$.password.$model">
+                <div>
+                  <BsEye
+                    v-if="!showPassword"
+                    class="transform absolute -translate-x-full -translate-y-1/2 -ms-2 font-bold cursor-pointer"
+                    @click="showPassword = true"
+                  />
+                  <BsEyeSlash
+                    v-else
+                    class="transform absolute -translate-x-full -translate-y-1/2 -ms-2 font-bold cursor-pointer"
+                    @click="showPassword = false"
+                  />
+                </div>
+              </div>
+              <div class="flex flex-col gap-2 text-xs">
+                <span
+                  class="font-semibold text-sm">{{ $t("Your password must contain at least") }}</span>
+                <span
+                  class="flex gap-2">
+                  <AkCircle v-if="v$.password.hasLetter.$invalid"/>
+                  <AnFilledCheckCircle class="text-accent" v-else/>
+                  {{ $t("1 letter") }}
+                </span>
+                <span
+                  class="flex gap-2 align-baseline">
+                  <AkCircle v-if="v$.password.special.$invalid"/>
+                  <AnFilledCheckCircle class="text-accent" v-else/>
+                  {{ $t("1 number or special character (example: # ? ! &)") }}
+                </span>
+                <span
+                  class="flex gap-2 align-baseline">
+                  <AkCircle v-if="v$.password.minLength.$invalid"/>
+                  <AnFilledCheckCircle class="text-accent" v-else/>
+                  {{ $t("10 characters") }}
+                </span>
+              </div>
+              <button
+                :disabled="v$.password.$invalid"
+                class="w-72 bg-primary text-background font-semibold p-2 rounded-full hover:bg-primary-500 mt-4 disabled:bg-secondary-300"
+                @click="++step">
+                {{ $t('Next') }}
+              </button>
+            </div>
             <button
               v-else
               class="w-72 bg-primary text-background font-semibold p-2 rounded-full hover:bg-primary-500 mt-4"
@@ -188,13 +250,13 @@
 <script lang="ts">
 import { defineComponent } from 'vue'
 import { Separator, SliderRange, SliderRoot, SliderTrack } from 'radix-vue';
-import { BsEye, BsEyeSlash, AkChevronLeft, AkCircleCheckFill, AkCircle } from '@kalimahapps/vue-icons';
+import { BsEye, BsEyeSlash, AkChevronLeft, AnFilledCheckCircle, AkCircle } from '@kalimahapps/vue-icons';
 import { auth, googleProvider, facebookProvider } from '@/firebase';
 import { signInWithPopup } from "firebase/auth";
 import { useUserStore } from '@/stores/user';
 import { mapState } from 'pinia';
 import { useVuelidate } from '@vuelidate/core'
-import { required, email } from '@vuelidate/validators'
+import { required, email, minLength } from '@vuelidate/validators'
 
 
 export default defineComponent({
@@ -202,7 +264,7 @@ export default defineComponent({
   components: {
     AkChevronLeft,
     AkCircle,
-    AkCircleCheckFill,
+    AnFilledCheckCircle,
     Separator,
     BsEye,
     BsEyeSlash,
@@ -216,7 +278,7 @@ export default defineComponent({
     })
   },
   data: () => ({
-    step: 0,
+    step: 0 as number,
     email: '',
     username: '',
     password: '',
@@ -284,7 +346,17 @@ export default defineComponent({
     return {
       email: { required, email },
       username: { required },
-      password: { required }
+      password: {
+        minLength: (value: string) => {
+          return value.length > 9
+        },
+        hasLetter: (value: string) => {
+          return /[a-zA-Z]/.test(value)
+        },
+        special: (value: string) => {
+          return /[!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?]+/.test(value)
+        }
+      }
     }
   },
   watch: {
