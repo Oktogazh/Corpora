@@ -6,7 +6,7 @@
       <div
         class="section-container flex flex-col items-center justify-center">
         <div
-          v-if="step === 0"
+          v-if="step === 1"
           class="flex flex-col justify-center items-center gap-8 text-center">
           <h1
             class="text-4xl mx-2 font-bold text-text-900">
@@ -31,7 +31,7 @@
             <button
               :disabled="v$.email.$invalid"
               class="w-72 bg-primary text-background font-semibold p-2 rounded-full hover:bg-primary-500 mt-4 disabled:bg-secondary-300"
-              @click="step = 1">
+              @click="++step">
               {{ $t('Next') }}
             </button>
           </div>
@@ -105,9 +105,8 @@
                   class="flex flex-col mx-4 text-text font-bold">
                   <span class="text-text-500 font-medium">{{ $tc("Step {n} of 3", step) }}</span>
                   <v-switch class="" :case="step">
-                    <template #1>{{ $t("Create a password") }}</template>
-                    <template #2>{{ $t("Create a username") }}</template>
-                    <template #default>{{ $t("Create an account") }}</template>
+                    <template #2>{{ $t("Create a password") }}</template>
+                    <template #3>{{ $t("Create a username") }}</template>
                   </v-switch>
                   <div
                     class="flex">
@@ -122,7 +121,7 @@
               id="form-container"
               class="flex flex-col gap-2">
               <v-switch :case="step">
-                <template #1>
+                <template #2>
                   <label
                     class="flex flex-col text-start font-semibold text-sm"
                     for="password">
@@ -179,7 +178,7 @@
                   </button>
                 </template>
 
-                <template #2>
+                <template #3>
                   <label
                     class="flex flex-col text-start font-semibold text-sm mb-2"
                     for="username">
@@ -204,22 +203,15 @@
                     </span>
                     <span
                       class="flex gap-2">
-                      <AkCircle v-if="true"/>
+                      <AkCircle v-if="!usernameAvailable"/>
                       <AnFilledCheckCircle class="text-accent" v-else/>
                       {{ $t("Available username") }}
                     </span>
                   </div>
                   <button
-                    :disabled="v$.username.$invalid"
-                    class="w-72 bg-primary text-background font-semibold p-2 rounded-full hover:bg-primary-500 mt-4 disabled:bg-secondary-300"
+                    :disabled="v$.username.$invalid || !usernameAvailable"
+                    class="w-72 bg-primary text-background font-semibold p-2 rounded-full hover:bg-primary-500 mt-4 transition-colors delay-150 duration-150 disabled:bg-secondary-300"
                     @click="++step">
-                    {{ $t('Next') }}
-                  </button>
-                </template>
-                <template #3>
-                  <button
-                    class="w-72 bg-primary text-background font-semibold p-2 rounded-full hover:bg-primary-500 mt-4"
-                    @click="createAccountAndRedirect">
                     {{ $t("Sign Up (action button)") }}
                   </button>
                 </template>
@@ -236,12 +228,17 @@
 import { defineComponent } from 'vue'
 import { Separator, SliderRange, SliderRoot, SliderTrack } from 'radix-vue';
 import { BsEye, BsEyeSlash, AkChevronLeft, AnFilledCheckCircle, AkCircle } from '@kalimahapps/vue-icons';
-import { auth, googleProvider, facebookProvider } from '@/firebase';
+import { auth, db, googleProvider, facebookProvider } from '@/firebase';
 import { signInWithPopup } from "firebase/auth";
+import { doc, onSnapshot } from 'firebase/firestore';
 import { useUserStore } from '@/stores/user';
 import { mapState } from 'pinia';
 import { useVuelidate } from '@vuelidate/core'
-import { required, email } from '@vuelidate/validators'
+import { required, email, helpers } from '@vuelidate/validators'
+const { withAsync } = helpers
+
+let unsubscribeUniqueUsername: any = null
+
 
 
 export default defineComponent({
@@ -263,11 +260,12 @@ export default defineComponent({
     })
   },
   data: () => ({
-    step: 0 as number,
+    step: 1 as 1|2|3,
     email: '',
     username: '',
     password: '',
     showPassword: false,
+    usernameAvailable: false,
     loginButtons: [
       {
         name: 'google',
@@ -284,7 +282,8 @@ export default defineComponent({
         icon: 'https://upload.wikimedia.org/wikipedia/commons/b/b8/2021_Facebook_icon.svg',
         text: 'Log in with Facebook'
       }, */
-    ]
+    ],
+    unsubscribeUniqueUsername: null as null | Function
   }),
   methods: {
     loginWith(provider: string) {
@@ -316,7 +315,17 @@ export default defineComponent({
         console.error("Error signing in with Facebook:", error);
       }
     },
-    loginWithPassword() {
+    async updateValidator(value: string) {
+      this.usernameAvailable = false
+      if (value.length < 3) return
+      const self = this
+      
+      if (this.unsubscribeUniqueUsername !== null) this.unsubscribeUniqueUsername()
+
+      const docRef = doc(db, "unique_usernames", value)
+      this.unsubscribeUniqueUsername = onSnapshot(docRef, (doc) => {
+        self.usernameAvailable = !doc.exists()
+      })
     }
   },
   created() {
@@ -327,13 +336,13 @@ export default defineComponent({
   setup () {
     return { v$: useVuelidate() }
   },
-  validations () {
+  validations() {
     return {
       email: { required, email },
       username: { 
         minLength: (value: string) => {
           return value.length > 2
-        },
+        }
        },
       password: {
         minLength: (value: string) => {
@@ -349,6 +358,9 @@ export default defineComponent({
     }
   },
   watch: {
+    username(value) {
+      this.updateValidator(value)
+    },
     isConnected(isConnected) {
       if (isConnected) {
         try {
