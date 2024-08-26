@@ -211,7 +211,7 @@
                   <button
                     :disabled="v$.username.$invalid || !usernameAvailable"
                     class="w-72 bg-primary text-background font-semibold p-2 rounded-full hover:bg-primary-500 mt-4 transition-colors delay-150 duration-150 disabled:bg-secondary-300"
-                    @click="++step">
+                    @click="signUpWithPwd">
                     {{ $t("Sign Up (action button)") }}
                   </button>
                 </template>
@@ -229,15 +229,12 @@ import { defineComponent } from 'vue'
 import { Separator, SliderRange, SliderRoot, SliderTrack } from 'radix-vue';
 import { BsEye, BsEyeSlash, AkChevronLeft, AnFilledCheckCircle, AkCircle } from '@kalimahapps/vue-icons';
 import { auth, db, googleProvider, facebookProvider } from '@/firebase';
-import { signInWithPopup } from "firebase/auth";
-import { doc, onSnapshot } from 'firebase/firestore';
+import { signInWithPopup, createUserWithEmailAndPassword } from "firebase/auth";
+import { doc, onSnapshot, setDoc, serverTimestamp } from 'firebase/firestore';
 import { useUserStore } from '@/stores/user';
 import { mapState } from 'pinia';
 import { useVuelidate } from '@vuelidate/core'
-import { required, email, helpers } from '@vuelidate/validators'
-const { withAsync } = helpers
-
-let unsubscribeUniqueUsername: any = null
+import { required, email } from '@vuelidate/validators'
 
 
 
@@ -257,6 +254,7 @@ export default defineComponent({
   computed: {
     ...mapState(useUserStore,{
       isConnected: (state) => state.isConnected,
+      user: (state) => state.user,
     })
   },
   data: () => ({
@@ -315,6 +313,13 @@ export default defineComponent({
         console.error("Error signing in with Facebook:", error);
       }
     },
+    async signUpWithPwd() {
+      try {
+        await createUserWithEmailAndPassword(auth, this.email, this.password);
+      } catch (error) {
+        console.error("Error signing up with email and password:", error);
+      }
+    },
     async updateValidator(value: string) {
       this.usernameAvailable = false
       if (value.length < 3) return
@@ -361,12 +366,15 @@ export default defineComponent({
     username(value) {
       this.updateValidator(value)
     },
-    isConnected(isConnected) {
-      if (isConnected) {
+    isConnected() {
+      if (this.user) {
         try {
-          this.$router.go(-1)
-        } catch (error) {
+          const { uid, displayName } = this.user
+          const uniqueUsernameRef = doc(db, "unique_usernames", displayName || this.username )
+          setDoc(uniqueUsernameRef, { owner: uid, createdAt: serverTimestamp() })
           this.$router.push({name: 'Home'});
+        } catch (error) {
+          console.error("Error setting unique username:", error)
         }
       }
     }

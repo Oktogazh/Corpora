@@ -41,9 +41,9 @@
               <input
                 id="email-or-user-name"
                 class="w-full border-[1px] border-secondary-300 p-2 rounded bg-background-100 hover:bg-background-50 hover:border-secondary-200"
-                type="text"
+                type="email"
                 :placeholder="$t('Email or username')"
-                :v-model="emailOrUsername">
+                v-model="emailOrUsername">
             </div>
             <div>
               <label
@@ -57,7 +57,7 @@
                   class="w-full border-[1px] border-secondary-300 p-2 rounded bg-background-100 hover:bg-background-50 hover:border-secondary-200 pe-8"
                   :type="showPassword? 'text': 'password'"
                   :placeholder="$t('Password')"
-                  :v-model="password">
+                  v-model="password">
                   <div>
                     <BsEye
                       v-if="!showPassword"
@@ -108,7 +108,7 @@ import { defineComponent } from 'vue'
 import { Separator } from 'radix-vue';
 import { BsEye, BsEyeSlash } from '@kalimahapps/vue-icons';
 import { auth, googleProvider, facebookProvider } from '@/firebase';
-import { signInWithPopup } from "firebase/auth";
+import { signInWithPopup, signInWithEmailAndPassword } from "firebase/auth";
 import { useUserStore } from '@/stores/user';
 import { mapState } from 'pinia';
 
@@ -175,7 +175,8 @@ export default defineComponent({
         console.error("Error signing in with Facebook:", error);
       }
     },
-    loginWithPassword() {
+    async loginWithPassword() {
+      await signInWithEmailAndPassword(auth, this.emailOrUsername, this.password)
     }
   },
   created() {
