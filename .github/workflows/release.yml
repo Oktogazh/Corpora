@@ -12,7 +12,7 @@ permissions:
 jobs:
   release-please:
     runs-on: ubuntu-latest
-    if: "!contains(github.event.head_commit.message, 'release-please--branches--master')"
+    if:  github.event.pusher.name != 'github-actions[bot]'
 
     steps:
       - name: Checkout repository
@@ -24,22 +24,3 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
           config-file: release-please-config.json
           manifest-file: .release-please-manifest.json
-  deploy:
-    runs-on: ubuntu-latest
-    needs: release-please
-    if: contains(github.event.head_commit.message, 'release-please--branches--master')
-
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
-
-      - name: Run release job
-        run: cd web && npm ci && npm run build && cd ../firebase
-
-      - name: Deploy to Firebase Hosting
-        uses: FirebaseExtended/action-hosting-deploy@v0
-        with:
-          # repoToken: '${{ secrets.GITHUB_TOKEN }}'
-          firebaseServiceAccount: '${{ secrets.FIREBASE_SERVICE_ACCOUNT }}'
-          channelId: live
-          projectId: korporaoueg
