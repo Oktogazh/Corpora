@@ -1,5 +1,15 @@
 # Changelog
 
+## [0.2.2](https://github.com/Oktogazh/Corpora/compare/corpora-v0.2.1...corpora-v0.2.2) (2024-08-26)
+
+
+### ✨  New
+
+* **sign up form:** installed v-switch and password validation ([f0e154a](https://github.com/Oktogazh/Corpora/commit/f0e154aafca143d8b9af9eadc754613b0aee1aac))
+* **sign up form:** introduce unique_username validator and its dedicated collection ([498e0b3](https://github.com/Oktogazh/Corpora/commit/498e0b3ec388ffe3ce94142ab7e8c27142b11ffb))
+* **sign up form:** username step layout ([dff49c7](https://github.com/Oktogazh/Corpora/commit/dff49c7a191850140a119bca87e2587d80db79c1))
+* **sign up form:** v-switch in the form container ([bdfe8fa](https://github.com/Oktogazh/Corpora/commit/bdfe8fa3fc4af20bf534a8e78371a28420df2c3a))
+
 ## [0.2.1](https://github.com/Oktogazh/Corpora/compare/corpora-v0.2.0...corpora-v0.2.1) (2024-08-23)
 
 
