@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.3.0](https://github.com/Oktogazh/Corpora/compare/corpora-v0.2.2...corpora-v0.3.0) (2024-08-26)
+
+
+### 🚀 Features
+
+* **auth:** email based sign up ([809cb1c](https://github.com/Oktogazh/Corpora/commit/809cb1ce3c796d694c4127fec41255d49c36d245))
+
 ## [0.2.2](https://github.com/Oktogazh/Corpora/compare/corpora-v0.2.1...corpora-v0.2.2) (2024-08-26)
 
 
