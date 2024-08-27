@@ -189,7 +189,6 @@ export default defineComponent({
   watch: {
     isConnected(isConnected) {
       if (this.user) {
-        console.log('this.user', JSON.stringify(this.user.createdAt))
         const { createdAt, displayName, uid } = this.user!
         const creationTime = new Date(Number(createdAt)).getTime();
         const now = new Date().getTime();

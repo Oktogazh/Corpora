@@ -29,7 +29,6 @@ export default defineComponent({
     async loadMarkdown() {
       try {
         const response = await fetch('/CHANGELOG.md')
-        console.log('response:', response)
         const markdown = await response.text()
         this.htmlChangeLog = await marked(markdown)
       } catch (error) {

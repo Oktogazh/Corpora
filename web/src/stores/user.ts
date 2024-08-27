@@ -3,7 +3,8 @@ import { auth } from '@/firebase';
 import { onAuthStateChanged, type User } from "firebase/auth";
 
 interface ExtendedUser extends User {
-  createdAt: string; // Add your custom property here
+  // Somehow not in the User type, but actual user has no metadata.creationTime
+  createdAt: string;
 }
 
 export const useUserStore = defineStore('User', {

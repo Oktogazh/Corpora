@@ -31,6 +31,39 @@
           {{ $t("Provider") }}:
           {{ user!.providerData[0].providerId }}
           </div>
+
+          <DialogRoot>
+            <DialogTrigger
+              class="w-72 bg-red-500 bg-opacity-25 text-red-500 font-medium p-2 rounded-full hover:bg-opacity-40 mt-4">
+              {{ $t("Delete Account") }}
+            </DialogTrigger>
+            <DialogPortal>
+              <DialogOverlay class="bg-black bg-opacity-50 data-[state=open]:animate-overlayShow fixed inset-0 z-30" />
+              <DialogContent
+                class="data-[state=open]:animate-contentShow fixed top-[50%] left-[50%] max-h-[85vh] w-[90vw] max-w-[450px] translate-x-[-50%] translate-y-[-50%] rounded-[6px] p-[25px] shadow-[hsl(206_22%_7%_/_35%)_0px_10px_38px_-10px,_hsl(206_22%_7%_/_20%)_0px_10px_20px_-15px] focus:outline-none z-[100] bg-background text-text"
+              >
+                <DialogTitle class="m-0 text-[17px] font-semibold">
+                  {{ $t("Delete Account") }}
+                </DialogTitle>
+                <DialogDescription class="mt-[10px] mb-5 text-[15px] leading-normal">
+                  {{ $t("Are you sure you want to delete your account? This action is irreversible.") }}
+                </DialogDescription>
+                <div class="mt-[25px] flex justify-end">
+                  <DialogClose as-child>
+                    <button
+                      class="bg-green-500 bg-opacity-20 px-4 me-4 text-accent font-medium p-2 rounded-full hover:bg-opacity-40 mt-4">
+                      {{ $t("Cancel") }}
+                    </button>
+                  </DialogClose>
+                  <button
+                    @click="deleteAccount"
+                    class="px-4 bg-red-500 bg-opacity-25 text-red-500 font-medium p-2 rounded-full hover:bg-opacity-40 mt-4">
+                    {{ $t("I understand, delete my account") }}
+                  </button>
+                </div>
+              </DialogContent>
+            </DialogPortal>
+          </DialogRoot>
         </div>
 
         <div
@@ -44,7 +77,7 @@
           <button
             @click="saveChanges"
             class="w-72 bg-primary text-background font-semibold p-2 rounded-full hover:bg-primary-500 mt-4">
-            {{ $t("Save changes") }}
+            {{ $t("Save Account") }}
           </button>
         </div>
       </div>
@@ -56,10 +89,30 @@
 import { mapState } from 'pinia'
 import { useUserStore } from '@/stores/user'
 import { defineComponent } from 'vue'
+import { deleteUser, type User } from "firebase/auth";
+import {
+  DialogClose,
+  DialogContent,
+  DialogDescription,
+  DialogOverlay,
+  DialogPortal,
+  DialogRoot,
+  DialogTitle,
+  DialogTrigger,
+} from 'radix-vue'
+import { auth } from '@/firebase';
 
 export default defineComponent({
   name: 'SettingsView',
   components: {
+    DialogClose,
+    DialogContent,
+    DialogDescription,
+    DialogOverlay,
+    DialogPortal,
+    DialogRoot,
+    DialogTitle,
+    DialogTrigger,
   },
   computed: {
     stateChanged() {
@@ -82,9 +135,13 @@ export default defineComponent({
       email: useUserStore().user?.email,
       photoURL: useUserStore().user?.photoURL
     },
+    confirmDelete: false,
     cardsSkeletons: 4,
   }),
   methods: {
+    async deleteAccount() {
+      await deleteUser(auth.currentUser as User)
+    },
     forgetChanges() {
       this.changes = {
         username: useUserStore().user?.displayName,

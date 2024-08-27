@@ -78,7 +78,6 @@ export default defineComponent({
   methods: {
     async saveChanges() {
       const { displayName, email, password, photoURL } = this.changes
-      console.log(this.changes)
     }
   }
 })
