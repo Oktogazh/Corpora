@@ -187,7 +187,7 @@ export default defineComponent({
     }
   },
   watch: {
-    isConnected(isConnected) {
+    isConnected() {
       if (this.user) {
         const { createdAt, displayName, uid } = this.user!
         const creationTime = new Date(Number(createdAt)).getTime();
