@@ -6,3 +6,11 @@ declare module '@vue/runtime-core' {
     $route: RouteLocationNormalized;
   }
 }
+
+import 'vue-router';
+
+declare module 'vue-router' {
+  interface Router {
+    previousRoute?: RouteLocationNormalized;
+  }
+}

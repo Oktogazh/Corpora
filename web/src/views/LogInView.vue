@@ -107,8 +107,9 @@
 import { defineComponent } from 'vue'
 import { Separator } from 'radix-vue';
 import { BsEye, BsEyeSlash } from '@kalimahapps/vue-icons';
-import { auth, googleProvider, facebookProvider } from '@/firebase';
+import { auth, googleProvider, facebookProvider, db } from '@/firebase';
 import { signInWithPopup, signInWithEmailAndPassword } from "firebase/auth";
+import { doc, setDoc, serverTimestamp } from "firebase/firestore";
 import { useUserStore } from '@/stores/user';
 import { mapState } from 'pinia';
 
@@ -123,6 +124,7 @@ export default defineComponent({
   computed: {
     ...mapState(useUserStore,{
       isConnected: (state) => state.isConnected,
+      user: (state) => state.user,
     }),
   },
   data: () => ({
@@ -186,12 +188,25 @@ export default defineComponent({
   },
   watch: {
     isConnected(isConnected) {
-      if (isConnected) {
-        try {
-          this.$router.go(-1)
-        } catch (error) {
-          this.$router.push({name: 'Home'});
+      if (this.user) {
+        console.log('this.user', JSON.stringify(this.user.createdAt))
+        const { createdAt, displayName, uid } = this.user!
+        const creationTime = new Date(Number(createdAt)).getTime();
+        const now = new Date().getTime();
+        // look if account was created less than 10 seconds ago
+        // to claim the username if it is the first time the user logs in
+        if ((now - creationTime) < 10000 && displayName) {
+          try {
+            const uniqueUsernameRef = doc(db, "unique_usernames", displayName )
+            setDoc(uniqueUsernameRef, { owner: uid, createdAt: serverTimestamp() })
+          } catch (error) {
+            console.error('Error setting displayName, the username might be already taken:', error)
+          }
         }
+        const { previousRoute, options } = this.$router;
+        (previousRoute && options.routes.some(({ path }) => path === previousRoute.path))
+          ? this.$router.push(previousRoute)
+          : this.$router.push({name: 'Home'});
       }
     }
   },

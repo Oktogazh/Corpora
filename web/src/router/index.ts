@@ -59,7 +59,7 @@ const router = createRouter({
 let isConnected = false;
 
 onAuthStateChanged(auth, (user) => {
-  const previouslyConnected = isConnected;
+  const previouslyConnected = isConnected
   isConnected = user !== null;
   if (!isConnected && previouslyConnected) {
     router.push({ name: 'Home' })
@@ -67,6 +67,7 @@ onAuthStateChanged(auth, (user) => {
 });
 
 router.beforeEach((to, from, next) => {
+  router.previousRoute = from
   if (to.meta.requiresAuth as boolean | undefined) {
     if (!isConnected) {
       next({ name: 'Log In' })

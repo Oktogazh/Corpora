@@ -32,8 +32,6 @@
           {{ user!.providerData[0].providerId }}
           </div>
         </div>
-        <pre>{{ user }}
-        </pre>
 
         <div
           v-if="stateChanged"
