@@ -1,5 +1,22 @@
 # Changelog
 
+## [0.4.0](https://github.com/Oktogazh/Corpora/compare/corpora-v0.3.0...corpora-v0.4.0) (2024-08-27)
+
+
+### 🚀 Features
+
+* **setting:** now can delete accounts ([c865d02](https://github.com/Oktogazh/Corpora/commit/c865d028c78b9a936fa6641c42c7ae5c16dcafc1))
+
+
+### 🐞 Bug Fixes
+
+* **log in form:** claim username when login in for the first time ([2c10a03](https://github.com/Oktogazh/Corpora/commit/2c10a034df4ca8d58fdbfff22b02fbb873878709))
+
+
+### ✨  New
+
+* **i18n:** add the firebase auth error messages ([7ac1f97](https://github.com/Oktogazh/Corpora/commit/7ac1f9738994e9f2fd77d842cde8772b963db87c))
+
 ## [0.3.0](https://github.com/Oktogazh/Corpora/compare/corpora-v0.2.2...corpora-v0.3.0) (2024-08-26)
 
 
