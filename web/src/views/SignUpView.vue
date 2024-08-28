@@ -17,7 +17,7 @@
             class="flex flex-col justify-center gap-4 w-fit">
             <div>
               <label
-                class="flex flex-col text-start font-semibold text-sm mb-2"
+                class="flex flex-col text-start font-medium text-sm mb-2"
                 for="email">
                 {{ $t('Email') }}
               </label>
@@ -30,7 +30,7 @@
             </div>
             <button
               :disabled="v$.email.$invalid"
-              class="w-72 bg-primary text-background font-semibold p-2 rounded-full hover:bg-primary-500 mt-4 disabled:bg-secondary-300"
+              class="w-72 bg-primary disabled:bg-primary-300 text-background font-medium p-2 rounded-full hover:bg-primary-500 mt-4"
               @click="++step">
               {{ $t('Next') }}
             </button>
@@ -123,7 +123,7 @@
               <v-switch :case="step">
                 <template #2>
                   <label
-                    class="flex flex-col text-start font-semibold text-sm"
+                    class="flex flex-col text-start font-medium text-sm"
                     for="password">
                     {{ $t('Password') }}
                   </label>
@@ -150,7 +150,7 @@
                   </div>
                   <div class="flex flex-col gap-2 text-xs">
                     <span
-                      class="font-semibold text-sm">{{ $t("Your password must contain at least") }}</span>
+                      class="font-medium text-sm">{{ $t("Your password must contain at least") }}</span>
                     <span
                       class="flex gap-2">
                       <AkCircle v-if="v$.password.hasLetter.$invalid"/>
@@ -172,7 +172,7 @@
                   </div>
                   <button
                     :disabled="v$.password.$invalid"
-                    class="w-72 bg-primary text-background font-semibold p-2 rounded-full hover:bg-primary-500 mt-4 disabled:bg-secondary-300"
+                    class="w-72 bg-primary text-background font-medium p-2 rounded-full hover:bg-primary-500 mt-4 disabled:bg-primary-300"
                     @click="++step">
                     {{ $t('Next') }}
                   </button>
@@ -180,7 +180,7 @@
 
                 <template #3>
                   <label
-                    class="flex flex-col text-start font-semibold text-sm mb-2"
+                    class="flex flex-col text-start font-medium text-sm mb-2"
                     for="username">
                     {{ $t('Username') }}
                   </label>
@@ -194,7 +194,7 @@
                   </div>
                   <div class="flex flex-col gap-2 text-xs">
                     <span
-                      class="font-semibold text-sm">{{ $t("Your password must contain at least") }}</span>
+                      class="font-medium text-sm">{{ $t("Your password must contain at least") }}</span>
                     <span
                       class="flex gap-2 align-baseline">
                       <AkCircle v-if="v$.username.minLength.$invalid"/>
@@ -210,7 +210,7 @@
                   </div>
                   <button
                     :disabled="v$.username.$invalid || !usernameAvailable"
-                    class="w-72 bg-primary text-background font-semibold p-2 rounded-full hover:bg-primary-500 mt-4 transition-colors delay-150 duration-150 disabled:bg-secondary-300"
+                    class="w-72 bg-primary text-background font-medium p-2 rounded-full hover:bg-primary-500 mt-4 transition-colors delay-150 duration-150 disabled:bg-primary-300"
                     @click="signUpWithPwd">
                     {{ $t("Sign Up (action button)") }}
                   </button>

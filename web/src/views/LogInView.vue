@@ -35,20 +35,20 @@
             <div>
               <label
                 class="flex flex-col text-start font-semibold text-sm mb-2"
-                for="email-or-username">
-                {{ $t('Email or username') }}
+                for="email">
+                {{ $t('Email') }}
               </label>
               <input
-                id="email-or-user-name"
+                id="email"
                 class="w-full border-[1px] border-secondary-300 p-2 rounded bg-background-100 hover:bg-background-50 hover:border-secondary-200"
                 type="email"
-                :placeholder="$t('Email or username')"
-                v-model="emailOrUsername">
+                :placeholder="$t('Email')"
+                v-model="v$.email.$model">
             </div>
             <div>
               <label
                 class="flex flex-col text-start font-semibold text-sm mb-2"
-                for="email-or-username">
+                for="password">
                 {{ $t('Password') }}
               </label>
               <div class="flex flex-row items-center">
@@ -57,7 +57,7 @@
                   class="w-full border-[1px] border-secondary-300 p-2 rounded bg-background-100 hover:bg-background-50 hover:border-secondary-200 pe-8"
                   :type="showPassword? 'text': 'password'"
                   :placeholder="$t('Password')"
-                  v-model="password">
+                  v-model="v$.password.$model">
                   <div>
                     <BsEye
                       v-if="!showPassword"
@@ -73,7 +73,8 @@
               </div>
             </div>
             <button
-              class="w-72 bg-primary text-background font-semibold p-2 rounded-full hover:bg-primary-500 mt-4"
+              :disabled="v$.$invalid"
+              class="w-72 bg-primary disabled:bg-primary-300 text-background font-semibold p-2 rounded-full hover:bg-primary-500 mt-4"
               @click="loginWithPassword">
               {{ $t('Log In (action button)') }}
             </button>
@@ -113,6 +114,8 @@ import { doc, setDoc, serverTimestamp } from "firebase/firestore";
 import { mapState } from 'pinia';
 import { useUserStore } from '@/stores/user';
 import { useAppStore } from '@/stores/app';
+import { useVuelidate } from '@vuelidate/core'
+import { required, email } from '@vuelidate/validators'
 
 
 export default defineComponent({
@@ -130,7 +133,7 @@ export default defineComponent({
   },
   data: () => ({
     nextRoute: null as any,
-    emailOrUsername: '',
+    email: '',
     password: '',
     showPassword: false,
     loginButtons: [
@@ -180,7 +183,7 @@ export default defineComponent({
     },
     async loginWithPassword() {
       try {
-        await signInWithEmailAndPassword(auth, this.emailOrUsername, this.password)
+        await signInWithEmailAndPassword(auth, this.email, this.password)
       } catch (error) {
         const errorCode = (error as AuthError).code;
         const { $t } = this;
@@ -194,6 +197,15 @@ export default defineComponent({
           type: "error"
         })
       }
+    }
+  },
+  setup () {
+    return { v$: useVuelidate() }
+  },
+  validations() {
+    return {
+      email: { required, email },
+      password: { required }
     }
   },
   created() {
