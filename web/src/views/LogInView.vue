@@ -108,10 +108,11 @@ import { defineComponent } from 'vue'
 import { Separator } from 'radix-vue';
 import { BsEye, BsEyeSlash } from '@kalimahapps/vue-icons';
 import { auth, googleProvider, facebookProvider, db } from '@/firebase';
-import { signInWithPopup, signInWithEmailAndPassword } from "firebase/auth";
+import { signInWithPopup, signInWithEmailAndPassword, type AuthError } from "firebase/auth";
 import { doc, setDoc, serverTimestamp } from "firebase/firestore";
-import { useUserStore } from '@/stores/user';
 import { mapState } from 'pinia';
+import { useUserStore } from '@/stores/user';
+import { useAppStore } from '@/stores/app';
 
 
 export default defineComponent({
@@ -125,7 +126,7 @@ export default defineComponent({
     ...mapState(useUserStore,{
       isConnected: (state) => state.isConnected,
       user: (state) => state.user,
-    }),
+    })
   },
   data: () => ({
     nextRoute: null as any,
@@ -178,7 +179,19 @@ export default defineComponent({
       }
     },
     async loginWithPassword() {
-      await signInWithEmailAndPassword(auth, this.emailOrUsername, this.password)
+      try {
+        await signInWithEmailAndPassword(auth, this.emailOrUsername, this.password)
+      } catch (error) {
+        const errorCode = (error as AuthError).code;
+        const { $t } = this;
+        console.log('Error code:', errorCode);
+        useAppStore().toast = {
+          title: $t("Error"),
+          open: true,
+          message: $t(errorCode),
+          type: 'error'
+        }
+      }
     }
   },
   created() {
