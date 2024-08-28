@@ -187,7 +187,6 @@ export default defineComponent({
       } catch (error) {
         const errorCode = (error as AuthError).code;
         const { $t } = this;
-        console.log('Error code:', errorCode);
         useAppStore().toasts.push({
           actionCallback: null,
           actionText: "",

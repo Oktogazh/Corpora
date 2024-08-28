@@ -32,7 +32,7 @@
           {{ user!.providerData[0].providerId }}
           </div>
 
-          <DialogRoot>
+          <DialogRoot #>
             <DialogTrigger
               class="w-72 bg-red-500 bg-opacity-25 text-red-500 font-medium p-2 rounded-full hover:bg-opacity-40 mt-4">
               {{ $t("Delete Account") }}
@@ -51,6 +51,7 @@
                 <div class="mt-[25px] flex justify-end">
                   <DialogClose as-child>
                     <button
+                      ref="deleteDialogCloseButton"
                       class="bg-green-500 bg-opacity-20 px-4 me-4 text-accent font-medium p-2 rounded-full hover:bg-opacity-40 mt-4">
                       {{ $t("Cancel") }}
                     </button>
@@ -89,7 +90,7 @@
 import { mapState } from 'pinia'
 import { useUserStore } from '@/stores/user'
 import { defineComponent } from 'vue'
-import { deleteUser, type User } from "firebase/auth";
+import { deleteUser, type User, type AuthError } from "firebase/auth";
 import {
   DialogClose,
   DialogContent,
@@ -101,6 +102,7 @@ import {
   DialogTrigger,
 } from 'radix-vue'
 import { auth } from '@/firebase';
+import { useAppStore } from '@/stores/app';
 
 export default defineComponent({
   name: 'SettingsView',
@@ -140,7 +142,21 @@ export default defineComponent({
   }),
   methods: {
     async deleteAccount() {
-      await deleteUser(auth.currentUser as User)
+      try {
+        await deleteUser(auth.currentUser as User)
+      } catch (error) {
+        const errorCode = (error as AuthError).code;
+        const { $t } = this;
+        useAppStore().toasts.push({
+          actionCallback: null,
+          actionText: "",
+          title: $t("Error"),
+          open: true,
+          message: $t(errorCode),
+          type: "error"
+        })
+      }
+      (this.$refs.deleteDialogCloseButton as HTMLButtonElement).click()
     },
     forgetChanges() {
       this.changes = {

@@ -229,9 +229,10 @@ import { defineComponent } from 'vue'
 import { Separator, SliderRange, SliderRoot, SliderTrack } from 'radix-vue';
 import { BsEye, BsEyeSlash, AkChevronLeft, AnFilledCheckCircle, AkCircle } from '@kalimahapps/vue-icons';
 import { auth, db, googleProvider, facebookProvider } from '@/firebase';
-import { signInWithPopup, createUserWithEmailAndPassword } from "firebase/auth";
+import { signInWithPopup, createUserWithEmailAndPassword, type AuthError } from "firebase/auth";
 import { doc, onSnapshot, setDoc, serverTimestamp } from 'firebase/firestore';
 import { useUserStore } from '@/stores/user';
+import { useAppStore } from '@/stores/app';
 import { mapState } from 'pinia';
 import { useVuelidate } from '@vuelidate/core'
 import { required, email } from '@vuelidate/validators'
@@ -303,21 +304,48 @@ export default defineComponent({
       try {
         await signInWithPopup(auth, googleProvider);
       } catch (error) {
-        console.error("Error signing in with Google:", error);
+        const errorCode = (error as AuthError).code;
+        const { $t } = this;
+        useAppStore().toasts.push({
+          actionCallback: null,
+          actionText: "",
+          title: $t("Error"),
+          open: true,
+          message: $t(errorCode),
+          type: "error"
+        })
       }
     },
     async loginWithFacebook() {
       try {
         await signInWithPopup(auth, facebookProvider);
       } catch (error) {
-        console.error("Error signing in with Facebook:", error);
+        const errorCode = (error as AuthError).code;
+        const { $t } = this;
+        useAppStore().toasts.push({
+          actionCallback: null,
+          actionText: "",
+          title: $t("Error"),
+          open: true,
+          message: $t(errorCode),
+          type: "error"
+        })
       }
     },
     async signUpWithPwd() {
       try {
         await createUserWithEmailAndPassword(auth, this.email, this.password);
       } catch (error) {
-        console.error("Error signing up with email and password:", error);
+        const errorCode = (error as AuthError).code;
+        const { $t } = this;
+        useAppStore().toasts.push({
+          actionCallback: null,
+          actionText: "",
+          title: $t("Error"),
+          open: true,
+          message: $t(errorCode),
+          type: "error"
+        })
       }
     },
     async updateValidator(value: string) {
