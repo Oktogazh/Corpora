@@ -51,6 +51,11 @@
       "hidden": false
     },
     {
+      "type": "improve",
+      "section": "✨ Polish",
+      "hidden": false
+    },
+    {
       "type": "refactor",
       "section": "✨ Polish",
       "hidden": false

@@ -4,28 +4,39 @@
   <div class="min-h-[100vh] pt-[64px] flex flex-col justify-between text-text">
     <RouterView name="default"/>
     <RouterView name="footer" />
-    <ToastProvider>
+    <ToastProvider :duration="5000">
       <ToastRoot
+        v-for="(toast, i) in toasts"
+        :key="i"
         v-model:open="toast.open"
-        class="bg-white rounded-md shadow-[hsl(206_22%_7%_/_35%)_0px_10px_38px_-10px,_hsl(206_22%_7%_/_20%)_0px_10px_20px_-15px] p-[15px] grid [grid-template-areas:_'title_action'_'description_action'] grid-cols-[auto_max-content] gap-x-[15px] items-center data-[state=open]:animate-slideIn data-[state=closed]:animate-hide data-[swipe=move]:translate-x-[var(--radix-toast-swipe-move-x)] data-[swipe=cancel]:translate-x-0 data-[swipe=cancel]:transition-[transform_200ms_ease-out] data-[swipe=end]:animate-swipeOut"
-      >
-        <ToastTitle class="[grid-area:_title] mb-[5px] font-medium text-slate12 text-[15px]">
+        class="border-2 border-opacity-50 bg-opacity-15 rounded-md shadow-[hsl(206_22%_7%_/_35%)_0px_10px_38px_-10px,_hsl(206_22%_7%_/_20%)_0px_10px_20px_-15px] p-4 data-[state=open]:animate-slideIn data-[state=closed]:animate-hide data-[swipe=move]:translate-x-[var(--radix-toast-swipe-move-x)] data-[swipe=cancel]:translate-x-0 data-[swipe=cancel]:transition-[transform_200ms_ease-out] data-[swipe=end]:animate-swipeOut"
+        :class="[
+          toast.type === 'success' ? 'bg-green-500 border-green-500 text-green-500' :
+          toast.type === 'error' ? 'bg-red-500 border-red-500 text-red-500' :
+          'bg-primary-50 border-primary-500 text-primary-500' // default = info
+        ]"
+        >
+        <ToastTitle
+          class="mb-1 font-semibold text-md"
+        >
           {{ toast.title }}
         </ToastTitle>
         <ToastDescription as-child>
-          <time
-            class="[grid-area:_description] m-0 text-slate11 text-[13px] leading-[1.3]"
-          >
+          <span class="text-sm">
             {{ toast.message }}
-          </time>
+          </span>
         </ToastDescription>
         <ToastAction
+          v-if="toast.actionCallback && toast.actionText"
           class="[grid-area:_action]"
           as-child
           alt-text="Goto schedule to undo"
         >
-          <button class="inline-flex items-center justify-center rounded font-medium text-xs px-[10px] leading-[25px] h-[25px] bg-green2 text-green11 shadow-[inset_0_0_0_1px] shadow-green7 hover:shadow-[inset_0_0_0_1px] hover:shadow-green8 focus:shadow-[0_0_0_2px] focus:shadow-green8">
-            Undo
+          <button
+            class="text-accent font-semibold"
+            @click="toast.actionCallback"
+          >
+            {{ toast.actionText }}
           </button>
         </ToastAction>
       </ToastRoot>
@@ -61,7 +72,7 @@ export default defineComponent({
   },
   computed: {
     ...mapState(useAppStore, {
-      toast: (state) => state.toast
+      toasts: (state) => state.toasts
     })
   }
 })

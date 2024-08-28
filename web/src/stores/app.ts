@@ -3,12 +3,14 @@ import { defineStore } from 'pinia'
 export const useAppStore = defineStore('App', {
   state: () => ({
     name: "",
-    toast: {
+    toasts: [{
+      actionCallback: null as (() => void) | null,
+      actionText: "",
       title: "",
       open: false,
       message: "",
       type: "error"
-    }
+    }]
   }),
   actions: {
     setName(appName: string) {

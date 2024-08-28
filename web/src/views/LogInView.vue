@@ -185,12 +185,14 @@ export default defineComponent({
         const errorCode = (error as AuthError).code;
         const { $t } = this;
         console.log('Error code:', errorCode);
-        useAppStore().toast = {
+        useAppStore().toasts.push({
+          actionCallback: null,
+          actionText: "",
           title: $t("Error"),
           open: true,
           message: $t(errorCode),
-          type: 'error'
-        }
+          type: "error"
+        })
       }
     }
   },
