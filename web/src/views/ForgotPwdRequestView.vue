@@ -21,44 +21,12 @@
                 :placeholder="$t('Email')"
                 v-model="v$.email.$model">
             </div>
-            <div>
-              <label
-                class="flex flex-col text-start font-semibold text-sm mb-2"
-                for="password">
-                {{ $t('Password') }}
-              </label>
-              <div class="flex flex-row items-center">
-                <input
-                  id="password"
-                  class="w-full border-[1px] border-secondary-300 p-2 rounded bg-background-100 hover:bg-background-50 hover:border-secondary-200 pe-8"
-                  :type="showPassword? 'text': 'password'"
-                  :placeholder="$t('Password')"
-                  v-model="v$.password.$model">
-                  <div>
-                    <BsEye
-                      v-if="!showPassword"
-                      class="transform absolute -translate-x-full -translate-y-1/2 -ms-2 font-bold cursor-pointer"
-                      @click="showPassword = true"
-                    />
-                    <BsEyeSlash
-                      v-else
-                      class="transform absolute -translate-x-full -translate-y-1/2 -ms-2 font-bold cursor-pointer"
-                      @click="showPassword = false"
-                    />
-                  </div>
-              </div>
-            </div>
             <button
               :disabled="v$.$invalid"
               class="w-72 bg-primary disabled:bg-primary-300 text-background font-semibold p-2 rounded-full hover:bg-primary-500 mt-4"
               @click="loginWithPassword">
-              {{ $t('Log In (action button)') }}
+              {{ $t("Send an email") }}
             </button>
-            <router-link
-              :to="{ name: 'Forgot Password' }"
-              class="text-text hover:text-text-500 underline">
-              {{ $t('Forgot password?') }}
-            </router-link>
           </div>
 
           <div class="h-8 w-full flex flex-row justify-center items-center">
@@ -83,7 +51,6 @@
 <script lang="ts">
 import { defineComponent } from 'vue'
 import { Separator } from 'radix-vue';
-import { BsEye, BsEyeSlash } from '@kalimahapps/vue-icons';
 import { auth, googleProvider, facebookProvider, db } from '@/firebase';
 import { signInWithPopup, signInWithEmailAndPassword, type AuthError } from "firebase/auth";
 import { doc, setDoc, serverTimestamp } from "firebase/firestore";
@@ -98,8 +65,6 @@ export default defineComponent({
   name: 'ForgotPwdRequestView',
   components: {
     Separator,
-    BsEye,
-    BsEyeSlash
   },
   computed: {
     ...mapState(useUserStore,{
