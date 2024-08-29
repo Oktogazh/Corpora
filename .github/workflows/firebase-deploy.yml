@@ -1,7 +1,7 @@
 name: Build web app and deploy to Firebase Hosting
 
 on:
-  pull_request:
+  pull_request_target:
     types: [closed]
 
 jobs:
@@ -11,7 +11,7 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
 
       - name: Run release job
         run: cd web && npm ci && npm run build && cd ../firebase
@@ -20,6 +20,6 @@ jobs:
         uses: FirebaseExtended/action-hosting-deploy@v0
         with:
           # repoToken: '${{ secrets.GITHUB_TOKEN }}'
-          firebaseServiceAccount: '${{ secrets.FIREBASE_SERVICE_ACCOUNT }}'
+          firebaseServiceAccount: '${{ secrets.FIREBASE_SERVICE_ACCOUNT_KORPORAOUEG }}'
           channelId: live
           projectId: korporaoueg
