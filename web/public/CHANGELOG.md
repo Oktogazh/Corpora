@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.4.2](https://github.com/Oktogazh/Corpora/compare/corpora-v0.4.1...corpora-v0.4.2) (2024-08-29)
+
+
+### ✨  New
+
+* created a password reset request page ([7622b23](https://github.com/Oktogazh/Corpora/commit/7622b2328b29f55af942ae70d7b3f4114962456f))
+
 ## [0.4.1](https://github.com/Oktogazh/Corpora/compare/corpora-v0.4.0...corpora-v0.4.1) (2024-08-29)
 
 
