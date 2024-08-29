@@ -1,4 +1,4 @@
-name: Release Please
+name: Create a release PR and deploy to Firebase Hosting
 
 on:
   push:
@@ -12,7 +12,7 @@ permissions:
 jobs:
   release-please:
     runs-on: ubuntu-latest
-    if:  github.event.pull_request.head.ref != 'release-please--branches--master'
+    if:  github.event.commits[0].author.name != 'github-actions[bot]'
 
     steps:
       - name: Checkout repository
@@ -24,3 +24,22 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
           config-file: release-please-config.json
           manifest-file: .release-please-manifest.json
+
+  build_and_deploy:
+    runs-on: ubuntu-latest
+    if:  github.event.commits[0].author.name == 'github-actions[bot]'
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Run release job
+        run: cd web && npm ci && npm run build && cd ../firebase
+
+      - name: Deploy to Firebase Hosting
+        uses: FirebaseExtended/action-hosting-deploy@v0
+        with:
+          entryPoint: firebase
+          firebaseServiceAccount: '${{ secrets.FIREBASE_SERVICE_ACCOUNT_KORPORAOUEG }}'
+          channelId: live
+          projectId: korporaoueg
