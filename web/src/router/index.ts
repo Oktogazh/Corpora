@@ -1,4 +1,4 @@
-import { createRouter, createWebHistory, onBeforeRouteUpdate, type RouteLocationNormalizedGeneric } from 'vue-router'
+import { createRouter, createWebHistory } from 'vue-router'
 import { onAuthStateChanged } from "firebase/auth";
 import { auth } from '@/firebase';
 
@@ -10,8 +10,7 @@ const router = createRouter({
       name: 'Home',
       components: {
         default: () => import('../views/HomeView.vue'),
-        footer: () => import('../components/AppFooter.vue'),
-        sidebar: () => import('../components/HomeSidebar.vue')
+        footer: () => import('../components/AppFooter.vue')
       }
     },
     {

@@ -9,13 +9,16 @@
     ></div>
     <div
       id="navbar-wrapper"
-      class="absolute w-full h-full bg-transparent flex items-center justify-between px-[32px]"
+      class="absolute w-full h-full bg-transparent flex items-center justify-between px-[32px] z-50"
     >
       <div
         id="navbar-inner-container"
         class="h-full w-full py-4 flex justify-between m-auto max-w-[1300px]"
       >
-        <router-link :to="{ name: 'Home' }" id="title" class="flex items-center font-bold">
+        <router-link
+          class="font-bold transition-colors duration-300 disabled:text-primary hover:text-primary"
+          :to="{ name: 'Home' }"
+          id="title">
           {{ appName }}
         </router-link>
 
@@ -83,12 +86,29 @@
       </div>
     </div>
     <Separator class="bg-secondary-200 absolute bottom-0 h-px w-full"/>
+
+    <div
+      class="fixed top-0 pt-16 w-1/4 h-screen z-40"
+      v-show="sidebar.open"
+    >
+      <ScrollAreaRoot
+        class="h-full border-e-[1px] border-text-100 bg-background">
+        <ScrollAreaViewport />
+        <ScrollAreaScrollbar orientation="horizontal">
+          <ScrollAreaThumb />
+        </ScrollAreaScrollbar>
+        <ScrollAreaScrollbar orientation="vertical">
+          <ScrollAreaThumb />
+        </ScrollAreaScrollbar>
+        <ScrollAreaCorner />
+      </ScrollAreaRoot>
+    </div>
   </header>
 </template>
 
 <script lang="ts">
 import { defineComponent } from 'vue';
-import { Separator, SwitchRoot, SwitchThumb } from 'radix-vue';
+import { Separator, SwitchRoot, SwitchThumb, ScrollAreaRoot, ScrollAreaScrollbar, ScrollAreaThumb, ScrollAreaViewport  } from 'radix-vue';
 import { AnOutlinedMoon, AnOutlinedSun, BxSolidCog } from '@kalimahapps/vue-icons';
 import { useDark } from '@vueuse/core';
 import { useAppStore } from '@/stores/app';
@@ -105,10 +125,15 @@ export default defineComponent({
     AnOutlinedMoon,
     AnOutlinedSun,
     BxSolidCog,
+    ScrollAreaRoot,
+    ScrollAreaScrollbar,
+    ScrollAreaThumb,
+    ScrollAreaViewport
   },
   computed: {
     ...mapState(useAppStore,{
       appName: (state) => state.name,
+      sidebar: (state) => state.sidebar
     }),
     ...mapState(useUserStore,{
       isConnected: (state) => state.isConnected,

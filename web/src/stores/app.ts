@@ -10,7 +10,10 @@ export const useAppStore = defineStore('App', {
       open: false,
       message: "",
       type: "error"
-    }]
+    }],
+    sidebar: {
+      open: false
+    }
   }),
   actions: {
     setName(appName: string) {

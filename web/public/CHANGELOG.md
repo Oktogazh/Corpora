@@ -5,7 +5,7 @@
 
 ### 🚀 Features
 
-* **setting:** now can delete accounts ([c865d02](https://github.com/Oktogazh/Corpora/commit/c865d028c78b9a936fa6641c42c7ae5c16dcafc1))
+* **settings:** now can delete accounts ([c865d02](https://github.com/Oktogazh/Corpora/commit/c865d028c78b9a936fa6641c42c7ae5c16dcafc1))
 
 
 ### 🐞 Bug Fixes
