@@ -1,5 +1,20 @@
 # Changelog
 
+## [0.4.1](https://github.com/Oktogazh/Corpora/compare/corpora-v0.4.0...corpora-v0.4.1) (2024-08-29)
+
+
+### ✨ Polish
+
+* **interface:** made sidebar part of the header, and its state managed by the store ([b1128a3](https://github.com/Oktogazh/Corpora/commit/b1128a3d3cd1a174b303c13c521ad292ec45fc29))
+* **toasts:** can now have several toasts, which have styles and actions props ([276acb1](https://github.com/Oktogazh/Corpora/commit/276acb1e149ef9a38623e6899bf3b57a80d7f00d))
+
+
+### ✨  New
+
+* **interface:** set up a toast system to display errors managed in the store app ([d188fa0](https://github.com/Oktogazh/Corpora/commit/d188fa0f6d2aa6a6e91af94767d97b8c7977e026))
+* **log in form:** validate form before log in ([4ca6e44](https://github.com/Oktogazh/Corpora/commit/4ca6e44e7215df639e6c2888c41efc5a8aae91aa))
+* **sign up form and settings:** integrate errors to the toast system ([6b92793](https://github.com/Oktogazh/Corpora/commit/6b9279348ac278efcd1d9fd378387ee265531b2f))
+
 ## [0.4.0](https://github.com/Oktogazh/Corpora/compare/corpora-v0.3.0...corpora-v0.4.0) (2024-08-27)
 
 
