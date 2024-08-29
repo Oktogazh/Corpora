@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.4.3](https://github.com/Oktogazh/Corpora/compare/corpora-v0.4.2...corpora-v0.4.3) (2024-08-29)
+
+
+### ⚠️ Changes
+
+* **forgot pwd request form:** update the form ([a87f99a](https://github.com/Oktogazh/Corpora/commit/a87f99a064621935b8430f13a049737c40ea8668))
+
 ## [0.4.2](https://github.com/Oktogazh/Corpora/compare/corpora-v0.4.1...corpora-v0.4.2) (2024-08-29)
 
 
