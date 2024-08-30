@@ -28,7 +28,7 @@ const analytics = getAnalytics(app);
 const db = getFirestore(app)
 const rtdb = getDatabase(app)
 const auth = getAuth(app)
-auth.useDeviceLanguage()
+auth.languageCode = "en"
 const functions = getFunctions(app, 'europe-west1')
 const storage = getStorage(app)
 const googleProvider = new GoogleAuthProvider()

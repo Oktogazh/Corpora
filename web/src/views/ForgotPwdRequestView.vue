@@ -24,7 +24,7 @@
             <button
               :disabled="v$.$invalid"
               class="w-72 bg-primary disabled:bg-primary-300 text-background font-semibold p-2 rounded-full hover:bg-primary-500 mt-4"
-              @click="loginWithPassword">
+              @click="sendResetEmail">
               {{ $t("Send an email") }}
             </button>
           </div>
@@ -51,14 +51,11 @@
 <script lang="ts">
 import { defineComponent } from 'vue'
 import { Separator } from 'radix-vue';
-import { auth, googleProvider, facebookProvider, db } from '@/firebase';
-import { signInWithPopup, signInWithEmailAndPassword, type AuthError } from "firebase/auth";
-import { doc, setDoc, serverTimestamp } from "firebase/firestore";
-import { mapState } from 'pinia';
-import { useUserStore } from '@/stores/user';
-import { useAppStore } from '@/stores/app';
+import { auth } from '@/firebase';
+import { sendPasswordResetEmail, type AuthError } from "firebase/auth";
 import { useVuelidate } from '@vuelidate/core'
 import { required, email } from '@vuelidate/validators'
+import { useAppStore } from '@/stores/app'
 
 
 export default defineComponent({
@@ -66,65 +63,23 @@ export default defineComponent({
   components: {
     Separator,
   },
-  computed: {
-    ...mapState(useUserStore,{
-      isConnected: (state) => state.isConnected,
-      user: (state) => state.user,
-    })
-  },
   data: () => ({
-    nextRoute: null as any,
-    email: '',
-    password: '',
-    showPassword: false,
-    loginButtons: [
-      {
-        name: 'google',
-        alt: 'Google icon',
-        icon: 'https://upload.wikimedia.org/wikipedia/commons/c/c1/Google_%22G%22_logo.svg',
-        text: 'Log in with Google'
-      }
-      /* TODO: Add the Data deletion url and Privacy Policy URLs
-        https://developers.facebook.com/apps/1166923014592622/go_live/?business_id=147001963459612
-      ,
-      {
-        name: 'facebook',
-        alt: 'Facebook icon',
-        icon: 'https://upload.wikimedia.org/wikipedia/commons/b/b8/2021_Facebook_icon.svg',
-        text: 'Log in with Facebook'
-      }, */
-    ]
+    email: ''
   }),
   methods: {
-    loginWith(provider: string) {
-      switch (provider) {
-        case 'google':
-          this.loginWithGoogle();
-          break;
-        case 'facebook':
-          this.loginWithFacebook();
-          break;
-        default:
-          console.error('Unknown provider:', provider);
-      }
-    },
-    async loginWithGoogle() {
+    async sendResetEmail() {
+      const { $t } = this;
       try {
-        await signInWithPopup(auth, googleProvider);
-      } catch (error) {
-        console.error("Error signing in with Google:", error);
-      }
-    },
-    async loginWithFacebook() {
-      try {
-        await signInWithPopup(auth, facebookProvider);
-      } catch (error) {
-        console.error("Error signing in with Facebook:", error);
-      }
-    },
-    async loginWithPassword() {
-      try {
-        await signInWithEmailAndPassword(auth, this.email, this.password)
+        await sendPasswordResetEmail(auth, this.email);
+        useAppStore().toasts.push({
+          actionCallback: null,
+          actionText: "",
+          title: $t("Email sent!"),
+          open: true,
+          message: $t("If the email is linked to an account, you will receive a link to reset your password."),
+          type: "info"
+        })
+        this.email = '';
       } catch (error) {
         const errorCode = (error as AuthError).code;
         const { $t } = this;
@@ -137,45 +92,16 @@ export default defineComponent({
           type: "error"
         })
       }
-    }
+    },
   },
   setup () {
     return { v$: useVuelidate() }
   },
   validations() {
     return {
-      email: { required, email },
-      password: { required }
+      email: { required, email }
     }
-  },
-  created() {
-    if (this.isConnected) {
-      this.$router.push({name: 'Home'});
-    }
-  },
-  watch: {
-    isConnected() {
-      if (this.user) {
-        const { createdAt, displayName, uid } = this.user!
-        const creationTime = new Date(Number(createdAt)).getTime();
-        const now = new Date().getTime();
-        // look if account was created less than 10 seconds ago
-        // to claim the username if it is the first time the user logs in
-        if ((now - creationTime) < 10000 && displayName) {
-          try {
-            const uniqueUsernameRef = doc(db, "unique_usernames", displayName )
-            setDoc(uniqueUsernameRef, { owner: uid, createdAt: serverTimestamp() })
-          } catch (error) {
-            console.error('Error setting displayName, the username might be already taken:', error)
-          }
-        }
-        const { previousRoute, options } = this.$router;
-        (previousRoute && options.routes.some(({ path }) => path === previousRoute.path))
-          ? this.$router.push(previousRoute)
-          : this.$router.push({name: 'Home'});
-      }
-    }
-  },
+  }
 })
 </script>
 
