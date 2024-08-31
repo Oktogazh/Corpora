@@ -109,7 +109,7 @@ import { defineComponent } from 'vue'
 import { Separator } from 'radix-vue';
 import { BsEye, BsEyeSlash } from '@kalimahapps/vue-icons';
 import { auth, googleProvider, facebookProvider, db } from '@/firebase';
-import { signInWithPopup, signInWithEmailAndPassword, type AuthError } from "firebase/auth";
+import { signInWithPopup, signInWithEmailAndPassword, updateProfile, type AuthError, reload } from "firebase/auth";
 import { doc, setDoc, serverTimestamp } from "firebase/firestore";
 import { mapState } from 'pinia';
 import { useUserStore } from '@/stores/user';
@@ -213,19 +213,42 @@ export default defineComponent({
     }
   },
   watch: {
-    isConnected() {
+    async isConnected() {
       if (this.user) {
-        const { createdAt, displayName, uid } = this.user!
+        const { $t, user } = this;
+        const { createdAt, displayName, uid } = user
         const creationTime = new Date(Number(createdAt)).getTime();
         const now = new Date().getTime();
         // look if account was created less than 10 seconds ago
         // to claim the username if it is the first time the user logs in
         if ((now - creationTime) < 10000 && displayName) {
           try {
-            const uniqueUsernameRef = doc(db, "unique_usernames", displayName )
-            setDoc(uniqueUsernameRef, { owner: uid, createdAt: serverTimestamp() })
+            const uniqueUsernameRef = doc(db, "unique_usernames", displayName)
+            await setDoc(uniqueUsernameRef, { owner: uid, createdAt: serverTimestamp() })
+            useAppStore().toasts.push({
+              actionCallback: null,
+              actionText: "",
+              title: $t("Welcome!"),
+              open: true,
+              message: $t("You account was successfully created!"),
+              type: "success"
+            })
           } catch (error) {
-            console.error('Error setting displayName, the username might be already taken:', error)
+            useAppStore().toasts.push({
+              actionCallback: null,
+              actionText: "",
+              title: $t("Welcome!"),
+              open: true,
+              message: $t("Don't forget to go the settings to create a username!"),
+              type: "info"
+            })
+            try {
+              await updateProfile(auth.currentUser!, { displayName: '' })
+              const user = useUserStore().$state.user
+              useUserStore().$patch({ user: { ...user, displayName: '' } })
+            } catch (error) {
+              console.error(error)
+            }
           }
         }
         const { previousRoute, options } = this.$router;

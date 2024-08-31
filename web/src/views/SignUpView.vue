@@ -229,7 +229,7 @@ import { defineComponent } from 'vue'
 import { Separator, SliderRange, SliderRoot, SliderTrack } from 'radix-vue';
 import { BsEye, BsEyeSlash, AkChevronLeft, AnFilledCheckCircle, AkCircle } from '@kalimahapps/vue-icons';
 import { auth, db, googleProvider, facebookProvider } from '@/firebase';
-import { signInWithPopup, createUserWithEmailAndPassword, type AuthError } from "firebase/auth";
+import { signInWithPopup, createUserWithEmailAndPassword, updateProfile, type AuthError } from "firebase/auth";
 import { doc, onSnapshot, setDoc, serverTimestamp } from 'firebase/firestore';
 import { useUserStore } from '@/stores/user';
 import { useAppStore } from '@/stores/app';
@@ -394,16 +394,47 @@ export default defineComponent({
     username(value) {
       this.updateValidator(value)
     },
-    isConnected() {
+    async isConnected() {
       if (this.user) {
-        try {
-          const { uid, displayName } = this.user
-          const uniqueUsernameRef = doc(db, "unique_usernames", displayName || this.username )
-          setDoc(uniqueUsernameRef, { owner: uid, createdAt: serverTimestamp() })
-          this.$router.push({name: 'Home'});
-        } catch (error) {
-          console.error("Error setting unique username:", error)
+        const { $t, user } = this;
+        const { createdAt, displayName, uid } = user
+        const creationTime = new Date(Number(createdAt)).getTime();
+        const now = new Date().getTime();
+        // look if account was created less than 10 seconds ago
+        // to claim the username if it is the first time the user logs in
+        if ((now - creationTime) < 10000 && displayName) {
+          try {
+            const uniqueUsernameRef = doc(db, "unique_usernames", displayName || this.username)
+            await setDoc(uniqueUsernameRef, { owner: uid, createdAt: serverTimestamp() })
+            useAppStore().toasts.push({
+              actionCallback: null,
+              actionText: "",
+              title: $t("Welcome!"),
+              open: true,
+              message: $t("You account was successfully created!"),
+              type: "success"
+            })
+          } catch (error) {
+            useAppStore().toasts.push({
+              actionCallback: null,
+              actionText: "",
+              title: $t("Welcome!"),
+              open: true,
+              message: $t("Don't forget to go the settings to create a username!"),
+              type: "info"
+            })
+            try {
+              await updateProfile(user, { displayName: null })
+            } catch (error) {
+              console.error('Error claiming username:', error)
+            }
+          }
         }
+        // as long as the user is connected, redirect to the previous route or home page
+        const { previousRoute, options } = this.$router;
+        (previousRoute && options.routes.some(({ path }) => path === previousRoute.path))
+          ? this.$router.push(previousRoute)
+          : this.$router.push({name: 'Home'});
       }
     }
   },

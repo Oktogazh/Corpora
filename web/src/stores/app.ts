@@ -9,7 +9,7 @@ export const useAppStore = defineStore('App', {
       title: "",
       open: false,
       message: "",
-      type: "error"
+      type: "error" as "error" | "success" | "info"
     }],
     sidebar: {
       open: false

@@ -112,6 +112,7 @@
   "auth/invalid-req-type": "The request type is invalid.",
   "Create a password": "Create a password",
   "Delete Account": "Delete Account",
+  "Don't forget to go the settings to create a username!": "Don't forget to go the settings to create a username!",
   "Don't have an account yet?": "Don't have an account yet?",
   "Email": "Email",
   "Email sent!": "Email sent!",
@@ -137,5 +138,7 @@
   "Sign Up (action button)": "Sign Up",
   "Step {n} of 3": "Step {n} of 3",
   "Username": "Username",
-  "Your password must contain at least": "Your password must contain at least"
+  "You account was successfully created!": "You account was successfully created!",
+  "Your password must contain at least": "Your password must contain at least",
+  "Welcome!": "Welcome!"
 }
