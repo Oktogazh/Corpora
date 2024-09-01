@@ -13,7 +13,7 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "CI CD pipeline and Testing.md",
+                "file": "@Flows.md",
                 "mode": "source",
                 "source": false
               }
@@ -99,7 +99,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "CI CD pipeline and Testing.md",
+                "file": "@Flows.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -116,7 +116,7 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "CI CD pipeline and Testing.md",
+                "file": "@Flows.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               }
@@ -139,7 +139,7 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "CI CD pipeline and Testing.md"
+                "file": "@Flows.md"
               }
             }
           }
@@ -162,13 +162,13 @@
   },
   "active": "2830d1175f6a70a9",
   "lastOpenFiles": [
-    "Translating.md",
+    "CI CD pipeline and Testing.md",
     "@Flows.md",
+    "Translating.md",
     "posting.md",
     "Tagging.md",
     "Elo rating.md",
     "User lifecycle.md",
-    "CI CD pipeline and Testing.md",
     "automated translators integration.md",
     "Private DBs for data ownership.md",
     "Interface translation.md",
