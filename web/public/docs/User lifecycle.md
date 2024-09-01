@@ -7,7 +7,6 @@ People should be able to connect, delete their accounts and the username system 
 # jobs
 1. Add update username
 	1. add function auth trigger to update displayName of user when displayName is set
-	2. add function auth trigger to delete unique_username of when user is deleted
 ---
 MVP_ready
 
