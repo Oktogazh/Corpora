@@ -1,5 +1,24 @@
 # Changelog
 
+## [0.4.4](https://github.com/Oktogazh/Corpora/compare/corpora-v0.4.3...corpora-v0.4.4) (2024-09-01)
+
+
+### ⚠️ Changes
+
+* **docs:** updated the docs with new requirements ([14287e0](https://github.com/Oktogazh/Corpora/commit/14287e099c159f5d5d2243533b7b6e965f53dd19))
+
+
+### 🐞 Bug Fixes
+
+* **user flow:** remove displayName when failing to claim unique username ([587c8e7](https://github.com/Oktogazh/Corpora/commit/587c8e71868df15da4ce85a86cba0e6dddf07bee))
+
+
+### ✨  New
+
+* **posting flow:** created a text area ([0ca3b51](https://github.com/Oktogazh/Corpora/commit/0ca3b51a82af146b5f6e2e4b9fe7188ada277f10))
+* **pwd reset form:** sends the email and shows a toast afterwards ([606b7d5](https://github.com/Oktogazh/Corpora/commit/606b7d59e1eda22305942f7261057a0fda2d47b5))
+* **user:** delete unique username document when user is deleted ([d538869](https://github.com/Oktogazh/Corpora/commit/d538869e4646eddc597b2ddf384817cff0a44259))
+
 ## [0.4.3](https://github.com/Oktogazh/Corpora/compare/corpora-v0.4.2...corpora-v0.4.3) (2024-08-29)
 
 
