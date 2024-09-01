@@ -8,7 +8,7 @@
   "collapse-color-groups": false,
   "colorGroups": [
     {
-      "query": "tag:#done  ",
+      "query": "tag:#MVP_ready",
       "color": {
         "a": 1,
         "rgb": 6082388
@@ -32,6 +32,6 @@
   "repelStrength": 1.60319010416667,
   "linkStrength": 0.623616536458333,
   "linkDistance": 173,
-  "scale": 1.0526411998095806,
+  "scale": 0.8253261555608342,
   "close": true
 }
