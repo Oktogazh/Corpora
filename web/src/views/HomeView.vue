@@ -24,21 +24,31 @@
           </div>
           <Separator class="bg-secondary-200 h-px w-full"/>
         </div>
-
-        <Skeleton
-          class="w-96 h-52 bg-secondary"
-          v-for="card of cardsSkeletons"
-          :key="card"
-        ></Skeleton>
+        <template
+          v-if="posts.length === 0"
+        >
+          <Skeleton
+            class="w-96 h-52 bg-secondary"
+            v-for="card of cardsSkeletons"
+            :key="card"
+          ></Skeleton>
+        </template>
+        <template
+          v-else
+        >
+        </template>
       </div>
     </div>
   </div>
 </template>
 
 <script lang="ts" setup>
-import { ref, computed, reactive } from 'vue'
+import { ref, computed, reactive, type Ref, onBeforeUnmount } from 'vue'
 import { Skeleton } from '@/components/shadcn/ui/skeleton'
 import { Separator } from 'radix-vue'
+import { db } from '@/firebase'
+import { collection, query, onSnapshot } from 'firebase/firestore'
+import type { Languoid } from '@/types/firestoreDocTypes'
 import { useUserStore } from '@/stores/user'
 import { useVuelidate } from '@vuelidate/core'
 import { required } from '@vuelidate/validators'
@@ -49,8 +59,17 @@ const user = computed(() => userStore.user)
 const isConnected = computed(() => userStore.isConnected)
 
 // Fetch posts
+const posts: Ref<Languoid[]> = ref([])
 const cardsSkeletons = ref(4)
-// https://firebase.google.com/docs/firestore/query-data/listen#listen_to_multiple_documents_in_a_collection
+const postsQuery = query(collection(db, "languoids"));
+const unsubscribe = onSnapshot(postsQuery, (querySnapshot) => {
+  const languagesSnapshots: Languoid[] = [];
+  querySnapshot.forEach((doc) => {
+      languagesSnapshots.push(doc.data() as Languoid);
+  });
+  posts.value = languagesSnapshots;
+  console.log("Posts ", languagesSnapshots.join(", "));
+});
 
 // post creation section
 const newSegment = ref('')
@@ -65,6 +84,10 @@ const v$ = useVuelidate(rules, newPostState)
 const publishSegment = () => {
   console.log('publishSegment', newSegment.value)
 }
+
+onBeforeUnmount(() => {
+  unsubscribe()
+})
 </script>
 
 <style scoped>
