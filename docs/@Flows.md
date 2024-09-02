@@ -7,7 +7,7 @@ A flow should be broken down into as many flows as possible for clarity sake and
 - Features stack
 	1. [[User lifecycle]]
 	2. [[posting]]
-	3. [[Tagging]]
+	3. [[Tagging]] (MVP)
 	4. [[Voting]]
 	5. [[Elo rating]]
 	6. [[Translating]]

@@ -10,19 +10,20 @@
             v-model="v$.newSegment.$model"
           ></textarea>
           <div class="flex justify-end items-center gap-4">
-            <span class="text-text opacity-85">
+            <span class="text-text select-none opacity-85">
+              <div class="absolute w-full h-full"></div>
               {{ newSegment.length }}/200
             </span>
             <button
               @click="publishSegment"
               :disabled="v$.$invalid"
-              class="bg-primary px-3 p-2 font-semibold rounded-full text-gray-100 disabled:opacity-75 hover:bg-primary-400"
+              class="bg-primary m-2 px-3 p-2 font-semibold rounded-full text-gray-100 disabled:opacity-75 disabled:hover:bg-primary hover:bg-primary-400"
             >
               {{ $t("Publish") }}
             </button>
           </div>
+          <Separator class="bg-secondary-200 h-px w-full"/>
         </div>
-        <Separator class="bg-secondary-200 h-px w-full"/>
 
         <Skeleton
           class="w-96 h-52 bg-secondary"
@@ -34,45 +35,36 @@
   </div>
 </template>
 
-<script lang="ts">
-import { defineComponent } from 'vue'
+<script lang="ts" setup>
+import { ref, computed, reactive } from 'vue'
 import { Skeleton } from '@/components/shadcn/ui/skeleton'
-import { Separator } from 'radix-vue';
-import { useUserStore } from '@/stores/user';
-import { mapState } from 'pinia';
+import { Separator } from 'radix-vue'
+import { useUserStore } from '@/stores/user'
 import { useVuelidate } from '@vuelidate/core'
 import { required } from '@vuelidate/validators'
 
-export default defineComponent({
-  name: 'HomeView',
-  computed: {
-    ...mapState(useUserStore,{
-      isConnected: (state) => state.isConnected,
-      user: (state) => state.user,
-    }),
-  },
-  components: {
-    Separator,
-    Skeleton
-  },
-  data: () => ({
-    newSegment: '',
-    cardsSkeletons: 4,
-  }),
-  methods: {
-    publishSegment() {
-      console.log('publishSegment', this.newSegment)
-    }
-  },
-  setup () {
-    return { v$: useVuelidate() }
-  },
-  validations() {
-    return {
-      newSegment: { required }
-    }
-  }
+const userStore = useUserStore()
+
+const user = computed(() => userStore.user)
+const isConnected = computed(() => userStore.isConnected)
+
+// Fetch posts
+const cardsSkeletons = ref(4)
+// https://firebase.google.com/docs/firestore/query-data/listen#listen_to_multiple_documents_in_a_collection
+
+// post creation section
+const newSegment = ref('')
+const rules = {
+  newSegment: { required }
+}
+const newPostState = reactive({
+  newSegment: ''
 })
+const v$ = useVuelidate(rules, newPostState)
+
+const publishSegment = () => {
+  console.log('publishSegment', newSegment.value)
+}
 </script>
 
 <style scoped>

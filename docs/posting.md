@@ -20,5 +20,4 @@ The posts should show up in the home page.
 3. Show the posts in a 'global activity' section
 	1. Fetch the languages ordered by lastUpdated: -1
 	2. display segment in a box showing the language and the corpus (ie. user) it originates from
-4. load the corpora in the language collection relating the browser settings
-5. when clicking on a corpus, list all its segments in a dedicated page
+4. when clicking on a corpus, list all its segments in a dedicated page
