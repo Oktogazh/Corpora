@@ -4,7 +4,7 @@
 # scope
 People should be able to connect, delete their accounts and the username system should be set in such a way that that usernames are in a one-to-one relationship with users, this implies being able to update one's username and delete unique username when deleting account.
 
-# jobs
+# tasks
 1. Add update username
 	1. add function auth trigger to update displayName of user when displayName is set
 ---
