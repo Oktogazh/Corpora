@@ -1,5 +1,5 @@
 #flow
-depends on: [[User lifecycle]]
+depends on: [[language tagging component]]
 
 # scope
 Allow users with a username to create segments (=post) in one of their own corpus (in firestore, the segment are docs in a "segments" subcollection of the corpus document, which is in "corpora" subcollection of the user's document: users>corpora>segments\[>translations]).

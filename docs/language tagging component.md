@@ -1,7 +1,8 @@
 #flow
-depends on: [[posting]] 
+depends on: [[User lifecycle]]
 
 # scope
+This feature aims to implement the [RCF5646](https://datatracker.ietf.org/doc/html/rfc5646) specification to tag accurately the different corpora being produced in the future.
 The language labelling sends to a label page, which contains:
 - a list of most recent strings translated in the language
 - stats on languages translated from, translated to under this label
@@ -22,4 +23,3 @@ The language labelling sends to a label page, which contains:
 3. make a section that shows the latest activities in regarding this language
 	1. Fetch all the corpora references in the language sub-collection
 	2. copy-past the corpus reference component from the posting flow
-4. 

@@ -6,8 +6,9 @@ A flow should be broken down into as many flows as possible for clarity sake and
 - [[CI CD pipeline and Testing]] 
 - Features stack
 	1. [[User lifecycle]]
-	2. [[posting]]
-	3. [[Tagging]] (MVP)
+	3. [[language tagging component]]
+	2. [[posting]] (MVP)
+	3. [[language pages]]
 	4. [[Voting]]
 	5. [[Elo rating]]
 	6. [[Translating]]

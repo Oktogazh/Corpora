@@ -1,2 +1,2 @@
 #flow 
-depends on: [[Tagging]]
+depends on: [[language tagging component]]

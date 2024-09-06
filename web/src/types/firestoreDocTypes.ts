@@ -9,6 +9,6 @@ declare type Glottocode = string
 /**
  * Lect with a reference to the latest activity
  */
-export declare interface Languoid {
+export declare type Languoid = {
   id: Glottocode;
 };
