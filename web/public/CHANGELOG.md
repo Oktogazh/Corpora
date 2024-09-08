@@ -1,5 +1,20 @@
 # Changelog
 
+## [0.4.5](https://github.com/Oktogazh/Corpora/compare/corpora-v0.4.4...corpora-v0.4.5) (2024-09-08)
+
+
+### ✨ Polish
+
+* **function:** double quote ([5895fc8](https://github.com/Oktogazh/Corpora/commit/5895fc822e3b45f6df1e901f073418919b92fe25))
+* **home:** convert to the composition API ([1f28f6a](https://github.com/Oktogazh/Corpora/commit/1f28f6a50ada4125a724514e10a276289d96c358))
+* type definition for query in home page ([e7f85f7](https://github.com/Oktogazh/Corpora/commit/e7f85f76bffb93e37307e7aab11da2ef2167d899))
+
+
+### ✨  New
+
+* language selector in the posting interface ([cdb057e](https://github.com/Oktogazh/Corpora/commit/cdb057e49dddf9191e550ac2681737a0e5add589))
+* registry of languages an scripts to generate ietf language tags ([ea1d559](https://github.com/Oktogazh/Corpora/commit/ea1d5594b64e7746fe85e95f66daca3f6d071efd))
+
 ## [0.4.4](https://github.com/Oktogazh/Corpora/compare/corpora-v0.4.3...corpora-v0.4.4) (2024-09-01)
 
 
