@@ -109,6 +109,7 @@
   "auth/missing-client-type": "The client type is missing.",
   "auth/missing-recaptcha-version": "The reCAPTCHA version is missing.",
   "auth/invalid-recaptcha-version": "The reCAPTCHA version is invalid.",
+  "Browser's languages": "Browser's languages",
   "auth/invalid-req-type": "The request type is invalid.",
   "Create a password": "Create a password",
   "Delete Account": "Delete Account",
@@ -120,6 +121,7 @@
   "Forget changes": "Forget changes",
   "I understand, delete my account": "I understand, delete my account",
   "If the email is linked to an account, you will receive a link to reset your password.": "If the email is linked to an account, you will receive a link to reset your password.",
+  "Language of the post": "Language of the post",
   "Log in (navbar link)": "Log in",
   "Log In (action button)": "Log In",
   "Log in here": "Log in here",
@@ -142,5 +144,6 @@
   "Username": "Username",
   "You account was successfully created!": "You account was successfully created!",
   "Your password must contain at least": "Your password must contain at least",
-  "Welcome!": "Welcome!"
+  "Welcome!": "Welcome!",
+  "Write something": "Write something"
 }

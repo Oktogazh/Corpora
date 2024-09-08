@@ -67111,6 +67111,7 @@
       "Yue Chinese",
       "Cantonese"
     ],
+    "endonyme": "广东话 / 廣東話",
     "Added": "2009-07-29",
     "Macrolanguage": "zh"
   },
@@ -72178,7 +72179,8 @@
     "Prefix": [
       "zh"
     ],
-    "Macrolanguage": "zh"
+    "Macrolanguage": "zh",
+    "endonyme": "廣東話 / 广东话"
   },
   {
     "Type": "extlang",
