@@ -6,13 +6,15 @@
           class="w-full flex flex-col"
           v-if="isConnected">
           <textarea
+            @input="v$.newSegment.$model = v$.newSegment.$model.substring(0, 200)"
             :placeholder="$t('Write a new post')"
-            class="unset"
-            style="min-height: 10ch"
+            class="unset text-lg"
+            style="min-height: 4.5rem; line-height: 1.5rem; font-size: 1rem"
             v-model="v$.newSegment.$model"
-          ></textarea>
+          >
+          </textarea>
           <div class="flex justify-end items-center gap-4">
-            <SelectRoot v-model="newSegmentLanguage">
+            <SelectRoot v-model="v$.newSegmentLanguage.$model">
               <SelectTrigger
                 class="inline-flex min-w-[160px] items-center justify-between rounded px-[15px] text-[13px] leading-none h-[35px] gap-[5px] hover:opacity-90 bg-secondary-50 outline-none"
                 aria-label="language-selector"
@@ -116,7 +118,7 @@ import type { Languoid } from '@/types/firestoreDocTypes'
 import type { IETFLanguage } from '@/types/utils'
 import { useUserStore } from '@/stores/user'
 import { useVuelidate } from '@vuelidate/core'
-import { required } from '@vuelidate/validators'
+import { required, maxLength } from '@vuelidate/validators'
 
 const userStore = useUserStore()
 const languages = ref(navigator.languages)
@@ -139,18 +141,23 @@ const unsubscribe = onSnapshot(postsQuery, (querySnapshot) => {
 });
 
 // post creation section
-const newSegment = ref('')
-const newSegmentLanguage = ref('')
 const rules = {
-  newSegment: { required }
+  newSegment: {
+    maxLength: maxLength(200),
+    required
+  },
+  newSegmentLanguage: {
+    required
+  }
 }
 const newPostState = reactive({
-  newSegment: ''
+  newSegment: '',
+  newSegmentLanguage: ''
 })
 const v$ = useVuelidate(rules, newPostState)
 
 const publishSegment = () => {
-  console.log('publishSegment', newSegment.value)
+  console.log('publishSegment', newPostState)
 }
 
 onBeforeUnmount(() => {
