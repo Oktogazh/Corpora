@@ -10,10 +10,15 @@
             :placeholder="$t('Write a new post')"
             class="unset text-lg"
             style="min-height: 4.5rem; line-height: 1.5rem; font-size: 1rem"
+            :style="`${v$.newSegment.$model}`.length == 0 ? 'font-size: 1.5rem;': null"
             v-model="v$.newSegment.$model"
           >
           </textarea>
           <div class="flex justify-end items-center gap-4">
+            <span class="text-text select-none opacity-85 relative">
+              <div class="absolute w-full h-full"></div>
+              {{ v$.newSegment.$model.length }}/200
+            </span>
             <SelectRoot v-model="v$.newSegmentLanguage.$model">
               <SelectTrigger
                 class="inline-flex min-w-[160px] items-center justify-between rounded px-[15px] text-[13px] leading-none h-[35px] gap-[5px] hover:opacity-90 bg-secondary-50 outline-none"
@@ -59,10 +64,6 @@
                 </SelectContent>
               </SelectPortal>
             </SelectRoot>
-            <span class="text-text select-none opacity-85 relative">
-              <div class="absolute w-full h-full"></div>
-              {{ v$.newSegment.$model.length }}/200
-            </span>
             <button
               @click="publishSegment"
               :disabled="v$.$invalid"
@@ -127,19 +128,6 @@ const languagesRepo: Ref<IETFLanguage[]> = ref(ietfLnaguagesRepo)
 const user = computed(() => userStore.user)
 const isConnected = computed(() => userStore.isConnected)
 
-// Fetch posts
-const posts: Ref<Languoid[]> = ref([])
-const cardsSkeletons = ref(4)
-const postsQuery = query(collection(db, "languoids"));
-const unsubscribe = onSnapshot(postsQuery, (querySnapshot) => {
-  const languagesSnapshots: Languoid[] = [];
-  querySnapshot.forEach((doc) => {
-      languagesSnapshots.push(doc.data() as Languoid);
-  });
-  posts.value = languagesSnapshots;
-  console.log("Posts ", languagesSnapshots.join(", "));
-});
-
 // post creation section
 const rules = {
   newSegment: {
@@ -157,8 +145,23 @@ const newPostState = reactive({
 const v$ = useVuelidate(rules, newPostState)
 
 const publishSegment = () => {
-  console.log('publishSegment', newPostState)
+  const { uid } = user.value!
+
+  console.log('publishSegment', newPostState, uid)
 }
+
+// Fetch posts
+const posts: Ref<Languoid[]> = ref([])
+const cardsSkeletons = ref(4)
+const postsQuery = query(collection(db, "languoids"));
+const unsubscribe = onSnapshot(postsQuery, (querySnapshot) => {
+  const languagesSnapshots: Languoid[] = [];
+  querySnapshot.forEach((doc) => {
+      languagesSnapshots.push(doc.data() as Languoid);
+  });
+  posts.value = languagesSnapshots;
+  console.log("Posts ", languagesSnapshots.join(", "));
+});
 
 onBeforeUnmount(() => {
   unsubscribe()

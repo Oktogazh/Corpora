@@ -2,7 +2,7 @@
 depends on: [[User lifecycle]]
 
 # scope
-This feature aims to implement the [RCF5646](https://datatracker.ietf.org/doc/html/rfc5646) specification to tag accurately the different corpora being produced in the future.
+This feature aims to implement a variant of the [RCF5646](https://datatracker.ietf.org/doc/html/rfc5646) specification to tag accurately the different corpora.
 The language labelling sends to a label page, which contains:
 - a list of most recent strings translated in the language
 - stats on languages translated from, translated to under this label
