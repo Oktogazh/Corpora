@@ -1,16 +1,25 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import * as functions from "firebase-functions";
 import * as admin from "firebase-admin";
 const db = admin.firestore();
+import type { SegmentBasis } from "./types.ts";
+import { parseLanguageTag } from "@sozialhelden/ietf-language-tags";
+
 
 const postSegmentInCorpus = functions
   .region("europe-west1")
-  .auth
-  .user()
-  .onDelete(async (user) => {
-    const { displayName } = user;
-    if (typeof displayName === "string" && displayName.length > 0) {
-      await db.collection("unique_usernames").doc(displayName).delete();
+  .https
+  .onCall(async (segmentBasis: SegmentBasis, context) => {
+    const { segment, languageTag: originalTag } = segmentBasis;
+    try {
+      const tag = parseLanguageTag(
+        originalTag,
+        false
+      );
+    } catch (err: any) {
+      throw new functions.https.HttpsError(
+        err.code,
+        err.message
+      );
     }
   });
 

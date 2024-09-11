@@ -112,9 +112,10 @@ import {
   SelectValue,
   SelectViewport,
  } from 'radix-vue'
-import { db } from '@/firebase'
+import { db, functions } from '@/firebase'
 import ietfLnaguagesRepo from '@/assets/utils/ietfLanguagesRepo.json'
 import { collection, query, onSnapshot } from 'firebase/firestore'
+import { httpsCallable } from 'firebase/functions'
 import type { Languoid } from '@/types/firestoreDocTypes'
 import type { IETFLanguage } from '@/types/utils'
 import { useUserStore } from '@/stores/user'
@@ -145,9 +146,15 @@ const newPostState = reactive({
 const v$ = useVuelidate(rules, newPostState)
 
 const publishSegment = () => {
-  const { uid } = user.value!
-
-  console.log('publishSegment', newPostState, uid)
+  const postSegmentCallable = httpsCallable(functions, 'publishSegment')
+  try {
+    postSegmentCallable({
+      segment: newPostState.newSegment,
+      languageTag: newPostState.newSegmentLanguage,
+    })
+  } catch (error) {
+    console.error('Error publishing segment', error)
+  }
 }
 
 // Fetch posts
