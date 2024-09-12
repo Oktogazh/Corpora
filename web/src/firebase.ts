@@ -1,9 +1,9 @@
 import { initializeApp } from "firebase/app";
 import { getAnalytics } from "firebase/analytics";
-import { getFirestore } from "firebase/firestore";
-import { getDatabase } from "firebase/database";
-import { getAuth, GoogleAuthProvider, FacebookAuthProvider } from "firebase/auth";
-import { getFunctions } from "firebase/functions";
+import { getAuth, GoogleAuthProvider, FacebookAuthProvider, connectAuthEmulator } from "firebase/auth";
+import { getFirestore, connectFirestoreEmulator } from "firebase/firestore";
+import { getDatabase, connectDatabaseEmulator } from "firebase/database";
+import { getFunctions, connectFunctionsEmulator } from "firebase/functions";
 import { getStorage } from "firebase/storage";
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
@@ -33,6 +33,30 @@ const functions = getFunctions(app, 'europe-west1')
 const storage = getStorage(app)
 const googleProvider = new GoogleAuthProvider()
 const facebookProvider = new FacebookAuthProvider()
+
+try {
+  const ping = new XMLHttpRequest()
+  ping.timeout = 9000
+  ping.open('GET', 'http://localhost:3001', true)
+  ping.send()
+  ping.onreadystatechange = function () {
+    // only connect to the emulator if it is active
+    const e = ping.status === 200
+    console.log(e ? 'Backend Firebase emulator active' : `Connected to backend: ${firebaseConfig.projectId}`)
+    if (ping.readyState === 4 && e) {
+      connectAuthEmulator(auth, 'http://localhost:3001')
+      connectFunctionsEmulator(functions, 'localhost', 3002)
+      connectFirestoreEmulator(db, 'localhost', 3003)
+      connectDatabaseEmulator(rtdb, 'localhost', 3004)
+    }
+  }
+} catch (error: unknown) {
+  if (typeof error === "string") {
+    console.error(error)
+  } else if (error instanceof Error) {
+    console.error('Firebase initialization error', error.stack)
+  }
+}
 
 export {
   auth,

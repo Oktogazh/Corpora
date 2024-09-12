@@ -9,24 +9,24 @@ import {
 
 
 const postSegmentInPersonalCorpus = functions
-  .region("europe-west1")
   .https
-  .onCall(async (segmentBasis: SegmentBasis, context) => {
-    const { segment, languageTag: originalTag } = segmentBasis;
-    let tag: ILanguageSubtag | undefined;
-    try {
-      tag = parseLanguageTag(
-        originalTag,
-        false
-      );
-    } catch (err: any) {
-      throw new functions.https.HttpsError(
-        err.code,
-        err.message
-      );
-    }
-    return { segment, uid: context.auth?.uid, tag };
-  });
+  .onCall({ region: "europe-west1" },
+    async ({ data, auth }) => {
+      const { segment, languageTag: originalTag } = data as SegmentBasis;
+      let tag: ILanguageSubtag | undefined;
+      try {
+        tag = parseLanguageTag(
+          originalTag,
+          false
+        );
+      } catch (err: any) {
+        throw new functions.https.HttpsError(
+          err.code,
+          err.message
+        );
+      }
+      return { segment, uid: auth?.uid, tag };
+    });
 
 export {
   postSegmentInPersonalCorpus,

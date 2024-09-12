@@ -6,7 +6,7 @@
     {
       "label": "backend-emulator",
       "type": "shell",
-      "command": "cd firebase",
+      "command": "cd firebase && firebase emulators:start",
       "presentation": {
         "group": "default"
       }
