@@ -1,8 +1,11 @@
 import * as functions from "firebase-functions";
-import * as admin from "firebase-admin";
-const db = admin.firestore();
-import type { SegmentBasis } from "./types.ts";
-import { parseLanguageTag } from "@sozialhelden/ietf-language-tags";
+/* import * as admin from "firebase-admin";
+const db = admin.firestore(); */
+import type { SegmentBasis } from "./types";
+import {
+  parseLanguageTag,
+  type ILanguageSubtag,
+} from "@sozialhelden/ietf-language-tags";
 
 
 const postSegmentInCorpus = functions
@@ -10,8 +13,9 @@ const postSegmentInCorpus = functions
   .https
   .onCall(async (segmentBasis: SegmentBasis, context) => {
     const { segment, languageTag: originalTag } = segmentBasis;
+    let tag: ILanguageSubtag | undefined;
     try {
-      const tag = parseLanguageTag(
+      tag = parseLanguageTag(
         originalTag,
         false
       );
@@ -21,6 +25,7 @@ const postSegmentInCorpus = functions
         err.message
       );
     }
+    return { segment, uid: context.auth?.uid, tag };
   });
 
 export {

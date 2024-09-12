@@ -1,13 +1,19 @@
 {
   "compilerOptions": {
-    "module": "node16",
+    "module": "commonjs",
     "noImplicitReturns": true,
     "noUnusedLocals": true,
     "outDir": "lib",
+    "paths": {
+      "@sozialhelden/ietf-language-tags": [
+        "./node_modules/@sozialhelden/ietf-language-tags/dist/esm/index.js"
+      ],
+    },
     "sourceMap": true,
-    "strict": true,
+    "strict": false,
     "target": "es2017",
-    "moduleResolution": "node16"
+    "rootDir": ".",
+    "esModuleInterop": true,
   },
   "compileOnSave": true,
   "include": [

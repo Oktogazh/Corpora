@@ -145,13 +145,14 @@ const newPostState = reactive({
 })
 const v$ = useVuelidate(rules, newPostState)
 
-const publishSegment = () => {
-  const postSegmentCallable = httpsCallable(functions, 'publishSegment')
+const publishSegment = async () => {
+  const postSegmentCallable = httpsCallable(functions, 'postSegmentInCorpus')
   try {
-    postSegmentCallable({
+    const res = await postSegmentCallable({
       segment: newPostState.newSegment,
       languageTag: newPostState.newSegmentLanguage,
     })
+    console.log('Segment published', res)
   } catch (error) {
     console.error('Error publishing segment', error)
   }
