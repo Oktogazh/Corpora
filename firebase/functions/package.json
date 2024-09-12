@@ -5,7 +5,7 @@
     "build": "tsc",
     "build:watch": "tsc --watch",
     "kill": "npx kill-port 3000 3001 3002 3003 3004 3005",
-    "emulate": "npm run build && npm run kill && firebase emulators:start",
+    "emulate": "npm run build && npm run kill && firebase emulators:start --debug",
     "serve": "npm run build && firebase emulators:start --only functions",
     "shell": "npm run build && firebase functions:shell",
     "start": "npm run shell",

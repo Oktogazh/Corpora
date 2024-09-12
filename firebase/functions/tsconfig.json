@@ -12,8 +12,6 @@
     "sourceMap": true,
     "strict": false,
     "target": "es2017",
-    "rootDir": ".",
-    "esModuleInterop": true,
   },
   "compileOnSave": true,
   "include": [

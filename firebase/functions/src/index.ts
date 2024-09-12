@@ -4,3 +4,4 @@ admin.initializeApp();
 
 export * from "./helloWorld";
 export * from "./userLifecycle";
+export * from "./postingFlow";
