@@ -1,5 +1,23 @@
 # Changelog
 
+## [0.0.4](https://github.com/Oktogazh/Corpora/compare/functions-v0.0.3...functions-v0.0.4) (2024-09-12)
+
+
+### ⚠️ Changes
+
+* **docs and home page:** minor changes ([ee23364](https://github.com/Oktogazh/Corpora/commit/ee23364a8079cb3d62b57375c7192021fc4e5cae))
+
+
+### 🐞 Bug Fixes
+
+* **emulator:** remove emulator from tasks because of a bug ([33d052d](https://github.com/Oktogazh/Corpora/commit/33d052d171e85a5a18d6736bcb68f58315f47dab))
+* **module importation:** edit config to make function deployable ([87135af](https://github.com/Oktogazh/Corpora/commit/87135af8c18dfca543c8db10b7f6763d918c1508))
+
+
+### ✨  New
+
+* **posting flow:** starting the callable responsible for posting segments ([3da7c19](https://github.com/Oktogazh/Corpora/commit/3da7c19dd7739f83e22936b76f30abc644050893))
+
 ## [0.0.3](https://github.com/Oktogazh/Corpora/compare/functions-v0.0.2...functions-v0.0.3) (2024-09-08)
 
 
