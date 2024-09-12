@@ -1,5 +1,23 @@
 # Changelog
 
+## [0.4.6](https://github.com/Oktogazh/Corpora/compare/corpora-v0.4.5...corpora-v0.4.6) (2024-09-12)
+
+
+### ⚠️ Changes
+
+* **docs and home page:** minor changes ([ee23364](https://github.com/Oktogazh/Corpora/commit/ee23364a8079cb3d62b57375c7192021fc4e5cae))
+
+
+### 🐞 Bug Fixes
+
+* **module importation:** edit config to make function deployable ([87135af](https://github.com/Oktogazh/Corpora/commit/87135af8c18dfca543c8db10b7f6763d918c1508))
+* **post form:** limit size and add rules ([94c4925](https://github.com/Oktogazh/Corpora/commit/94c492543d7703b97b5f1a684c6196c3d341de34))
+
+
+### ✨  New
+
+* **posting flow:** starting the callable responsible for posting segments ([3da7c19](https://github.com/Oktogazh/Corpora/commit/3da7c19dd7739f83e22936b76f30abc644050893))
+
 ## [0.4.5](https://github.com/Oktogazh/Corpora/compare/corpora-v0.4.4...corpora-v0.4.5) (2024-09-08)
 
 
