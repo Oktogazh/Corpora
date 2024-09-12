@@ -20,3 +20,10 @@ A flow should be broken down into as many flows as possible for clarity sake and
 
 # Phases of development
 Before creating the translation system, people should agree on the language tagging they use in their translation. As the tagging system is user-generated, linguistic communities should be established before the tagging system, which obviously comes before the translation system etc... This is why the posting flow development should precede the the tagging flow.
+
+# TODOs 12/09
+- Emulator to test functions
+- Protect branches in github
+- Edit the posting and tagging flows so it integrates **[ietf-language-tags](https://github.com/sozialhelden/ietf-language-tags)**
+- edit postSegment function
+- 

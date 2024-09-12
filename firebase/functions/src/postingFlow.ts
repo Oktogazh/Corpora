@@ -8,7 +8,7 @@ import {
 } from "@sozialhelden/ietf-language-tags";
 
 
-const postSegmentInCorpus = functions
+const postSegmentInPersonalCorpus = functions
   .region("europe-west1")
   .https
   .onCall(async (segmentBasis: SegmentBasis, context) => {
@@ -29,5 +29,5 @@ const postSegmentInCorpus = functions
   });
 
 export {
-  postSegmentInCorpus,
+  postSegmentInPersonalCorpus,
 };

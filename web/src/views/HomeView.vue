@@ -146,9 +146,9 @@ const newPostState = reactive({
 const v$ = useVuelidate(rules, newPostState)
 
 const publishSegment = async () => {
-  const postSegmentCallable = httpsCallable(functions, 'postSegmentInCorpus')
+  const postSegmentInPersonalCorpusCallable = httpsCallable(functions, 'postSegmentInPersonalCorpus')
   try {
-    const res = await postSegmentCallable({
+    const res = await postSegmentInPersonalCorpusCallable({
       segment: newPostState.newSegment,
       languageTag: newPostState.newSegmentLanguage,
     })
