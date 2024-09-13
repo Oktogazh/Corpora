@@ -19,7 +19,7 @@
               <div class="absolute w-full h-full"></div>
               {{ v$.newSegment.$model.length }}/200
             </span>
-            <SelectRoot v-model="v$.newSegmentLanguage.$model">
+            <SelectRoot v-model="v$.newSegmentLanguageTag.$model">
               <SelectTrigger
                 class="inline-flex min-w-[160px] items-center justify-between rounded px-[15px] text-[13px] leading-none h-[35px] gap-[5px] hover:opacity-90 bg-secondary-50 outline-none"
                 aria-label="language-selector"
@@ -59,7 +59,7 @@
                   </SelectViewport>
 
                   <SelectScrollDownButton class="flex items-center justify-center h-[25px] cursor-default">
-                    <Icon icon="radix-icons:chevron-down" />
+                    <AkChevronDownSmall />
                   </SelectScrollDownButton>
                 </SelectContent>
               </SelectPortal>
@@ -115,6 +115,7 @@ import {
 import { db, functions } from '@/firebase'
 import ietfLnaguagesRepo from '@/assets/utils/ietfLanguagesRepo.json'
 import { collection, query, onSnapshot } from 'firebase/firestore'
+import { useAppStore } from '@/stores/app';
 import { httpsCallable } from 'firebase/functions'
 import type { Languoid } from '@/types/firestoreDocTypes'
 import type { IETFLanguage } from '@/types/utils'
@@ -135,13 +136,13 @@ const rules = {
     maxLength: maxLength(200),
     required
   },
-  newSegmentLanguage: {
+  newSegmentLanguageTag: {
     required
   }
 }
 const newPostState = reactive({
   newSegment: '',
-  newSegmentLanguage: ''
+  newSegmentLanguageTag: ''
 })
 const v$ = useVuelidate(rules, newPostState)
 
@@ -150,11 +151,38 @@ const publishSegment = async () => {
   try {
     const res = await postSegmentInPersonalCorpusCallable({
       segment: newPostState.newSegment,
-      languageTag: newPostState.newSegmentLanguage,
+      languageTag: newPostState.newSegmentLanguageTag,
     })
     console.log('Segment published', res)
-  } catch (error) {
-    console.error('Error publishing segment', error)
+  } catch (error: any) {
+    if (error && error.code) {
+      let message = "" as string | [string, { tag: string, link: string }]
+      switch (error.code) {
+        case "functions/invalid-argument":
+          message = [
+            "Could not interpret tag Please supply a valid IETF/BCP-47 language tag!",
+            {
+              tag: newPostState.newSegmentLanguageTag,
+              link: "<a href='https://tools.ietf.org/html/rfc5646' target='_blank'>https://tools.ietf.org/html/rfc5646</a>"
+             }
+          ]
+          break;
+
+        default:
+          message = "An error occurred while publishing your post"
+          break;
+      }
+      useAppStore()
+        .toasts
+        .push({
+          actionCallback: null,
+          actionText: "",
+          title: "Error",
+          open: true,
+          message,
+          type: "error"
+        })
+    }
   }
 }
 

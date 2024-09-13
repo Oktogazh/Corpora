@@ -150,9 +150,9 @@ export default defineComponent({
         useAppStore().toasts.push({
           actionCallback: null,
           actionText: "",
-          title: $t("Error"),
+          title: "Error",
           open: true,
-          message: $t(errorCode),
+          message: errorCode,
           type: "error"
         })
       }

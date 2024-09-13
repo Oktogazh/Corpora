@@ -21,8 +21,8 @@ const postSegmentInPersonalCorpus = functions
         );
       } catch (err: any) {
         throw new functions.https.HttpsError(
-          err.code,
-          err.message
+          "invalid-argument",
+          err
         );
       }
       return { segment, uid: auth?.uid, tag };

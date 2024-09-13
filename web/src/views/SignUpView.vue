@@ -305,13 +305,12 @@ export default defineComponent({
         await signInWithPopup(auth, googleProvider);
       } catch (error) {
         const errorCode = (error as AuthError).code;
-        const { $t } = this;
         useAppStore().toasts.push({
           actionCallback: null,
           actionText: "",
-          title: $t("Error"),
+          title: "Error",
           open: true,
-          message: $t(errorCode),
+          message: errorCode,
           type: "error"
         })
       }
@@ -325,9 +324,9 @@ export default defineComponent({
         useAppStore().toasts.push({
           actionCallback: null,
           actionText: "",
-          title: $t("Error"),
+          title: "Error",
           open: true,
-          message: $t(errorCode),
+          message: errorCode,
           type: "error"
         })
       }
@@ -341,9 +340,9 @@ export default defineComponent({
         useAppStore().toasts.push({
           actionCallback: null,
           actionText: "",
-          title: $t("Error"),
+          title: "Error",
           open: true,
-          message: $t(errorCode),
+          message: errorCode,
           type: "error"
         })
       }
@@ -409,18 +408,18 @@ export default defineComponent({
             useAppStore().toasts.push({
               actionCallback: null,
               actionText: "",
-              title: $t("Welcome!"),
+              title: "Welcome!",
               open: true,
-              message: $t("You account was successfully created!"),
+              message: "You account was successfully created!",
               type: "success"
             })
           } catch (error) {
             useAppStore().toasts.push({
               actionCallback: null,
               actionText: "",
-              title: $t("Welcome!"),
+              title: "Welcome!",
               open: true,
-              message: $t("Don't forget to go the settings to create a username!"),
+              message: "Don't forget to go the settings to create a username!",
               type: "info"
             })
             try {

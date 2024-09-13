@@ -108,7 +108,7 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue';
-import { Separator, SwitchRoot, SwitchThumb, ScrollAreaRoot, ScrollAreaScrollbar, ScrollAreaThumb, ScrollAreaViewport  } from 'radix-vue';
+import { Separator, SwitchRoot, SwitchThumb, ScrollAreaRoot, ScrollAreaScrollbar, ScrollAreaThumb, ScrollAreaViewport, ScrollAreaCorner  } from 'radix-vue';
 import { AnOutlinedMoon, AnOutlinedSun, BxSolidCog } from '@kalimahapps/vue-icons';
 import { useDark } from '@vueuse/core';
 import { useAppStore } from '@/stores/app';
@@ -128,7 +128,8 @@ export default defineComponent({
     ScrollAreaRoot,
     ScrollAreaScrollbar,
     ScrollAreaThumb,
-    ScrollAreaViewport
+    ScrollAreaViewport,
+    ScrollAreaCorner
   },
   computed: {
     ...mapState(useAppStore,{

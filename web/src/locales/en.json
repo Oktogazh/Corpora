@@ -6,6 +6,7 @@
   "Account Settings": "Account Settings",
   "Available username": "Available username",
   "Already have an account?": "Already have an account?",
+  "An error occurred while publishing your post": "An error occurred while publishing your post",
   "Are you sure you want to delete your account? This action is irreversible.": "Are you sure you want to delete your account? This action is irreversible.",
   "auth/admin-restricted-operation": "This action requires an admin account.",
   "auth/argument-error": "Invalid argument provided.",
@@ -111,12 +112,14 @@
   "auth/invalid-recaptcha-version": "The reCAPTCHA version is invalid.",
   "Browser's languages": "Browser's languages",
   "auth/invalid-req-type": "The request type is invalid.",
+  "Could not interpret tag Please supply a valid IETF/BCP-47 language tag!": "Could not interpret ‘{tag}’ - Please supply a valid IETF/BCP-47 language tag!<br> If necessary, you can find out more on {link}.",
   "Create a password": "Create a password",
   "Delete Account": "Delete Account",
   "Don't forget to go the settings to create a username!": "Don't forget to go the settings to create a username!",
   "Don't have an account yet?": "Don't have an account yet?",
   "Email": "Email",
   "Email sent!": "Email sent!",
+  "Error": "Error",
   "Forgot password?": "Forgot password?",
   "Forget changes": "Forget changes",
   "I understand, delete my account": "I understand, delete my account",
@@ -145,5 +148,5 @@
   "You account was successfully created!": "You account was successfully created!",
   "Your password must contain at least": "Your password must contain at least",
   "Welcome!": "Welcome!",
-  "Write something": "Write something"
+  "Write a new post": "Write a new post"
 }

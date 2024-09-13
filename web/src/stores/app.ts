@@ -8,7 +8,7 @@ export const useAppStore = defineStore('App', {
       actionText: "",
       title: "",
       open: false,
-      message: "",
+      message: "" as string | [string, { [key: string]: string | number }],
       type: "error" as "error" | "success" | "info"
     }],
     sidebar: {

@@ -19,11 +19,12 @@
       <ToastTitle
         class="mb-1 font-semibold text-md"
       >
-        {{ toast.title }}
+        {{ $t(toast.title) }}
       </ToastTitle>
       <ToastDescription as-child>
-        <span class="text-sm">
-          {{ toast.message }}
+        <span
+          class="text-sm"
+          v-html="typeof toast.message === 'string' ? $t(toast.message) : $t(toast.message[0], toast.message[1])">
         </span>
       </ToastDescription>
       <ToastAction
@@ -36,7 +37,7 @@
           class="text-accent font-semibold"
           @click="toast.actionCallback"
         >
-          {{ toast.actionText }}
+          {{ $t(toast.actionText) }}
         </button>
       </ToastAction>
     </ToastRoot>

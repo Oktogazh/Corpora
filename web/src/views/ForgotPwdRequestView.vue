@@ -74,21 +74,20 @@ export default defineComponent({
         useAppStore().toasts.push({
           actionCallback: null,
           actionText: "",
-          title: $t("Email sent!"),
+          title: "Email sent!",
           open: true,
-          message: $t("If the email is linked to an account, you will receive a link to reset your password."),
+          message: "If the email is linked to an account, you will receive a link to reset your password.",
           type: "info"
         })
         this.email = '';
       } catch (error) {
         const errorCode = (error as AuthError).code;
-        const { $t } = this;
         useAppStore().toasts.push({
           actionCallback: null,
           actionText: "",
-          title: $t("Error"),
+          title: "Error",
           open: true,
-          message: $t(errorCode),
+          message: errorCode,
           type: "error"
         })
       }
