@@ -147,7 +147,8 @@ const newPostState = reactive({
 const v$ = useVuelidate(rules, newPostState)
 
 const publishSegment = async () => {
-  const postSegmentInPersonalCorpusCallable = httpsCallable(functions, 'postSegmentInPersonalCorpus')
+  const postSegmentInPersonalCorpusCallable =
+    httpsCallable(functions, 'postSegmentInPersonalCorpus')
   try {
     const res = await postSegmentInPersonalCorpusCallable({
       segment: newPostState.newSegment,

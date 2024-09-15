@@ -1,7 +1,7 @@
 import * as functions from "firebase-functions";
 import * as admin from "firebase-admin";
 const db = admin.firestore();
-import type { SegmentBasis } from "./types";
+import type { SegmentBasis, SegmentRefDoc, LanguageDoc } from "./types";
 import {
   parseLanguageTag,
   normalizeLanguageTagCasing,
@@ -12,10 +12,8 @@ import {
 // This function does the following:
 //    - normalize the language tag
 //    - publish the segment in the personal corpus
-//    - add a ref to the segment in global normalized tag ref corpus
-//    - publish ref to segment in language subtag ref corpus if exists
-//        with its attribute 'isCopy' true (orginal not from the same langtag)
-//    - update the lastActivity timestamp in those two global language docs
+//    - add a ref to the segment in global segments_refs collection
+//    - update the lastActivity and postsCount in the language doc
 const postSegmentInPersonalCorpus = functions
   .https
   .onCall({ region: "europe-west1" },
@@ -61,29 +59,22 @@ const postSegmentInPersonalCorpus = functions
             created: admin.firestore.FieldValue.serverTimestamp(),
           })).id;
 
-        // referrence it in the global normalized langtag corpus
-        await db.doc(`languages/${normalizedTag}/segments/${segmentId}`)
-          .set({
-            isCopy: false,
-            created: admin.firestore.FieldValue.serverTimestamp(),
-          });
-        await db.doc(`languages/${normalizedTag}`)
-          .set({
-            lastActivity: admin.firestore.FieldValue.serverTimestamp(),
-          }, { merge: true });
+        // reference the post globally
+        const segmentRefDoc: SegmentRefDoc = {
+          ref: `users/${uid}/corpora/${normalizedTag}/segments/${segmentId}`,
+          langtag: normalizedTag,
+          created: admin.firestore.FieldValue.serverTimestamp(),
+        };
+        await db.doc(`segments_refs/${uid}${segmentId}`)
+          .set(segmentRefDoc);
 
-        // copy reference in the language subtag corpus if different for langtag
-        if (preferredLangSubTag !== normalizedTag) {
-          await db.doc(`languages/${preferredLangSubTag}/segments/${segmentId}`)
-            .set({
-              isCopy: true,
-              created: admin.firestore.FieldValue.serverTimestamp(),
-            });
-          await db.doc(`languages/${preferredLangSubTag}`)
-            .set({
-              lastActivity: admin.firestore.FieldValue.serverTimestamp(),
-            }, { merge: true });
-        }
+        // update it in the global normalized langtag corpus
+        const languageDoc: LanguageDoc = {
+          lastActivity: admin.firestore.FieldValue.serverTimestamp(),
+          postsCount: admin.firestore.FieldValue.increment(1),
+        };
+        await db.doc(`languages/${normalizedTag}`)
+          .set(languageDoc, { merge: true });
       } catch (err) {
         throw new functions.https.HttpsError(
           "unknown",
@@ -99,19 +90,19 @@ const deleteSegmentInPersonalCorpus = functions
   .https
   .onCall({ region: "europe-west1" },
     async ({ data, auth: { uid } }) => {
-      const { segmentId, corpusTag } = data;
+      const { segmentId, normalizedTag } = data;
       // delete the segment from the personal corpus
       // delete the post references from the global corpora
       try {
-        await db.doc(`users/${uid}/corpora/${corpusTag}/${segmentId}`).delete();
-        const { language: langSubTag } = parseLanguageTag(
-          corpusTag,
-          false
-        );
-        if (langSubTag !== corpusTag) {
-          await db.doc(`languages/${langSubTag}/segments/${segmentId}`)
-            .delete();
-        }
+        await db
+          .doc(`users/${uid}/corpora/${normalizedTag}/${segmentId}`).delete();
+        await db
+          .doc(`segments_refs/${uid}${segmentId}`).delete();
+        await db.doc(`languages/${normalizedTag}`)
+          .update({
+            lastActivity: admin.firestore.FieldValue.serverTimestamp(),
+            postsCount: admin.firestore.FieldValue.increment(-1),
+          });
       } catch (err) {
         throw new functions.https.HttpsError(
           "unknown",
@@ -119,7 +110,7 @@ const deleteSegmentInPersonalCorpus = functions
         );
       }
       return {
-        segment: `users/${uid}/corpora/${corpusTag}/${segmentId}`,
+        segment: `users/${uid}/corpora/${normalizedTag}/${segmentId}`,
         deleted: true,
       };
     });
