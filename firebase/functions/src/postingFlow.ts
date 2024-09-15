@@ -63,7 +63,7 @@ const postSegmentInPersonalCorpus = functions
         const segmentRefDoc: SegmentRefDoc = {
           ref: `users/${uid}/corpora/${normalizedTag}/segments/${segmentId}`,
           langtag: normalizedTag,
-          created: admin.firestore.FieldValue.serverTimestamp(),
+          createdAt: admin.firestore.FieldValue.serverTimestamp(),
         };
         await db.doc(`segments_refs/${uid}${segmentId}`)
           .set(segmentRefDoc);

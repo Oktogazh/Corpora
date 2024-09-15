@@ -3,9 +3,12 @@
     <div class="w-full px-6 sm:px-12 lg:px-16">
       <div class="section-container flex flex-col items-center gap-4">
         <div
+          id="post-creation-container"
           class="w-full flex flex-col"
+          :class="posting ? 'opacity-75' : ''"
           v-if="isConnected">
           <textarea
+            :disabled="posting"
             @input="v$.newSegment.$model = v$.newSegment.$model.substring(0, 200)"
             :placeholder="$t('Write a new post')"
             class="unset text-lg"
@@ -19,7 +22,7 @@
               <div class="absolute w-full h-full"></div>
               {{ v$.newSegment.$model.length }}/200
             </span>
-            <SelectRoot v-model="v$.newSegmentLanguageTag.$model">
+            <SelectRoot :disabled="posting" v-model="v$.newSegmentLanguageTag.$model">
               <SelectTrigger
                 class="inline-flex min-w-[160px] items-center justify-between rounded px-[15px] text-[13px] leading-none h-[35px] gap-[5px] hover:opacity-90 bg-secondary-50 outline-none"
                 aria-label="language-selector"
@@ -66,10 +69,18 @@
             </SelectRoot>
             <button
               @click="publishSegment"
-              :disabled="v$.$invalid"
+              :disabled="v$.$invalid || posting"
               class="bg-primary m-2 px-3 p-2 font-semibold rounded-full text-gray-100 disabled:opacity-75 disabled:hover:bg-primary hover:bg-primary-400"
             >
-              {{ $t("Publish") }}
+              <div class="flex items-center justify-center width-full height-full">
+                <span :class="posting? 'opacity-0' : ''">
+                  {{ $t("Publishing") }}
+                </span>
+                <div
+                  :class="posting ? '' : 'opacity-0'"
+                  class="loader absolute m-auto border-primary border-2 border-t-white w-6 h-6 rounded-full">
+                </div>
+              </div>
             </button>
           </div>
           <Separator class="bg-secondary-200 h-px w-full"/>
@@ -114,7 +125,7 @@ import {
  } from 'radix-vue'
 import { db, functions } from '@/firebase'
 import ietfLnaguagesRepo from '@/assets/utils/ietfLanguagesRepo.json'
-import { collection, query, onSnapshot } from 'firebase/firestore'
+import { collection, query, onSnapshot, orderBy, where } from 'firebase/firestore'
 import { useAppStore } from '@/stores/app';
 import { httpsCallable } from 'firebase/functions'
 import type { Languoid } from '@/types/firestoreDocTypes'
@@ -131,6 +142,7 @@ const user = computed(() => userStore.user)
 const isConnected = computed(() => userStore.isConnected)
 
 // post creation section
+const posting = ref(false)
 const rules = {
   newSegment: {
     maxLength: maxLength(200),
@@ -147,6 +159,7 @@ const newPostState = reactive({
 const v$ = useVuelidate(rules, newPostState)
 
 const publishSegment = async () => {
+  posting.value = true
   const postSegmentInPersonalCorpusCallable =
     httpsCallable(functions, 'postSegmentInPersonalCorpus')
   try {
@@ -155,6 +168,9 @@ const publishSegment = async () => {
       languageTag: newPostState.newSegmentLanguageTag,
     })
     console.log('Segment published', res)
+    newPostState.newSegment = ''
+    newPostState.newSegmentLanguageTag = ''
+    posting.value = false
   } catch (error: any) {
     if (error && error.code) {
       let message = "" as string | [string, { tag: string, link: string }]
@@ -190,7 +206,13 @@ const publishSegment = async () => {
 // Fetch posts
 const posts: Ref<Languoid[]> = ref([])
 const cardsSkeletons = ref(4)
-const postsQuery = query(collection(db, "languages"));
+// query posts ordered by creation date (most recent first)
+// where langtag is one of in the user's languages (string[])
+const postsQuery = query(collection(db,
+  "segments_refs"),
+  orderBy("createdAt", "desc"),
+  where("langtag", "in", languages.value)
+);
 const unsubscribe = onSnapshot(postsQuery, (querySnapshot) => {
   const languagesSnapshots: Languoid[] = [];
   querySnapshot.forEach((doc) => {
@@ -206,5 +228,12 @@ onBeforeUnmount(() => {
 </script>
 
 <style scoped>
+.loader {
+  animation: spin 1s linear infinite;
+}
 
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
 </style>

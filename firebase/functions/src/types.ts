@@ -8,7 +8,7 @@ export type SegmentBasis = {
 export type SegmentRefDoc = {
   ref: string;
   langtag: string;
-  created: FieldValue,
+  createdAt: FieldValue,
 }
 
 export type LanguageDoc = {
