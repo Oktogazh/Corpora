@@ -74,7 +74,7 @@
             >
               <div class="flex items-center justify-center width-full height-full">
                 <span :class="posting? 'opacity-0' : ''">
-                  {{ $t("Publishing") }}
+                  {{ $t("Publish") }}
                 </span>
                 <div
                   :class="posting ? '' : 'opacity-0'"
@@ -221,12 +221,15 @@ const postsQuery = query(collection(db, "segments_refs"),
 );
 const unsubscribe = onSnapshot(postsQuery, async (querySnapshot) => {
   const postsRefs: DocumentReference[] = [];
-  querySnapshot.forEach(({ data }) => {
-      postsRefs.push(doc(db, (data() as SegmentRefDoc).ref));
-  });
-  posts.value = (await Promise.all(
-    postsRefs.map(async (ref) => getDoc(ref))
-  )).map((doc) => ({ id: doc.id, ...doc.data() }));
+  const { docs }= querySnapshot
+  if (docs && docs.length) {
+    docs.forEach((refDoc, i) => {
+      postsRefs.push(doc(db, (refDoc.data() as SegmentRefDoc).ref));
+    });
+    posts.value = (await Promise.all(
+      postsRefs.map(async (ref) => getDoc(ref))
+      )).map((doc) => ({ id: doc.id, ...doc.data() }));
+  }
 });
 
 onBeforeUnmount(() => {

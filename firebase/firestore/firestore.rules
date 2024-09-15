@@ -6,5 +6,13 @@ service cloud.firestore {
       allow read;
       allow create: if request.auth != null;
     }
+    match /segments_refs/{id} {
+      allow read;
+    }
+    match /users/{userId} {
+      match /corpora/{corpusId}/segments/{segmentId} {
+        allow read;
+      }
+    }
   }
 }
