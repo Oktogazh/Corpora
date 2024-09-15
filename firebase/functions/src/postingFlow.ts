@@ -4,24 +4,24 @@ const db = admin.firestore();
 import type { SegmentBasis } from "./types";
 import {
   parseLanguageTag,
-  getTag,
   normalizeLanguageTagCasing,
   getPreferredLanguageTag,
 } from "@sozialhelden/ietf-language-tags";
 
 
-// This function does the following
-// normalize the language tag
-// publish the segment in the personal corpus
-// add a reference to the segment in global normalized tag ref corpus
-// if language subtag is not equal to normalizedTag,
-//   publish ref to segment in global language subtag ref corpus
-//   with attribute 'isCopy' true
+// This function does the following:
+//    - normalize the language tag
+//    - publish the segment in the personal corpus
+//    - add a ref to the segment in global normalized tag ref corpus
+//    - publish ref to segment in language subtag ref corpus if exists
+//        with its attribute 'isCopy' true (orginal not from the same langtag)
+//    - update the lastActivity timestamp in those two global language docs
 const postSegmentInPersonalCorpus = functions
   .https
   .onCall({ region: "europe-west1" },
     async ({ data, auth: { uid } }) => {
       const { languageTag: originalTag, segment } = data as SegmentBasis;
+      // normalization happens here
       // if the langtab is valid, set its preferred language value and
       //    normalize it;
       //    eg. zH-yUe-Latn-a-extend1-x-foo-bar -> yue-Latn-a-extend1
@@ -49,27 +49,40 @@ const postSegmentInPersonalCorpus = functions
           err
         );
       }
-      const semanticTag = getTag(normalizedTag);
+
+      // publish the segment
       let segmentId = "";
       try {
+        // in the personal corpus
         segmentId = (await db
           .collection(`users/${uid}/corpora/${normalizedTag}/segments`)
           .add({
             segment,
             created: admin.firestore.FieldValue.serverTimestamp(),
           })).id;
+
+        // referrence it in the global normalized langtag corpus
         await db.doc(`languages/${normalizedTag}/segments/${segmentId}`)
           .set({
             isCopy: false,
             created: admin.firestore.FieldValue.serverTimestamp(),
           });
+        await db.doc(`languages/${normalizedTag}`)
+          .set({
+            lastActivity: admin.firestore.FieldValue.serverTimestamp(),
+          }, { merge: true });
+
+        // copy reference in the language subtag corpus if different for langtag
         if (preferredLangSubTag !== normalizedTag) {
-          functions.logger.log("preferredLangSubTag", preferredLangSubTag);
           await db.doc(`languages/${preferredLangSubTag}/segments/${segmentId}`)
             .set({
               isCopy: true,
               created: admin.firestore.FieldValue.serverTimestamp(),
             });
+          await db.doc(`languages/${preferredLangSubTag}`)
+            .set({
+              lastActivity: admin.firestore.FieldValue.serverTimestamp(),
+            }, { merge: true });
         }
       } catch (err) {
         throw new functions.https.HttpsError(
@@ -79,7 +92,6 @@ const postSegmentInPersonalCorpus = functions
       }
       return {
         normalizedTag,
-        semanticTag,
       };
     });
 

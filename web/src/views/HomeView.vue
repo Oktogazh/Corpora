@@ -189,7 +189,7 @@ const publishSegment = async () => {
 // Fetch posts
 const posts: Ref<Languoid[]> = ref([])
 const cardsSkeletons = ref(4)
-const postsQuery = query(collection(db, "languoids"));
+const postsQuery = query(collection(db, "languages"));
 const unsubscribe = onSnapshot(postsQuery, (querySnapshot) => {
   const languagesSnapshots: Languoid[] = [];
   querySnapshot.forEach((doc) => {
