@@ -125,18 +125,25 @@ import {
  } from 'radix-vue'
 import { db, functions } from '@/firebase'
 import ietfLnaguagesRepo from '@/assets/utils/ietfLanguagesRepo.json'
-import { collection, query, onSnapshot, orderBy, where } from 'firebase/firestore'
+import { collection,
+  query,
+  onSnapshot,
+  orderBy,
+  where,
+  doc,
+  getDoc,
+  type DocumentReference
+} from 'firebase/firestore'
 import { useAppStore } from '@/stores/app';
 import { httpsCallable } from 'firebase/functions'
-import type { Languoid } from '@/types/firestoreDocTypes'
-import type { IETFLanguage } from '@/types/utils'
+import type { Post } from '@/types/firestoreDocTypes'
 import { useUserStore } from '@/stores/user'
 import { useVuelidate } from '@vuelidate/core'
 import { required, maxLength } from '@vuelidate/validators'
+import type { SegmentRefDoc } from '@/../../firebase/functions/src/types'
 
 const userStore = useUserStore()
 const languages = ref(navigator.languages)
-const languagesRepo: Ref<IETFLanguage[]> = ref(ietfLnaguagesRepo)
 
 const user = computed(() => userStore.user)
 const isConnected = computed(() => userStore.isConnected)
@@ -204,22 +211,22 @@ const publishSegment = async () => {
 }
 
 // Fetch posts
-const posts: Ref<Languoid[]> = ref([])
+const posts: Ref<Post[]> = ref([])
 const cardsSkeletons = ref(4)
 // query posts ordered by creation date (most recent first)
 // where langtag is one of in the user's languages (string[])
-const postsQuery = query(collection(db,
-  "segments_refs"),
+const postsQuery = query(collection(db, "segments_refs"),
   orderBy("createdAt", "desc"),
   where("langtag", "in", languages.value)
 );
-const unsubscribe = onSnapshot(postsQuery, (querySnapshot) => {
-  const languagesSnapshots: Languoid[] = [];
-  querySnapshot.forEach((doc) => {
-      languagesSnapshots.push(doc.data() as Languoid);
+const unsubscribe = onSnapshot(postsQuery, async (querySnapshot) => {
+  const postsRefs: DocumentReference[] = [];
+  querySnapshot.forEach(({ data }) => {
+      postsRefs.push(doc(db, (data() as SegmentRefDoc).ref));
   });
-  posts.value = languagesSnapshots;
-  console.log("Posts ", languagesSnapshots.join(", "));
+  posts.value = (await Promise.all(
+    postsRefs.map(async (ref) => getDoc(ref))
+  )).map((doc) => ({ id: doc.id, ...doc.data() }));
 });
 
 onBeforeUnmount(() => {

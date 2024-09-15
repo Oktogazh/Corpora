@@ -4,6 +4,13 @@ export declare interface UniqueUsername {
   owner: UserInfo["uid"];
 };
 
+export declare interface Post {
+  id: string;
+  owner?: UserInfo["uid"];
+  segment?: string;
+  langtag?: string;
+};
+
 declare type Glottocode = string
 
 /**
