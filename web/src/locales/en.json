@@ -115,6 +115,7 @@
   "Could not interpret tag Please supply a valid IETF/BCP-47 language tag!": "Could not interpret ‘{tag}’ - Please supply a valid IETF/BCP-47 language tag!<br> If necessary, you can find out more on {link}.",
   "Create a password": "Create a password",
   "Delete Account": "Delete Account",
+  "Delete post": "Delete post",
   "Don't forget to go the settings to create a username!": "Don't forget to go the settings to create a username!",
   "Don't have an account yet?": "Don't have an account yet?",
   "Email": "Email",

@@ -112,8 +112,26 @@
               >
                 <div
                   id="unique-user-name"
+                  class="relative w-full"
                 >
                   {{ uniqueUsernameMap[post.ownerUid] || $t("User Deleted") }}
+                  <div
+                    class="absolute top-0 end-0"
+                    v-if="user?.uid === post.ownerUid"
+                  >
+                    <DropdownMenu 
+                    >
+                      <DropdownMenuTrigger>
+                        <BsThreeDotsVertical
+                          class="opacity-75 hover:opacity-100" />
+                      </DropdownMenuTrigger>
+                      <DropdownMenuContent>
+                        <DropdownMenuItem
+                          class="cursor-pointer"
+                        >{{ $t("Delete post") }}</DropdownMenuItem>
+                      </DropdownMenuContent>
+                    </DropdownMenu>
+                  </div>
                 </div>
                 <div
                   id="segment"
@@ -133,7 +151,20 @@
 <script lang="ts" setup>
 import { ref, computed, reactive, type Ref, onBeforeUnmount } from 'vue'
 import { Skeleton } from '@/components/shadcn/ui/skeleton'
-import { AkChevronDownSmall, AkChevronUpSmall, AkCheck } from '@kalimahapps/vue-icons';
+import {
+  AkChevronDownSmall,
+  AkChevronUpSmall,
+  AkCheck,
+  BsThreeDotsVertical
+} from '@kalimahapps/vue-icons'
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+/*   DropdownMenuLabel,
+  DropdownMenuSeparator, */
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu'
 import {
   Separator,
   SelectContent,
