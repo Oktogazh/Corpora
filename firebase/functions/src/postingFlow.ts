@@ -1,7 +1,12 @@
 import * as functions from "firebase-functions";
 import * as admin from "firebase-admin";
 const db = admin.firestore();
-import type { SegmentBasis, SegmentRefDoc, LanguageDoc } from "./types";
+import type {
+  SegmentBasis,
+  SegmentRefDoc,
+  LanguageDoc,
+  SegmentDoc,
+} from "./types";
 import {
   parseLanguageTag,
   normalizeLanguageTagCasing,
@@ -55,9 +60,11 @@ const postSegmentInPersonalCorpus = functions
         segmentId = (await db
           .collection(`users/${uid}/corpora/${normalizedTag}/segments`)
           .add({
+            ownerUid: uid,
+            langtag: normalizedTag,
             segment,
-            created: admin.firestore.FieldValue.serverTimestamp(),
-          })).id;
+            createdAt: admin.firestore.FieldValue.serverTimestamp(),
+          } as SegmentDoc)).id;
 
         // reference the post globally
         const segmentRefDoc: SegmentRefDoc = {

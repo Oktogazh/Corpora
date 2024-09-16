@@ -97,6 +97,33 @@
         <template
           v-else
         >
+          <div
+            v-for="post of posts"
+            :key="post.id"
+            class="w-full flex flex-col"
+          >
+            <div class="w-full flex">
+              <div
+                id="avatar"
+              ></div>
+              <div
+                id="post-container"
+                class="flex flex-col w-full"
+              >
+                <div
+                  id="unique-user-name"
+                >
+                  {{ uniqueUsernameMap[post.ownerUid] || $t("User Deleted") }}
+                </div>
+                <div
+                  id="segment"
+                >
+                  <span>{{ post.segment }}</span>
+                </div>
+              </div>
+            </div>
+          <Separator class="bg-secondary-200 h-px w-full"/>
+          </div>
         </template>
       </div>
     </div>
@@ -124,26 +151,25 @@ import {
   SelectViewport,
  } from 'radix-vue'
 import { db, functions } from '@/firebase'
-import ietfLnaguagesRepo from '@/assets/utils/ietfLanguagesRepo.json'
 import { collection,
   query,
   onSnapshot,
+  getDocs,
   orderBy,
   where,
   doc,
   getDoc,
   type DocumentReference
 } from 'firebase/firestore'
-import { useAppStore } from '@/stores/app';
+import { useAppStore } from '@/stores/app'
 import { httpsCallable } from 'firebase/functions'
-import type { Post } from '@/types/firestoreDocTypes'
 import { useUserStore } from '@/stores/user'
 import { useVuelidate } from '@vuelidate/core'
 import { required, maxLength } from '@vuelidate/validators'
-import type { SegmentRefDoc } from '@/../../firebase/functions/src/types'
+import type { SegmentRefDoc, SegmentDoc } from '@/../../firebase/functions/src/types'
 
 const userStore = useUserStore()
-const languages = ref(navigator.languages)
+const languages: Ref<readonly string[]> = ref(navigator.languages)
 
 const user = computed(() => userStore.user)
 const isConnected = computed(() => userStore.isConnected)
@@ -211,7 +237,11 @@ const publishSegment = async () => {
 }
 
 // Fetch posts
+interface Post extends SegmentDoc {
+  id: string
+}
 const posts: Ref<Post[]> = ref([])
+const uniqueUsernameMap: Ref<{ [uid: string]: string}> = ref({})
 const cardsSkeletons = ref(4)
 // query posts ordered by creation date (most recent first)
 // where langtag is one of in the user's languages (string[])
@@ -221,6 +251,7 @@ const postsQuery = query(collection(db, "segments_refs"),
 );
 const unsubscribe = onSnapshot(postsQuery, async (querySnapshot) => {
   const postsRefs: DocumentReference[] = [];
+  uniqueUsernameMap.value = {}
   const { docs }= querySnapshot
   if (docs && docs.length) {
     docs.forEach((refDoc, i) => {
@@ -228,9 +259,33 @@ const unsubscribe = onSnapshot(postsQuery, async (querySnapshot) => {
     });
     posts.value = (await Promise.all(
       postsRefs.map(async (ref) => getDoc(ref))
-      )).map((doc) => ({ id: doc.id, ...doc.data() }));
+    )).map((doc) => ({ id: doc.id, ...doc.data() as SegmentDoc }))
+    posts.value.forEach((post) => {
+        uniqueUsernameMap.value[post.ownerUid] = "..."
+    });
+    fetchUniqueUsernames()
   }
 });
+
+// Fetch unique usernames
+const fetchUniqueUsernames = async () => {
+  await Promise.all(
+    Object.keys(uniqueUsernameMap.value).map(async (uid) => {
+      console.log("fetching unique username for", uid)
+      let uniqueUsername = ""
+      try {
+        uniqueUsername = (await getDocs(
+          query(collection(db, "unique_usernames"),
+            where("owner", "==", uid))
+        )).docs[0].id
+      } catch (error) {
+        console.error("Error fetching unique username", error)
+      }
+      uniqueUsernameMap.value[uid] = uniqueUsername
+      return null
+    })
+    )
+}
 
 onBeforeUnmount(() => {
   unsubscribe()
