@@ -6,6 +6,7 @@ import type {
   SegmentRefDoc,
   LanguageDoc,
   SegmentDoc,
+  Post,
 } from "./types";
 import {
   parseLanguageTag,
@@ -97,15 +98,15 @@ const deleteSegmentInPersonalCorpus = functions
   .https
   .onCall({ region: "europe-west1" },
     async ({ data, auth: { uid } }) => {
-      const { segmentId, normalizedTag } = data;
+      const { id, langtag } = data as Post;
       // delete the segment from the personal corpus
       // delete the post references from the global corpora
       try {
         await db
-          .doc(`users/${uid}/corpora/${normalizedTag}/${segmentId}`).delete();
+          .doc(`users/${uid}/corpora/${langtag}/segments/${id}`).delete();
         await db
-          .doc(`segments_refs/${uid}${segmentId}`).delete();
-        await db.doc(`languages/${normalizedTag}`)
+          .doc(`segments_refs/${uid}${id}`).delete();
+        await db.doc(`languages/${langtag}`)
           .update({
             lastActivity: admin.firestore.FieldValue.serverTimestamp(),
             postsCount: admin.firestore.FieldValue.increment(-1),
@@ -117,7 +118,7 @@ const deleteSegmentInPersonalCorpus = functions
         );
       }
       return {
-        segment: `users/${uid}/corpora/${normalizedTag}/${segmentId}`,
+        segment: `users/${uid}/corpora/${langtag}/segments/${id}`,
         deleted: true,
       };
     });

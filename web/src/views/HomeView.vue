@@ -127,6 +127,7 @@
                       </DropdownMenuTrigger>
                       <DropdownMenuContent>
                         <DropdownMenuItem
+                          @click="deletePost(post)"
                           class="cursor-pointer"
                         >{{ $t("Delete post") }}</DropdownMenuItem>
                       </DropdownMenuContent>
@@ -197,7 +198,7 @@ import { httpsCallable } from 'firebase/functions'
 import { useUserStore } from '@/stores/user'
 import { useVuelidate } from '@vuelidate/core'
 import { required, maxLength } from '@vuelidate/validators'
-import type { SegmentRefDoc, SegmentDoc } from '@/../../firebase/functions/src/types'
+import type { SegmentRefDoc, SegmentDoc, Post } from '@/../../firebase/functions/src/types'
 
 const userStore = useUserStore()
 const languages: Ref<readonly string[]> = ref(navigator.languages)
@@ -268,9 +269,6 @@ const publishSegment = async () => {
 }
 
 // Fetch posts
-interface Post extends SegmentDoc {
-  id: string
-}
 const posts: Ref<Post[]> = ref([])
 const uniqueUsernameMap: Ref<{ [uid: string]: string}> = ref({})
 const cardsSkeletons = ref(4)
@@ -289,7 +287,7 @@ const unsubscribe = onSnapshot(postsQuery, async (querySnapshot) => {
       postsRefs.push(doc(db, (refDoc.data() as SegmentRefDoc).ref));
     });
     posts.value = (await Promise.all(
-      postsRefs.map(async (ref) => getDoc(ref))
+      postsRefs.map(async (ref) => getDoc(ref)) // TODO use onSnapshot
     )).map((doc) => ({ id: doc.id, ...doc.data() as SegmentDoc }))
     posts.value.forEach((post) => {
         uniqueUsernameMap.value[post.ownerUid] = "..."
@@ -302,7 +300,6 @@ const unsubscribe = onSnapshot(postsQuery, async (querySnapshot) => {
 const fetchUniqueUsernames = async () => {
   await Promise.all(
     Object.keys(uniqueUsernameMap.value).map(async (uid) => {
-      console.log("fetching unique username for", uid)
       let uniqueUsername = ""
       try {
         uniqueUsername = (await getDocs(
@@ -317,6 +314,8 @@ const fetchUniqueUsernames = async () => {
     })
     )
 }
+
+const deletePost = httpsCallable(functions, 'deleteSegmentInPersonalCorpus')
 
 onBeforeUnmount(() => {
   unsubscribe()

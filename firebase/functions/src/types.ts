@@ -24,6 +24,10 @@ export type SegmentDoc = {
   createdAt: FieldValue;
 }
 
+export type Post = SegmentDoc & {
+  id: string
+}
+
 export declare interface UniqueUsername {
   owner: UserInfo["uid"];
   createdAt: FieldValue;
