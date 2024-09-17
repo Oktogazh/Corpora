@@ -3,6 +3,7 @@ import { defineStore } from 'pinia'
 export const useAppStore = defineStore('App', {
   state: () => ({
     name: "",
+    callback: null as (() => any) | null,
     toasts: [{
       actionCallback: null as (() => void) | null,
       actionText: "",

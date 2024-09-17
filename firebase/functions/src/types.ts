@@ -25,7 +25,8 @@ export type SegmentDoc = {
 }
 
 export type Post = SegmentDoc & {
-  id: string
+  id: string,
+  ownerUsername: string,
 }
 
 export declare interface UniqueUsername {

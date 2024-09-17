@@ -90,7 +90,10 @@ const postSegmentInPersonalCorpus = functions
         );
       }
       return {
-        normalizedTag,
+        id: segmentId,
+        langtag: normalizedTag,
+        segment: segment,
+        ownerUid: uid,
       };
     });
 

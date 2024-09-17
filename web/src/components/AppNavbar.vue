@@ -16,6 +16,7 @@
         class="h-full w-full py-4 flex justify-between m-auto max-w-[1300px]"
       >
         <router-link
+          @click="callback"
           class="font-bold transition-colors duration-300 disabled:text-primary hover:text-primary"
           :to="{ name: 'Home' }"
           id="title">
@@ -134,7 +135,8 @@ export default defineComponent({
   computed: {
     ...mapState(useAppStore,{
       appName: (state) => state.name,
-      sidebar: (state) => state.sidebar
+      sidebar: (state) => state.sidebar,
+      callback: (state) => state.callback
     }),
     ...mapState(useUserStore,{
       isConnected: (state) => state.isConnected,

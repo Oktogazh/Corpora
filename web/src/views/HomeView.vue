@@ -114,7 +114,7 @@
                   id="unique-user-name"
                   class="relative w-full"
                 >
-                  {{ uniqueUsernameMap[post.ownerUid] || $t("User Deleted") }}
+                  {{ post.ownerUsername || $t("User Deleted") }}
                   <div
                     class="absolute top-0 end-0"
                     v-if="user?.uid === post.ownerUid"
@@ -190,8 +190,9 @@ import { collection,
   orderBy,
   where,
   doc,
-  getDoc,
-  type DocumentReference
+  type Unsubscribe,
+  type DocumentSnapshot,
+  type FieldValue
 } from 'firebase/firestore'
 import { useAppStore } from '@/stores/app'
 import { httpsCallable } from 'firebase/functions'
@@ -232,10 +233,20 @@ const publishSegment = async () => {
       segment: newPostState.newSegment,
       languageTag: newPostState.newSegmentLanguageTag,
     })
-    console.log('Segment published', res)
+    console.log('Segment published', JSON.stringify(res.data))
     newPostState.newSegment = ''
     newPostState.newSegmentLanguageTag = ''
+    const now = Date.now()
+    posts.value = [({
+      ...res.data as SegmentDoc & { id: string },
+      ownerUsername: user.value!.displayName,
+      createdAt: ({
+        seconds: Math.floor(now / 1000),
+        nanoseconds: (now % 1000) * 1000000
+      } as unknown as FieldValue)
+    } as Post), ...posts.value]
     posting.value = false
+
   } catch (error: any) {
     if (error && error.code) {
       let message = "" as string | [string, { tag: string, link: string }]
@@ -268,57 +279,82 @@ const publishSegment = async () => {
   }
 }
 
-// Fetch posts
+// Fetch posts & unique username
+const unsubscribePosts: Ref<Promise<Unsubscribe[]> | []> = ref([])
 const posts: Ref<Post[]> = ref([])
-const uniqueUsernameMap: Ref<{ [uid: string]: string}> = ref({})
 const cardsSkeletons = ref(4)
+const uniqueUsernameMap: { [uid: string]: string} = {}
+const populatePostsWithUsernames = async (postsObj: { [id: string]: SegmentDoc | null }) => {
+  Object.values(postsObj)
+    .filter((val) => val !== null)
+    .forEach(({ ownerUid }) => {
+      uniqueUsernameMap[ownerUid] = uniqueUsernameMap[ownerUid] || "..."
+    })
+  await Promise.all(
+    Object.keys(uniqueUsernameMap).map(async (uid) => {
+      if (uniqueUsernameMap[uid] === "...") {
+        console.log("Fetching unique username for", uid)
+        let uniqueUsername = ""
+        try {
+          uniqueUsername = (await getDocs(
+            query(collection(db, "unique_usernames"),
+              where("owner", "==", uid))
+          )).docs[0].id
+        } catch (error) {
+          console.error("Error fetching unique username", error)
+        }
+        uniqueUsernameMap[uid] = uniqueUsername
+      }
+      return null
+    })
+  )
+  posts.value = (Object.entries(postsObj)
+    .filter(([, val]) => val !== null) as [string, SegmentDoc][])
+    .map(([id, val]) => ({ id, ...val, ownerUsername: uniqueUsernameMap[val.ownerUid] }))
+  return null
+}
 // query posts ordered by creation date (most recent first)
 // where langtag is one of in the user's languages (string[])
 const postsQuery = query(collection(db, "segments_refs"),
   orderBy("createdAt", "desc"),
   where("langtag", "in", languages.value)
 );
-const unsubscribe = onSnapshot(postsQuery, async (querySnapshot) => {
-  const postsRefs: DocumentReference[] = [];
-  uniqueUsernameMap.value = {}
-  const { docs }= querySnapshot
-  if (docs && docs.length) {
-    docs.forEach((refDoc, i) => {
-      postsRefs.push(doc(db, (refDoc.data() as SegmentRefDoc).ref));
-    });
-    posts.value = (await Promise.all(
-      postsRefs.map(async (ref) => getDoc(ref)) // TODO use onSnapshot
-    )).map((doc) => ({ id: doc.id, ...doc.data() as SegmentDoc }))
-    posts.value.forEach((post) => {
-        uniqueUsernameMap.value[post.ownerUid] = "..."
-    });
-    fetchUniqueUsernames()
-  }
-});
+const fetchPosts: () => Promise<Unsubscribe[]> = async () => {
+  const postsRefs = (await getDocs(postsQuery)).docs.map((doc) => doc.data() as SegmentRefDoc)
+  const postsObj: { [id: string]: SegmentDoc | null} = {}
 
-// Fetch unique usernames
-const fetchUniqueUsernames = async () => {
-  await Promise.all(
-    Object.keys(uniqueUsernameMap.value).map(async (uid) => {
-      let uniqueUsername = ""
-      try {
-        uniqueUsername = (await getDocs(
-          query(collection(db, "unique_usernames"),
-            where("owner", "==", uid))
-        )).docs[0].id
-      } catch (error) {
-        console.error("Error fetching unique username", error)
+  const unsubscribePosts = await Promise.all(postsRefs
+    .map(async (postRef) => {
+      return onSnapshot(doc(db, postRef.ref),
+        (postSnapshot: DocumentSnapshot) => {
+          if (postSnapshot.exists()) {
+            postsObj[postSnapshot.id] = postSnapshot.data() as SegmentDoc
+          }
+          else {
+            postsObj[postSnapshot.id] = null
+          }
+          if (Object.keys(postsObj).length === postsRefs.length) {
+            populatePostsWithUsernames(postsObj)
+          }
+        })
       }
-      uniqueUsernameMap.value[uid] = uniqueUsername
-      return null
-    })
-    )
+    ))
+  return unsubscribePosts
 }
+unsubscribePosts.value = fetchPosts()
+/* useAppStore().callback = () => {
+  unsubscribePosts.value.forEach((unsub) => unsub())
+  fetchPosts
+} */
 
 const deletePost = httpsCallable(functions, 'deleteSegmentInPersonalCorpus')
 
 onBeforeUnmount(() => {
-  unsubscribe()
+  const u = unsubscribePosts.value
+  if (u instanceof Promise) {
+    u.then((unsubs) => unsubs.forEach((un) => un()))
+  }
+  else u.forEach((unsub: Unsubscribe) => unsub())
 })
 </script>
 
