@@ -89,7 +89,7 @@
           v-if="posts.length === 0"
         >
           <Skeleton
-            class="w-96 h-52 bg-secondary"
+            class="w-full h-24 bg-secondary"
             v-for="card of cardsSkeletons"
             :key="card"
           ></Skeleton>
@@ -105,6 +105,7 @@
             <div class="w-full flex">
               <div
                 id="avatar"
+                class="p-2"
               ></div>
               <div
                 id="post-container"
@@ -114,7 +115,9 @@
                   id="unique-user-name"
                   class="relative w-full"
                 >
-                  {{ post.ownerUsername || $t("User Deleted") }}
+                  <span class="opacity-50">
+                    @{{ post.ownerUsername || $t("User Deleted") }}
+                  </span>
                   <div
                     class="absolute top-0 end-0"
                     v-if="user?.uid === post.ownerUid"
@@ -136,6 +139,7 @@
                 </div>
                 <div
                   id="segment"
+                  class="mb-2"
                 >
                   <span>{{ post.segment }}</span>
                 </div>
@@ -233,7 +237,6 @@ const publishSegment = async () => {
       segment: newPostState.newSegment,
       languageTag: newPostState.newSegmentLanguageTag,
     })
-    console.log('Segment published', JSON.stringify(res.data))
     newPostState.newSegment = ''
     newPostState.newSegmentLanguageTag = ''
     const now = Date.now()
@@ -293,7 +296,6 @@ const populatePostsWithUsernames = async (postsObj: { [id: string]: SegmentDoc |
   await Promise.all(
     Object.keys(uniqueUsernameMap).map(async (uid) => {
       if (uniqueUsernameMap[uid] === "...") {
-        console.log("Fetching unique username for", uid)
         let uniqueUsername = ""
         try {
           uniqueUsername = (await getDocs(
@@ -342,10 +344,14 @@ const fetchPosts: () => Promise<Unsubscribe[]> = async () => {
   return unsubscribePosts
 }
 unsubscribePosts.value = fetchPosts()
-/* useAppStore().callback = () => {
-  unsubscribePosts.value.forEach((unsub) => unsub())
-  fetchPosts
-} */
+useAppStore().callback = () => {
+  const u = unsubscribePosts.value
+  if (u instanceof Promise) {
+    u.then((unsubs) => unsubs.forEach((un) => un()))
+  }
+  else (u as Unsubscribe[]).forEach((unsub) => unsub())
+  fetchPosts()
+}
 
 const deletePost = httpsCallable(functions, 'deleteSegmentInPersonalCorpus')
 
@@ -355,6 +361,7 @@ onBeforeUnmount(() => {
     u.then((unsubs) => unsubs.forEach((un) => un()))
   }
   else u.forEach((unsub: Unsubscribe) => unsub())
+  useAppStore().callback = null
 })
 </script>
 
