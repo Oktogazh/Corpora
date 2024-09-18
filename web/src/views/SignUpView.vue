@@ -401,7 +401,7 @@ watch(isConnected, async () => {
     // to claim the username if it is the first time the user logs in
     if ((now - creationTime) < 10000 && displayName) {
       try {
-        const uniqueUsernameRef = doc(db, "unique_usernames", displayName || username.value);
+        const uniqueUsernameRef = doc(db, "unique_usernames", displayName.replace(/\s/g, '_').replace(/[/]/gm, '') || username.value);
         await setDoc(uniqueUsernameRef, { owner: uid, createdAt: serverTimestamp() });
         appStore.toasts.push({
           actionCallback: null,

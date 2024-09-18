@@ -222,7 +222,7 @@ export default defineComponent({
         // to claim the username if it is the first time the user logs in
         if ((now - creationTime) < 10000 && displayName) {
           try {
-            const uniqueUsernameRef = doc(db, "unique_usernames", displayName)
+            const uniqueUsernameRef = doc(db, "unique_usernames", displayName.replace(/\s/g, '_').replace(/[/]/gm, ''))
             await setDoc(uniqueUsernameRef, { owner: uid, createdAt: serverTimestamp() })
             useAppStore().toasts.push({
               actionCallback: null,
