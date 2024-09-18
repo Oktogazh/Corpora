@@ -167,7 +167,7 @@
                       class="flex gap-2 align-baseline">
                       <AkCircle v-if="v$.password.minLength.$invalid"/>
                       <AnFilledCheckCircle class="text-accent" v-else/>
-                      {{ $t("10 characters") }}
+                      {{ $t("{n} characters", {n: 10}) }}
                     </span>
                   </div>
                   <button
@@ -188,6 +188,7 @@
                     class="flex flex-row items-center">
                     <input
                       name="username"
+                      @input="v$.username.$model = correctUsernameValue()"
                       class="border-[1px] w-full border-secondary-300 p-2 rounded bg-background-100 hover:bg-background-50 hover:border-secondary-200"
                       :placeholder="$t('Username')"
                       v-model="v$.username.$model">
@@ -197,14 +198,15 @@
                       class="font-medium text-sm">{{ $t("Your password must contain at least") }}</span>
                     <span
                       class="flex gap-2 align-baseline">
-                      <AkCircle v-if="v$.username.minLength.$invalid"/>
-                      <AnFilledCheckCircle class="text-accent" v-else/>
-                      {{ $t("3 characters") }}
+                      <AkCircle v-if="v$.username.minLength.$invalid" />
+                      <AnFilledCheckCircle class="text-accent" v-if="!v$.username.minLength.$invalid" />
+                      {{ $t("{n} characters", {n: 3}) }}
                     </span>
                     <span
-                      class="flex gap-2">
-                      <AkCircle v-if="!usernameAvailable"/>
-                      <AnFilledCheckCircle class="text-accent" v-else/>
+                      class="flex gap-2"
+                    >
+                      <AkCircle v-if="!showAvailable" />
+                      <AnFilledCheckCircle class="text-accent" v-if="showAvailable" />
                       {{ $t("Available username") }}
                     </span>
                   </div>
@@ -224,8 +226,8 @@
   </div>
 </template>
 
-<script lang="ts">
-import { defineComponent } from 'vue'
+<script setup lang="ts">
+import { ref, computed, watch, onMounted, type Ref } from 'vue'
 import { Separator, SliderRange, SliderRoot, SliderTrack } from 'radix-vue';
 import { BsEye, BsEyeSlash, AkChevronLeft, AnFilledCheckCircle, AkCircle } from '@kalimahapps/vue-icons';
 import { auth, db, googleProvider, facebookProvider } from '@/firebase';
@@ -233,213 +235,231 @@ import { signInWithPopup, createUserWithEmailAndPassword, updateProfile, type Au
 import { doc, onSnapshot, setDoc, serverTimestamp } from 'firebase/firestore';
 import { useUserStore } from '@/stores/user';
 import { useAppStore } from '@/stores/app';
-import { mapState } from 'pinia';
-import { useVuelidate } from '@vuelidate/core'
-import { required, email } from '@vuelidate/validators'
+import { useVuelidate, type ValidationRuleWithoutParams } from '@vuelidate/core'
+import { required, email as emailValidator } from '@vuelidate/validators'
+import { useRouter } from 'vue-router';
 
+const step = ref<1 | 2 | 3>(1);
+const email = ref('');
+const username: Ref<string> = ref('');
+const password = ref('');
+const showPassword = ref(false);
+const usernameAvailable = ref(false);
+const unsubscribeUniqueUsername = ref<Function | null>(null);
+const showAvailable = ref(false);
 
+const loginButtons = [
+  {
+    name: 'google',
+    alt: 'Google icon',
+    icon: 'https://upload.wikimedia.org/wikipedia/commons/c/c1/Google_%22G%22_logo.svg',
+    text: 'Log in with Google'
+  }
+  // TODO: Add the Data deletion url and Privacy Policy URLs
+  // https://developers.facebook.com/apps/1166923014592622/go_live/?business_id=147001963459612
+  // ,
+  // {
+  //   name: 'facebook',
+  //   alt: 'Facebook icon',
+  //   icon: 'https://upload.wikimedia.org/wikipedia/commons/b/b8/2021_Facebook_icon.svg',
+  //   text: 'Log in with Facebook'
+  // },
+];
 
-export default defineComponent({
-  name: 'SignUpView',
-  components: {
-    AkChevronLeft,
-    AkCircle,
-    AnFilledCheckCircle,
-    Separator,
-    BsEye,
-    BsEyeSlash,
-    SliderRange,
-    SliderRoot,
-    SliderTrack
+const userStore = useUserStore();
+const appStore = useAppStore();
+const router = useRouter();
+
+const isConnected = computed(() => userStore.isConnected);
+const user = computed(() => userStore.user);
+
+interface ValidationRules {
+  email: { required: ValidationRuleWithoutParams<any>, emailValidator: ValidationRuleWithoutParams<any> };
+  username: { minLength: (value: string) => boolean };
+  password: {
+    minLength: (value: string) => boolean;
+    hasLetter: (value: string) => boolean;
+    numberOrSpecial: (value: string) => boolean;
+  };
+}
+
+const rules: ValidationRules = {
+  email: { required, emailValidator },
+  username: {
+    minLength: (value: string) => value.length > 2,
   },
-  computed: {
-    ...mapState(useUserStore,{
-      isConnected: (state) => state.isConnected,
-      user: (state) => state.user,
-    })
-  },
-  data: () => ({
-    step: 1 as 1|2|3,
-    email: '',
-    username: '',
-    password: '',
-    showPassword: false,
-    usernameAvailable: false,
-    loginButtons: [
-      {
-        name: 'google',
-        alt: 'Google icon',
-        icon: 'https://upload.wikimedia.org/wikipedia/commons/c/c1/Google_%22G%22_logo.svg',
-        text: 'Log in with Google'
-      }
-      /* TODO: Add the Data deletion url and Privacy Policy URLs
-        https://developers.facebook.com/apps/1166923014592622/go_live/?business_id=147001963459612
-      ,
-      {
-        name: 'facebook',
-        alt: 'Facebook icon',
-        icon: 'https://upload.wikimedia.org/wikipedia/commons/b/b8/2021_Facebook_icon.svg',
-        text: 'Log in with Facebook'
-      }, */
-    ],
-    unsubscribeUniqueUsername: null as null | Function
-  }),
-  methods: {
-    loginWith(provider: string) {
-      switch (provider) {
-        case 'google':
-          this.loginWithGoogle();
-          break;
-        case 'facebook':
-          this.loginWithFacebook();
-          break;
-        default:
-          console.error('Unknown provider:', provider);
-      }
-    },
-    async createAccountAndRedirect() {
-      console.log('Creating account and redirecting');
-    },
-    async loginWithGoogle() {
+  password: {
+    minLength: (value: string) => value.length > 9,
+    hasLetter: (value: string) => /[a-zA-Z]/.test(value),
+    numberOrSpecial: (value: string) => /[0-9!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?]+/.test(value)
+  }
+};
+
+const v$ = useVuelidate(rules, { email, username, password });
+
+const loginWith = (provider: string) => {
+  switch (provider) {
+    case 'google':
+      loginWithGoogle();
+      break;
+    case 'facebook':
+      loginWithFacebook();
+      break;
+    default:
+      console.error('Unknown provider:', provider);
+  }
+};
+
+const createAccountAndRedirect = async () => {
+  console.log('Creating account and redirecting');
+};
+
+const loginWithGoogle = async () => {
+  try {
+    await signInWithPopup(auth, googleProvider);
+  } catch (error) {
+    const errorCode = (error as AuthError).code;
+    appStore.toasts.push({
+      actionCallback: null,
+      actionText: "",
+      title: "Error",
+      open: true,
+      message: errorCode,
+      type: "error"
+    });
+  }
+};
+
+const loginWithFacebook = async () => {
+  try {
+    await signInWithPopup(auth, facebookProvider);
+  } catch (error) {
+    const errorCode = (error as AuthError).code;
+    appStore.toasts.push({
+      actionCallback: null,
+      actionText: "",
+      title: "Error",
+      open: true,
+      message: errorCode,
+      type: "error"
+    });
+  }
+};
+
+const signUpWithPwd = async () => {
+  try {
+    await createUserWithEmailAndPassword(auth, email.value, password.value);
+  } catch (error) {
+    const errorCode = (error as AuthError).code;
+    appStore.toasts.push({
+      actionCallback: null,
+      actionText: "",
+      title: "Error",
+      open: true,
+      message: errorCode,
+      type: "error"
+    });
+  }
+};
+
+const updateValidator = async (value: string) => {
+  usernameAvailable.value = false;
+  if (value.length < 3) {
+    showAvailable.value = false;
+    return;
+  }
+
+  if (unsubscribeUniqueUsername.value !== null) unsubscribeUniqueUsername.value();
+
+  const docRef = doc(db, "unique_usernames", value);
+  unsubscribeUniqueUsername.value = onSnapshot(docRef, (doc) => {
+    const available = !doc.exists();
+    usernameAvailable.value = available;
+    showAvailable.value =  available;
+  });
+};
+
+onMounted(() => {
+  if (isConnected.value) {
+    router.push({ name: 'Home' });
+  }
+});
+
+const correctUsernameValue = () => {
+  // @ts-ignore
+  const newVal = v$.value.username.$model.replace(/\s/g, '_').replace(/[/]/gm, '');
+  updateValidator(newVal)
+  return newVal;
+};
+
+watch(isConnected, async () => {
+  if (user.value) {
+    const { createdAt, displayName, uid } = user.value;
+    const creationTime = new Date(Number(createdAt)).getTime();
+    const now = new Date().getTime();
+    // look if account was created less than 10 seconds ago
+    // to claim the username if it is the first time the user logs in
+    if ((now - creationTime) < 10000 && displayName) {
       try {
-        await signInWithPopup(auth, googleProvider);
-      } catch (error) {
-        const errorCode = (error as AuthError).code;
-        useAppStore().toasts.push({
+        const uniqueUsernameRef = doc(db, "unique_usernames", displayName || username.value);
+        await setDoc(uniqueUsernameRef, { owner: uid, createdAt: serverTimestamp() });
+        appStore.toasts.push({
           actionCallback: null,
           actionText: "",
-          title: "Error",
+          title: "Welcome!",
           open: true,
-          message: errorCode,
-          type: "error"
-        })
-      }
-    },
-    async loginWithFacebook() {
-      try {
-        await signInWithPopup(auth, facebookProvider);
+          message: "You account was successfully created!",
+          type: "success"
+        });
       } catch (error) {
-        const errorCode = (error as AuthError).code;
-        const { $t } = this;
-        useAppStore().toasts.push({
+        appStore.toasts.push({
           actionCallback: null,
           actionText: "",
-          title: "Error",
+          title: "Welcome!",
           open: true,
-          message: errorCode,
-          type: "error"
-        })
-      }
-    },
-    async signUpWithPwd() {
-      try {
-        await createUserWithEmailAndPassword(auth, this.email, this.password);
-      } catch (error) {
-        const errorCode = (error as AuthError).code;
-        const { $t } = this;
-        useAppStore().toasts.push({
-          actionCallback: null,
-          actionText: "",
-          title: "Error",
-          open: true,
-          message: errorCode,
-          type: "error"
-        })
-      }
-    },
-    async updateValidator(value: string) {
-      this.usernameAvailable = false
-      if (value.length < 3) return
-      const self = this
-      
-      if (this.unsubscribeUniqueUsername !== null) this.unsubscribeUniqueUsername()
-
-      const docRef = doc(db, "unique_usernames", value)
-      this.unsubscribeUniqueUsername = onSnapshot(docRef, (doc) => {
-        self.usernameAvailable = !doc.exists()
-      })
-    }
-  },
-  created() {
-    if (this.isConnected) {
-      this.$router.push({name: 'Home'});
-    }
-  },
-  setup () {
-    return { v$: useVuelidate() }
-  },
-  validations() {
-    return {
-      email: { required, email },
-      username: { 
-        minLength: (value: string) => {
-          return value.length > 2
-        }
-       },
-      password: {
-        minLength: (value: string) => {
-          return value.length > 9
-        },
-        hasLetter: (value: string) => {
-          return /[a-zA-Z]/.test(value)
-        },
-        numberOrSpecial: (value: string) => {
-          return /[0-9!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?]+/.test(value)
+          message: "Don't forget to go the settings to create a username!",
+          type: "info"
+        });
+        try {
+          await updateProfile(user.value, { displayName: null });
+        } catch (error) {
+          console.error('Error claiming username:', error);
         }
       }
     }
-  },
-  watch: {
-    username(value) {
-      this.updateValidator(value)
-    },
-    async isConnected() {
-      if (this.user) {
-        const { $t, user } = this;
-        const { createdAt, displayName, uid } = user
-        const creationTime = new Date(Number(createdAt)).getTime();
-        const now = new Date().getTime();
-        // look if account was created less than 10 seconds ago
-        // to claim the username if it is the first time the user logs in
-        if ((now - creationTime) < 10000 && displayName) {
-          try {
-            const uniqueUsernameRef = doc(db, "unique_usernames", displayName || this.username)
-            await setDoc(uniqueUsernameRef, { owner: uid, createdAt: serverTimestamp() })
-            useAppStore().toasts.push({
-              actionCallback: null,
-              actionText: "",
-              title: "Welcome!",
-              open: true,
-              message: "You account was successfully created!",
-              type: "success"
-            })
-          } catch (error) {
-            useAppStore().toasts.push({
-              actionCallback: null,
-              actionText: "",
-              title: "Welcome!",
-              open: true,
-              message: "Don't forget to go the settings to create a username!",
-              type: "info"
-            })
-            try {
-              await updateProfile(user, { displayName: null })
-            } catch (error) {
-              console.error('Error claiming username:', error)
-            }
-          }
-        }
-        // as long as the user is connected, redirect to the previous route or home page
-        const { previousRoute, options } = this.$router;
-        (previousRoute && options.routes.some(({ path }) => path === previousRoute.path))
-          ? this.$router.push(previousRoute)
-          : this.$router.push({name: 'Home'});
-      }
+    // as long as the user is connected, redirect to the previous route or home page
+    const { previousRoute, options } = router;
+    if (previousRoute && options.routes.some(({ path }) => path === previousRoute.path)) {
+      router.push(previousRoute);
+    } else {
+      router.push({ name: 'Home' });
     }
-  },
-})
+  }
+});
 </script>
 
-<style scoped>
 
+<style scoped>
+/* Delayed Transition for both AkCircle and AnFilledCheckCircle */
+.delayed-enter-active {
+  transition: opacity 0s ease; /* Adjust the duration and easing as needed */
+  transition-delay: 0.15s; /* Delay the transition by 0.15s */
+}
+
+.delayed-leave-active {
+  transition: opacity 0s ease; /* Adjust the duration and easing as needed */
+  transition-delay: 0.15s; /* Delay the transition by 0.15s */
+}
+
+.delayed-enter-active, .delayed-leave-active {
+  opacity: 0; /* Initial state before entering */
+}
+
+.delayed-enter-active {
+  opacity: 1; /* Final state after entering */
+}
+
+.delayed-leave-active {
+  opacity: 0; /* Final state after leaving */
+}
 </style>
