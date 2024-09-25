@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.5.2](https://github.com/Oktogazh/Corpora/compare/corpora-v0.5.1...corpora-v0.5.2) (2024-09-25)
+
+
+### 🐞 Bug Fixes
+
+* depedency ([7d2e2c0](https://github.com/Oktogazh/Corpora/commit/7d2e2c0e81c1e09e9aaab10476c77eb49b9ae8ae))
+
 ## [0.5.1](https://github.com/Oktogazh/Corpora/compare/corpora-v0.5.0...corpora-v0.5.1) (2024-09-25)
 
 
