@@ -1,4 +1,6 @@
+// @ts-ignore
 import type { FieldValue } from "firebase-admin/firestore";
+// @ts-ignore
 import { type UserInfo } from "firebase-admin/auth";
 
 export type SegmentBasis = {
