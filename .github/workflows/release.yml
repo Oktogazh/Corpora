@@ -34,7 +34,7 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Run release job
-        run: cd firebace/functions && npm ci && cd ../../web && npm ci && npm run build && cd ../firebase
+        run: cd web && npm ci && npm run build && cd ../firebase
 
       - name: Deploy to Firebase Hosting
         uses: FirebaseExtended/action-hosting-deploy@v0
