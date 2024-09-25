@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.5.3](https://github.com/Oktogazh/Corpora/compare/corpora-v0.5.2...corpora-v0.5.3) (2024-09-25)
+
+
+### 🐞 Bug Fixes
+
+* use nodenext as moduleResolution setting ([5be2a5a](https://github.com/Oktogazh/Corpora/commit/5be2a5a31eaa182e7782d782f8fb29160705e759))
+
 ## [0.5.2](https://github.com/Oktogazh/Corpora/compare/corpora-v0.5.1...corpora-v0.5.2) (2024-09-25)
 
 
