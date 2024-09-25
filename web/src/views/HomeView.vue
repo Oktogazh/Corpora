@@ -289,8 +289,9 @@ const cardsSkeletons = ref(4)
 const uniqueUsernameMap: { [uid: string]: string} = {}
 const populatePostsWithUsernames = async (postsObj: { [id: string]: SegmentDoc | null }) => {
   Object.values(postsObj)
-    .filter((val) => val !== null)
-    .forEach(({ ownerUid }) => {
+    .filter((val): val is SegmentDoc => val !== null)
+    .forEach((segment) => {
+      const { ownerUid } = segment
       uniqueUsernameMap[ownerUid] = uniqueUsernameMap[ownerUid] || "..."
     })
   await Promise.all(
