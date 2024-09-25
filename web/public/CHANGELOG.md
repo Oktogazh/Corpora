@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.5.1](https://github.com/Oktogazh/Corpora/compare/corpora-v0.5.0...corpora-v0.5.1) (2024-09-25)
+
+
+### 🐞 Bug Fixes
+
+* **front end:** some TS bugs ([713a62e](https://github.com/Oktogazh/Corpora/commit/713a62e6f4a3953983cf669884a1b012b2f5ccd7))
+
 ## [0.5.0](https://github.com/Oktogazh/Corpora/compare/corpora-v0.4.6...corpora-v0.5.0) (2024-09-25)
 
 
