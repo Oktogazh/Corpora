@@ -1,5 +1,40 @@
 # Changelog
 
+## [0.5.0](https://github.com/Oktogazh/Corpora/compare/corpora-v0.4.6...corpora-v0.5.0) (2024-09-25)
+
+
+### 🚀 Features
+
+* **post:** add post deletion button ([b834e60](https://github.com/Oktogazh/Corpora/commit/b834e6099c665c0da6c6f277dbbd6824f7335648))
+
+
+### ⚠️ Changes
+
+* **posts & types:** display posts and usernames on home page, updated types accordingly ([23f4d65](https://github.com/Oktogazh/Corpora/commit/23f4d65d3db6e878dc24a9635d09b4e1be9d6a93))
+
+
+### 🐞 Bug Fixes
+
+* **first log in:** make sure username is well formated when logging in for the first time ([7fe5255](https://github.com/Oktogazh/Corpora/commit/7fe52555783dd69cc5bece285fe0a01521b1b71f))
+* **home:** fetch refs only once, snapshot of posts instead ([a7f320d](https://github.com/Oktogazh/Corpora/commit/a7f320d0ba7244382d794be8fb691b8e8ba7e8b3))
+* **Home:** posts query function ([5aaae07](https://github.com/Oktogazh/Corpora/commit/5aaae0798cb0182a5ce5e07f621d09d3a76ca576))
+* **signup:** forbid using / or \s in username ([344776a](https://github.com/Oktogazh/Corpora/commit/344776a6fdc8de512f37ae173646262002575b73))
+
+
+### ✨ Polish
+
+* **alerts:** translate toast strings in the end only ([be8ef05](https://github.com/Oktogazh/Corpora/commit/be8ef0577403a0e6d8e9def9f120d49bf8112857))
+* **functions:** clean and comment postSegmentInPersonalCorpus ([b9ba358](https://github.com/Oktogazh/Corpora/commit/b9ba358c84286695eed4c874496c8e5e8e0d1206))
+* **home page:** remove logs and add callback ([fcf8771](https://github.com/Oktogazh/Corpora/commit/fcf8771598a48d36cb94dc52a60e13563f75477a))
+* **posts:** new data structure for referencing segments ([37a9901](https://github.com/Oktogazh/Corpora/commit/37a9901aa48009a1eea93182b3efc300512ce831))
+
+
+### ✨  New
+
+* **homePage:** posts query function ([ad2223f](https://github.com/Oktogazh/Corpora/commit/ad2223fdb161ce16c2d0609f25c58749a3c5882a))
+* **posting form:** posting state and behaviour ([f2bd533](https://github.com/Oktogazh/Corpora/commit/f2bd5339200ba2c08b7d3b73b3d98b26ec40e763))
+* **posts:** a menu with a "delete post" item ([192c2a4](https://github.com/Oktogazh/Corpora/commit/192c2a45bf34e99bd611e23e7723094741eff4dd))
+
 ## [0.4.6](https://github.com/Oktogazh/Corpora/compare/corpora-v0.4.5...corpora-v0.4.6) (2024-09-12)
 
 

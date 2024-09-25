@@ -1,5 +1,35 @@
 # Changelog
 
+## [0.1.0](https://github.com/Oktogazh/Corpora/compare/functions-v0.0.4...functions-v0.1.0) (2024-09-25)
+
+
+### 🚀 Features
+
+* **post:** add post deletion button ([b834e60](https://github.com/Oktogazh/Corpora/commit/b834e6099c665c0da6c6f277dbbd6824f7335648))
+
+
+### ⚠️ Changes
+
+* **posts & types:** display posts and usernames on home page, updated types accordingly ([23f4d65](https://github.com/Oktogazh/Corpora/commit/23f4d65d3db6e878dc24a9635d09b4e1be9d6a93))
+
+
+### 🐞 Bug Fixes
+
+* **home:** fetch refs only once, snapshot of posts instead ([a7f320d](https://github.com/Oktogazh/Corpora/commit/a7f320d0ba7244382d794be8fb691b8e8ba7e8b3))
+
+
+### ✨ Polish
+
+* **alerts:** translate toast strings in the end only ([be8ef05](https://github.com/Oktogazh/Corpora/commit/be8ef0577403a0e6d8e9def9f120d49bf8112857))
+* **functions:** clean and comment postSegmentInPersonalCorpus ([b9ba358](https://github.com/Oktogazh/Corpora/commit/b9ba358c84286695eed4c874496c8e5e8e0d1206))
+* **posting flow:** made a decent postPublishing function ([c3a487a](https://github.com/Oktogazh/Corpora/commit/c3a487a9e8f0d554b38a9055b6f962cc7cd32982))
+* **posts:** new data structure for referencing segments ([37a9901](https://github.com/Oktogazh/Corpora/commit/37a9901aa48009a1eea93182b3efc300512ce831))
+
+
+### ✨  New
+
+* **posting form:** posting state and behaviour ([f2bd533](https://github.com/Oktogazh/Corpora/commit/f2bd5339200ba2c08b7d3b73b3d98b26ec40e763))
+
 ## [0.0.4](https://github.com/Oktogazh/Corpora/compare/functions-v0.0.3...functions-v0.0.4) (2024-09-12)
 
 
