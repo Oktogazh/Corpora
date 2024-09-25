@@ -12,12 +12,17 @@
     }
   ],
   "compilerOptions": {
+    "module": "commonjs",
+    "noImplicitReturns": true,
+    "noUnusedLocals": true,
     "baseUrl": ".",
     "paths": {
       "@/*": [
         "src/*"
       ]
     },
+    "sourceMap": true,
+    "strict": false,
     "typeRoots": [
       "node_modules/@types",
       "node_modules/@pinia/testing"
