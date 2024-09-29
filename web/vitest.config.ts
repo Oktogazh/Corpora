@@ -11,7 +11,15 @@ export default mergeConfig(
         provider: 'v8',
         reporter: ['text', 'json', 'html'],
         include: ['src/**/*.{js,ts}'],
-        exclude: ['node_modules/', 'dist/', 'tests/'],
+        exclude: [
+          'node_modules/', // modules
+          'tests/', // default test folder
+          'src/main.ts', // main entry point
+          'src/components/ui/', // shadcn components, not tested though may be faulty...
+          'src/lib/utils.ts', // tailwind-merge
+          'src/locales/index.ts', // agregation of locales should not be tested, only its usage
+          'src/vue-router.d.ts', // types
+        ],
       },
       environment: 'jsdom',
       exclude: [...configDefaults.exclude, 'e2e/**'],

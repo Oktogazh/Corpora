@@ -30,7 +30,7 @@ const router = createRouter({
     },
     {
       path: '/changelog',
-      name: 'Change Log',
+      name: 'Changelog',
       components: {
         default: () => import('../views/ChangeLogView.vue'),
         footer: () => import('../components/AppFooter.vue')

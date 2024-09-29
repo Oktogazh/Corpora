@@ -28,4 +28,6 @@ useUserStore().initAuth()
 app.use(i18n)
 app.component('v-switch', VSwitch)
 
+export { app }
+
 app.mount('#app')
