@@ -13,7 +13,7 @@
 </template>
 
 <script lang="ts">
-import { Skeleton } from '@/components/shadcn/ui/skeleton'
+import { Skeleton } from '@/components/ui/skeleton'
 import { defineComponent } from 'vue'
 
 export default defineComponent({

@@ -155,7 +155,7 @@
 
 <script lang="ts" setup>
 import { ref, computed, reactive, type Ref, onBeforeUnmount } from 'vue'
-import { Skeleton } from '@/components/shadcn/ui/skeleton'
+import { Skeleton } from '@/components/ui/skeleton'
 import {
   AkChevronDownSmall,
   AkChevronUpSmall,
