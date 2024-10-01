@@ -7,7 +7,7 @@ import type {
   LanguageDoc,
   SegmentDoc,
   Post,
-} from "./types";
+} from "./firestoreTypes";
 import {
   parseLanguageTag,
   normalizeLanguageTagCasing,

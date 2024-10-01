@@ -10,13 +10,14 @@ export default mergeConfig(
       coverage: {
         provider: 'v8',
         reporter: ['text', 'json', 'html'],
-        include: ['src/**/*.{js,ts}'],
+        include: ['src/{views,components,stores}/**/*.{js,ts,vue}'],
         exclude: [
           'src/**/*.spec.ts', // test files
           'src/components/__tests__', // test files
+          'src/components/ui/', // shadcn files
           'node_modules/', // modules
           'src/main.ts', // main entry point
-          'src/components/ui/', // shadcn components, not tested though may be faulty...
+          'src/types/firestoreTypes.ts', // ts types
           'src/lib/utils.ts', // tailwind-merge
           'src/locales/index.ts', // agregation of locales should not be tested, only its usage
           'src/vue-router.d.ts', // types

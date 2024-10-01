@@ -203,7 +203,7 @@ import { httpsCallable } from 'firebase/functions'
 import { useUserStore } from '@/stores/user'
 import { useVuelidate } from '@vuelidate/core'
 import { required, maxLength } from '@vuelidate/validators'
-import type { SegmentRefDoc, SegmentDoc, Post } from '@/types/firestoreDocTypes'
+import type { SegmentRefDoc, SegmentDoc, Post } from '@/types/firestoreTypes'
 
 const userStore = useUserStore()
 const languages: Ref<readonly string[]> = ref(navigator.languages)
