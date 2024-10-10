@@ -1,5 +1,19 @@
 # Changelog
 
+## [0.5.4](https://github.com/Oktogazh/Corpora/compare/corpora-v0.5.3...corpora-v0.5.4) (2024-10-10)
+
+
+### ✨ Polish
+
+* component location ([a4b32d7](https://github.com/Oktogazh/Corpora/commit/a4b32d7ce44f982176d1b3c04c409b7e15f2de9d))
+* exclude test files from test coverage ([b51ea85](https://github.com/Oktogazh/Corpora/commit/b51ea8544e5503f76acecfc2ed1e7e5485d79808))
+
+
+### 🧪 Tests
+
+* add route testing ([0dad465](https://github.com/Oktogazh/Corpora/commit/0dad465ee6dae5bc5f461a19c8d7fc27d4afda81))
+* make sure FE and BE types match each other ([7e4b41a](https://github.com/Oktogazh/Corpora/commit/7e4b41a1851d12874d0fc0c6a5f86087febb44fe))
+
 ## [0.5.3](https://github.com/Oktogazh/Corpora/compare/corpora-v0.5.2...corpora-v0.5.3) (2024-09-25)
 
 

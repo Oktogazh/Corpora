@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.1.1](https://github.com/Oktogazh/Corpora/compare/functions-v0.1.0...functions-v0.1.1) (2024-10-10)
+
+
+### 🧪 Tests
+
+* make sure FE and BE types match each other ([7e4b41a](https://github.com/Oktogazh/Corpora/commit/7e4b41a1851d12874d0fc0c6a5f86087febb44fe))
+
 ## [0.1.0](https://github.com/Oktogazh/Corpora/compare/functions-v0.0.4...functions-v0.1.0) (2024-09-25)
 
 
