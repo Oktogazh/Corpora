@@ -10,8 +10,23 @@ permissions:
   pull-requests: write
 
 jobs:
+  test:
+    runs-on: ubuntu-latest
+    if: github.event.commits[0].author.name != 'github-actions[bot]'
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Install dependencies
+        run: cd web && npm ci
+
+      - name: Run unit tests
+        run: cd web && npx vitest run
+
   release-please:
     runs-on: ubuntu-latest
+    needs: test
     if:  github.event.commits[0].author.name != 'github-actions[bot]'
 
     steps:
